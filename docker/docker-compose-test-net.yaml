@@ -73,7 +73,7 @@ services:
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orgNetzbetreiber.example.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orgNetzbetreiber.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_LOCALMSPID=OrgNetzbetreiberMSP
     volumes:
         - /var/run/:/host/var/run/
         - ../organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/msp:/etc/hyperledger/fabric/msp
@@ -111,7 +111,7 @@ services:
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orgKunde.example.com:9051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orgKunde.example.com:9051
-      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_LOCALMSPID=OrgKundeMSP
     volumes:
         - /var/run/:/host/var/run/
         - ../organizations/peerOrganizations/orgKunde.example.com/peers/peer0.orgKunde.example.com/msp:/etc/hyperledger/fabric/msp

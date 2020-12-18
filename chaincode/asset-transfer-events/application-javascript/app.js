@@ -44,7 +44,7 @@
 //   approve, and commit the javascript chaincode, all the actions it takes
 //   to deploy a chaincode to a channel.
 //         ===> from directory test-network
-//         ./network.sh deployCC -ccn events -ccl javascript -ccep "OR('Org1MSP.peer','Org2MSP.peer')"
+//         ./network.sh deployCC -ccn events -ccl javascript -ccep "OR('OrgNetzbetreiberMSP.peer','OrgKundeMSP.peer')"
 //
 // - Be sure that node.js is installed
 //         ===> from directory asset-transfer-sbe/application-javascript
@@ -87,7 +87,7 @@ const { buildCCPOrg1, buildWallet } = require('../../test-application/javascript
 const channelName = 'mychannel';
 const chaincodeName = 'events';
 
-const org1 = 'Org1MSP';
+const org1 = 'OrgNetzbetreiberMSP';
 const Org1UserId = 'appUser1';
 
 const RED = '\x1b[31m\n';
@@ -320,7 +320,7 @@ async function main() {
 			} catch (deleteError) {
 				console.log(`${RED}<-- Failed: DeleteAsset - ${deleteError}${RESET}`);
 				if (deleteError.toString().includes('ENDORSEMENT_POLICY_FAILURE')) {
-					console.log(`${RED}Be sure that chaincode was deployed with the endorsement policy "OR('Org1MSP.peer','Org2MSP.peer')"${RESET}`)
+					console.log(`${RED}Be sure that chaincode was deployed with the endorsement policy "OR('OrgNetzbetreiberMSP.peer','OrgKundeMSP.peer')"${RESET}`)
 				}
 			}
 			try {

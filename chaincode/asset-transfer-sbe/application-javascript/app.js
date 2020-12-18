@@ -65,8 +65,8 @@ const { buildCCPOrg1, buildCCPOrg2, buildWallet } = require('../../test-applicat
 const channelName = 'mychannel';
 const chaincodeName = 'sbe';
 
-const org1 = 'Org1MSP';
-const org2 = 'Org2MSP';
+const org1 = 'OrgNetzbetreiberMSP';
+const org2 = 'OrgKundeMSP';
 const Org1UserId = 'appUser1';
 const Org2UserId = 'appUser2';
 

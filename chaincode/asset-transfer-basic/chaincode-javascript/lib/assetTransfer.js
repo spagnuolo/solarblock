@@ -9,50 +9,42 @@
 const { Contract } = require('fabric-contract-api');
 
 class AssetTransfer extends Contract {
+    // To create InitLedger: 
+    // 1. Bring the network up and createChannel with : ./network.sh up createChannel und ./network.sh deployCC -ccn basic -ccl javascript
+    // 2. Interacting with the network 
+    // export PATH=${PWD}/bin:$PATH
+    // export FABRIC_CFG_PATH=$PWD/config/
+    // # Environment variables for Org1
+    // export CORE_PEER_TLS_ENABLED=true
+    // export CORE_PEER_LOCALMSPID="OrgNetzbetreiberMSP"
+    // export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt
+    // export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp
+    // export CORE_PEER_ADDRESS=localhost:7051
+    // Command to initialize  : peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgKunde.example.com/peers/peer0.orgKunde.example.com/tls/ca.crt -c '{"function":"InitLedger","Args":[]}'
+    // REMEMBER: Chaincodes are invoked when a network member wants to transfer or change an asset on the ledger(like InitLedger,CreateAsset,UpdateAsset,DeleteAsset and pass the appropriate parameters in Args).
+    // To QUERY ReadAsset,AssetExists,GetAllAssets use chaincode query: .e.g. chaincode query  peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}' 
 
     async InitLedger(ctx) {
         const assets = [
             {
                 ID: 'asset1',
-                Color: 'blue',
-                Size: 5,
-                Owner: 'Tomoko',
-                AppraisedValue: 300,
+                Owner: 'Viet',
+                Electricity: 300,
             },
             {
                 ID: 'asset2',
-                Color: 'red',
-                Size: 5,
-                Owner: 'Brad',
-                AppraisedValue: 400,
+                Owner: 'Markus',
+                Electricity: 250,
             },
             {
                 ID: 'asset3',
-                Color: 'green',
-                Size: 10,
-                Owner: 'Jin Soo',
-                AppraisedValue: 500,
+                Owner: 'Henry',
+                Electricity: 350,
             },
             {
                 ID: 'asset4',
-                Color: 'yellow',
-                Size: 10,
-                Owner: 'Max',
-                AppraisedValue: 600,
-            },
-            {
-                ID: 'asset5',
-                Color: 'black',
-                Size: 15,
-                Owner: 'Adriana',
-                AppraisedValue: 700,
-            },
-            {
-                ID: 'asset6',
-                Color: 'white',
-                Size: 15,
-                Owner: 'Michel',
-                AppraisedValue: 800,
+                Owner: 'Giuliano',
+                Electricity: 300,
             },
         ];
 
@@ -64,13 +56,11 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, color, size, owner, appraisedValue) {
+    async CreateAsset(ctx, id, owner, electricity) {
         const asset = {
             ID: id,
-            Color: color,
-            Size: size,
             Owner: owner,
-            AppraisedValue: appraisedValue,
+            Electricity: electricity,
         };
         ctx.stub.putState(id, Buffer.from(JSON.stringify(asset)));
         return JSON.stringify(asset);
@@ -86,7 +76,7 @@ class AssetTransfer extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id, color, size, owner, appraisedValue) {
+    async UpdateAsset(ctx, id, owner, electricity) {
         const exists = await this.AssetExists(ctx, id);
         if (!exists) {
             throw new Error(`The asset ${id} does not exist`);
@@ -95,10 +85,8 @@ class AssetTransfer extends Contract {
         // overwriting original asset with new asset
         const updatedAsset = {
             ID: id,
-            Color: color,
-            Size: size,
             Owner: owner,
-            AppraisedValue: appraisedValue,
+            Electricity: electricity,
         };
         return ctx.stub.putState(id, Buffer.from(JSON.stringify(updatedAsset)));
     }

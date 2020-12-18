@@ -149,7 +149,7 @@ func populateWallet(wallet *gateway.Wallet) error {
 		return err
 	}
 
-	identity := gateway.NewX509Identity("Org1MSP", string(cert), string(key))
+	identity := gateway.NewX509Identity("OrgNetzbetreiberMSP", string(cert), string(key))
 
 	return wallet.Put("appUser", identity)
 }

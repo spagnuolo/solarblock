@@ -14,7 +14,7 @@ const { buildCCPOrg1, buildWallet } = require('../../test-application/javascript
 
 const channelName = 'mychannel';
 const chaincodeName = 'basic';
-const mspOrg1 = 'Org1MSP';
+const mspOrg1 = 'OrgNetzbetreiberMSP';
 const walletPath = path.join(__dirname, 'wallet');
 const org1UserId = 'appUser';
 

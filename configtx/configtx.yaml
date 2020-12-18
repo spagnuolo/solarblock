@@ -47,10 +47,10 @@ Organizations:
     - &Org1
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: Org1MSP
+        Name: OrgNetzbetreiberMSP
 
         # ID to load the MSP definition as
-        ID: Org1MSP
+        ID: OrgNetzbetreiberMSP
 
         MSPDir: ../organizations/peerOrganizations/orgNetzbetreiber.example.com/msp
 
@@ -60,16 +60,16 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+                Rule: "OR('OrgNetzbetreiberMSP.admin', 'OrgNetzbetreiberMSP.peer', 'OrgNetzbetreiberMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+                Rule: "OR('OrgNetzbetreiberMSP.admin', 'OrgNetzbetreiberMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin')"
+                Rule: "OR('OrgNetzbetreiberMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('Org1MSP.peer')"
+                Rule: "OR('OrgNetzbetreiberMSP.peer')"
 
         # leave this flag set to true.
         AnchorPeers:
@@ -82,10 +82,10 @@ Organizations:
     - &Org2
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: Org2MSP
+        Name: OrgKundeMSP
 
         # ID to load the MSP definition as
-        ID: Org2MSP
+        ID: OrgKundeMSP
 
         MSPDir: ../organizations/peerOrganizations/orgKunde.example.com/msp
 
@@ -95,16 +95,16 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
+                Rule: "OR('OrgKundeMSP.admin', 'OrgKundeMSP.peer', 'OrgKundeMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
+                Rule: "OR('OrgKundeMSP.admin', 'OrgKundeMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('Org2MSP.admin')"
+                Rule: "OR('OrgKundeMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('Org2MSP.peer')"
+                Rule: "OR('OrgKundeMSP.peer')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used

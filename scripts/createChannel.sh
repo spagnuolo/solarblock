@@ -32,7 +32,7 @@ createChannelTx() {
 
 createAncorPeerTx() {
 
-	for orgmsp in Org1MSP Org2MSP; do
+	for orgmsp in OrgNetzbetreiberMSP OrgKundeMSP; do
 
 	infoln "Generating anchor peer update transaction for ${orgmsp}"
 	set -x

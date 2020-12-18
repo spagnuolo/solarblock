@@ -88,7 +88,7 @@ public class RegisterUser {
 
 			@Override
 			public String getMspId() {
-				return "Org1MSP";
+				return "OrgNetzbetreiberMSP";
 			}
 
 		};
@@ -99,7 +99,7 @@ public class RegisterUser {
 		registrationRequest.setEnrollmentID("appUser");
 		String enrollmentSecret = caClient.register(registrationRequest, admin);
 		Enrollment enrollment = caClient.enroll("appUser", enrollmentSecret);
-		Identity user = Identities.newX509Identity("Org1MSP", enrollment);
+		Identity user = Identities.newX509Identity("OrgNetzbetreiberMSP", enrollment);
 		wallet.put("appUser", user);
 		System.out.println("Successfully enrolled user \"appUser\" and imported it into the wallet");
 	}

@@ -32,7 +32,7 @@ export class AssetContract extends Contract {
         await AssetContract.setStateBasedEndorsement(ctx, assetId, [ownerOrg]);
 
         // Optionally, set the endorsement policy of the assetId Key, such that any 1 Org (N) out of the specified Orgs can endorse future updates
-        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["Org1MSP", "Org2MSP"]);
+        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["OrgNetzbetreiberMSP", "OrgKundeMSP"]);
     }
 
     // ReadAsset returns asset with given assetId
@@ -86,7 +86,7 @@ export class AssetContract extends Contract {
         await AssetContract.setStateBasedEndorsement(ctx, asset.ID, [newOwnerOrg]);
 
         // Optionally, set the endorsement policy of the assetId Key, such that any 1 Org (N) out of the specified Orgs can endorse future updates
-        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["Org1MSP", "Org2MSP"]);
+        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["OrgNetzbetreiberMSP", "OrgKundeMSP"]);
     }
 
     // AssetExists returns true when asset with given ID exists
