@@ -11,7 +11,8 @@
 //          5.2 export CORE_PEER_LOCALMSPID="OrgNetzbetreiberMSP"
 //          5.3 export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt
 //          5.3 export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp
-//          5.4 export CORE_PEER_ADDRESS=localhost:7051
+//          5.4 export CORE_PEER_ADDRESS=localhost:7051 
+//          5.5 Port 7051 for OrgNetzbetreiberMSP , Port 9051 for OrgKundeMSP
 //      6. Create InitLedger with Sample Data
 //          6.1 peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgKunde.example.com/peers/peer0.orgKunde.example.com/tls/ca.crt -c '{"function":"InitLedger","Args":[]}'
 //      7. Get AllAssets: peer chaincode query  peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}' 
