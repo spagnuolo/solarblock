@@ -25,7 +25,11 @@ docker-compose -f "docker/docker-compose-test-net.yaml" up -d 2>&1
 # Print all running container.
 docker ps -a
 
-
-
+# create system channel
 ./network.sh createChannel
+
+# Deploy Chaincode
+./scripts/deployCC.sh
+
+# add Org3
 ./addOrg.sh

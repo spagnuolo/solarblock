@@ -5,7 +5,7 @@ source scriptUtils.sh
 CHANNEL_NAME=${1:-"mychannel"}
 CC_NAME=${2:-"basic"}
 CC_SRC_PATH=${3:-"NA"}
-CC_SRC_LANGUAGE=${4:-"go"}
+CC_SRC_LANGUAGE=${4:-"javascript"}
 CC_VERSION=${5:-"1.0"}
 CC_SEQUENCE=${6:-"1"}
 CC_INIT_FCN=${7:-"NA"}
@@ -32,7 +32,7 @@ println "- VERBOSE: ${C_GREEN}${VERBOSE}${C_RESET}"
 CC_SRC_LANGUAGE=$(echo "$CC_SRC_LANGUAGE" | tr [:upper:] [:lower:])
 
 FABRIC_CFG_PATH=$PWD/config/
-
+pwd
 # User has not provided a path, therefore the CC_NAME must
 # be the short name of a known chaincode sample
 if [ "$CC_SRC_PATH" = "NA" ]; then
@@ -41,22 +41,22 @@ if [ "$CC_SRC_PATH" = "NA" ]; then
   # short name of the known chaincode sample
   if [ "$CC_NAME" = "basic" ]; then
     println $'\e[0;32m'asset-transfer-basic$'\e[0m' chaincode
-    CC_SRC_PATH="../asset-transfer-basic"
+    CC_SRC_PATH="chaincode/asset-transfer-basic"
   elif [ "$CC_NAME" = "events" ]; then
     println $'\e[0;32m'asset-transfer-events$'\e[0m' chaincode
-    CC_SRC_PATH="../asset-transfer-events"
+    CC_SRC_PATH="chaincode/asset-transfer-events"
   elif [ "$CC_NAME" = "secured" ]; then
     println $'\e[0;32m'asset-transfer-secured-agreeement$'\e[0m' chaincode
-    CC_SRC_PATH="../asset-transfer-secured-agreement"
+    CC_SRC_PATH="chaincode/asset-transfer-secured-agreement"
   elif [ "$CC_NAME" = "ledger" ]; then
     println $'\e[0;32m'asset-transfer-ledger-agreeement$'\e[0m' chaincode
-    CC_SRC_PATH="../asset-transfer-ledger-queries"
+    CC_SRC_PATH="chaincode/asset-transfer-ledger-queries"
   elif [ "$CC_NAME" = "private" ]; then
     println $'\e[0;32m'asset-transfer-private-data$'\e[0m' chaincode
-    CC_SRC_PATH="../asset-transfer-private-data"
+    CC_SRC_PATH="chaincode/asset-transfer-private-data"
   elif [ "$CC_NAME" = "sbe" ]; then
     println $'\e[0;32m'asset-transfer-sbe$'\e[0m' chaincode
-    CC_SRC_PATH="../asset-transfer-sbe"
+    CC_SRC_PATH="chaincode/asset-transfer-sbe"
   else
     fatalln "The chaincode name ${CC_NAME} is not supported by this script. Supported chaincode names are: basic, events, ledger, private, sbe, secured"
   fi
