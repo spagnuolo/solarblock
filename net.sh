@@ -31,5 +31,5 @@ docker ps -a
 # Deploy Chaincode
 ./scripts/deployCC.sh
 
-# add Org3
+# add OrgHaushaltA
 ./addOrg.sh
