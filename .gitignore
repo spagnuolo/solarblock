@@ -1,3 +1,15 @@
+# Fabric binaries
+bin
+
+# Fabric artifacts
+channel-artifacts
+log.txt
+organizations/ordererOrganizations
+organizations/peerOrganizations
+system-genesis-block
+
+
+### ab hier Standard JavaScript project .gitignore
 # Logs
 logs
 *.log
@@ -69,7 +81,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+# .env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
