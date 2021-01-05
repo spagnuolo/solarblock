@@ -67,7 +67,7 @@ public class RegisterUser {
 
 			@Override
 			public String getAffiliation() {
-				return "org1.department1";
+				return "orgNetzbetreiber.department1";
 			}
 
 			@Override
@@ -95,7 +95,7 @@ public class RegisterUser {
 
 		// Register the user, enroll the user, and import the new identity into the wallet.
 		RegistrationRequest registrationRequest = new RegistrationRequest("appUser");
-		registrationRequest.setAffiliation("org1.department1");
+		registrationRequest.setAffiliation("orgNetzbetreiber.department1");
 		registrationRequest.setEnrollmentID("appUser");
 		String enrollmentSecret = caClient.register(registrationRequest, admin);
 		Enrollment enrollment = caClient.enroll("appUser", enrollmentSecret);

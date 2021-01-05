@@ -94,7 +94,7 @@ async function main() {
 
 		// in a real application this would be done only when a new user was required to be added
 		// and would be part of an administrative flow
-		await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'org1.department1');
+		await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'orgNetzbetreiber.department1');
 
 		// Create a new gateway instance for interacting with the fabric network.
 		// In a real application this would be done as the backend server session is setup for

@@ -97,7 +97,7 @@ async function initGatewayForOrg1() {
 	// and stores app user identity in local wallet
 	// In a real application this would be done only when a new user was required to be added
 	// and would be part of an administrative flow
-	await registerAndEnrollUser(caOrg1Client, walletOrg1, org1, Org1UserId, 'org1.department1');
+	await registerAndEnrollUser(caOrg1Client, walletOrg1, org1, Org1UserId, 'orgNetzbetreiber.department1');
 
 	try {
 		// Create a new gateway for connecting to Org's peer node.

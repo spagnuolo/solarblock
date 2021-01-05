@@ -28,23 +28,27 @@ class AssetTransfer extends Contract {
         const assets = [
             {
                 ID: 'asset1',
-                Owner: 'Viet',
+                Owner: 'OrgNetzbetreiber',
+                Status: 'being sold',
                 Electricity: 300,
             },
             {
                 ID: 'asset2',
-                Owner: 'Markus',
+                Owner: 'OrgNetzbetreiber',
+                Status: 'being sold'
                 Electricity: 250,
             },
             {
                 ID: 'asset3',
-                Owner: 'Henry',
+                Owner: 'OrgKunde',
+                Status: 'transfered'
                 Electricity: 350,
             },
             {
                 ID: 'asset4',
-                Owner: 'Giuliano',
-                Electricity: 300,
+                Owner: 'OrgKunde',
+                Status: 'transfered'
+                Electricity: 800,
             },
         ];
 
@@ -56,10 +60,11 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, owner, electricity) {
+    async CreateAsset(ctx, id, owner,status, electricity) {
         const asset = {
             ID: id,
             Owner: owner,
+            Status: status,
             Electricity: electricity,
         };
         ctx.stub.putState(id, Buffer.from(JSON.stringify(asset)));
