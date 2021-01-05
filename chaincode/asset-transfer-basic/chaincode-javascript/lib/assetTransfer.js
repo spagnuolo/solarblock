@@ -35,19 +35,19 @@ class AssetTransfer extends Contract {
             {
                 ID: 'asset2',
                 Owner: 'OrgNetzbetreiber',
-                Status: 'being sold'
+                Status: 'being sold',
                 Electricity: 250,
             },
             {
                 ID: 'asset3',
                 Owner: 'OrgKunde',
-                Status: 'transfered'
+                Status: 'transfered',
                 Electricity: 350,
             },
             {
                 ID: 'asset4',
                 Owner: 'OrgKunde',
-                Status: 'transfered'
+                Status: 'transfered',
                 Electricity: 800,
             },
         ];
@@ -81,7 +81,7 @@ class AssetTransfer extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id, owner, electricity) {
+    async UpdateAsset(ctx, id, owner,status,electricity) {
         const exists = await this.AssetExists(ctx, id);
         if (!exists) {
             throw new Error(`The asset ${id} does not exist`);
@@ -91,6 +91,7 @@ class AssetTransfer extends Contract {
         const updatedAsset = {
             ID: id,
             Owner: owner,
+            Status: status,
             Electricity: electricity,
         };
         return ctx.stub.putState(id, Buffer.from(JSON.stringify(updatedAsset)));

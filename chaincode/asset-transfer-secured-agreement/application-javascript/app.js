@@ -62,8 +62,8 @@
 const { Gateway, Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const path = require('path');
-const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../test-application/javascript/CAUtil.js');
-const { buildCCPOrg1, buildCCPOrg2, buildWallet } = require('../../test-application/javascript/AppUtil.js');
+const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../../test-application/javascript/CAUtil.js');
+const { buildCCPOrg1, buildCCPOrg2, buildWallet } = require('../../../test-application/javascript/AppUtil.js');
 
 const channelName = 'mychannel';
 const chaincodeName = 'secured';
@@ -97,7 +97,7 @@ async function initGatewayForOrg1() {
 	// and stores app user identity in local wallet
 	// In a real application this would be done only when a new user was required to be added
 	// and would be part of an administrative flow
-	await registerAndEnrollUser(caOrg1Client, walletOrg1, org1, Org1UserId, 'orgNetzbetreiber.department1');
+	await registerAndEnrollUser(caOrg1Client, walletOrg1, org1, Org1UserId, 'org1.department1');
 
 	try {
 		// Create a new gateway for connecting to Org's peer node.

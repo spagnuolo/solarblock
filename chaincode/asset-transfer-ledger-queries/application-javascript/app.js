@@ -9,8 +9,8 @@
 const { Gateway, Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const path = require('path');
-const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../test-application/javascript/CAUtil.js');
-const { buildCCPOrg1, buildWallet } = require('../../test-application/javascript/AppUtil.js');
+const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../../test-application/javascript/CAUtil.js');
+const { buildCCPOrg1, buildWallet } = require('../../../test-application/javascript/AppUtil.js');
 
 const channelName = 'mychannel';
 const chaincodeName = 'ledger';
@@ -94,7 +94,7 @@ async function main() {
 
 		// in a real application this would be done only when a new user was required to be added
 		// and would be part of an administrative flow
-		await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'orgNetzbetreiber.department1');
+		await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'org1.department1');
 
 		// Create a new gateway instance for interacting with the fabric network.
 		// In a real application this would be done as the backend server session is setup for
