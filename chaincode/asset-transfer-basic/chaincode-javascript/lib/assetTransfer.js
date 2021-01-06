@@ -30,25 +30,25 @@ class AssetTransfer extends Contract {
                 ID: 'asset1',
                 Owner: 'OrgNetzbetreiber',
                 Status: 'being sold',
-                Electricity: 300,
+                Energy: '300kWh',
             },
             {
                 ID: 'asset2',
                 Owner: 'OrgNetzbetreiber',
                 Status: 'being sold',
-                Electricity: 250,
+                Energy: '250kWh',
             },
             {
                 ID: 'asset3',
                 Owner: 'OrgKunde',
                 Status: 'transfered',
-                Electricity: 350,
+                Energy: '350kWh',
             },
             {
                 ID: 'asset4',
                 Owner: 'OrgKunde',
                 Status: 'transfered',
-                Electricity: 800,
+                Energy: '800kWh',
             },
         ];
 
@@ -60,12 +60,12 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, owner,status, electricity) {
+    async CreateAsset(ctx, id, owner,status, energy) {
         const asset = {
             ID: id,
             Owner: owner,
             Status: status,
-            Electricity: electricity,
+            Energy: energy,
         };
         ctx.stub.putState(id, Buffer.from(JSON.stringify(asset)));
         return JSON.stringify(asset);
@@ -81,7 +81,7 @@ class AssetTransfer extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id, owner,status,electricity) {
+    async UpdateAsset(ctx, id, owner,status,energy) {
         const exists = await this.AssetExists(ctx, id);
         if (!exists) {
             throw new Error(`The asset ${id} does not exist`);
@@ -92,7 +92,7 @@ class AssetTransfer extends Contract {
             ID: id,
             Owner: owner,
             Status: status,
-            Electricity: electricity,
+            Energy: energy,
         };
         return ctx.stub.putState(id, Buffer.from(JSON.stringify(updatedAsset)));
     }
