@@ -1,0 +1,57 @@
+{
+	"name": "first-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw"
+		},
+		"enableAuthentication": true,
+		"organization": "OrgNetzbetreiberMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"mychannel": {
+			"peers": {
+				"peer0.orgNetzbetreiber.example.com": {}
+			},
+			"connection": {
+				"timeout": {
+					"peer": {
+						"endorser": "6000",
+						"eventHub": "6000",
+						"eventReg": "6000"
+					}
+				}
+			}
+		}
+	},
+	"organizations": {
+		"OrgNetzbetreiberMSP": {
+			"mspid": "OrgNetzbetreiberMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/keystore/7054582c9d3fe65c4315fef6711de9bdbf41e56570b2de95db07bedb4b9f9bd0_sk"
+			},
+			"peers": ["peer0.orgNetzbetreiber.example.com"],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/signcerts/cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer0.orgNetzbetreiber.example.com": {
+			"tlsCACerts": {
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt"
+			},
+			"url": "grpcs://peer0.orgNetzbetreiber.example.com:7051"
+		}
+	}
+}
