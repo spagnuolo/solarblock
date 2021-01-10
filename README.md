@@ -35,5 +35,5 @@ node redeem.js # chaincode
 
 ## Links
 * [Commercial paper tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_paper.html#examine-the-commercial-paper-smart-contract)
-* [Smart Contracts](organization\netzbetreiber\contract\lib)
-* [Chaincode](organization\kunde\application)
+* [Smart Contracts](organization/netzbetreiber/contract/lib)
+* [Chaincode](organization/kunde/application)
