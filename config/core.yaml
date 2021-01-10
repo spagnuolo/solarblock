@@ -443,7 +443,7 @@ peer:
         authCachePurgeRetentionRatio: 0.75
         # Whether to allow non-admins to perform non channel scoped queries.
         # When this is false, it means that only peer admins can perform non channel scoped queries.
-        orgMembersAllowedAccess: false
+        orgMembersAllowedAccess: true
 
     # Limits is used to configure some internal resource limits.
     limits:

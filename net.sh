@@ -3,33 +3,49 @@ export PATH=${PWD}/bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/configtx
 export VERBOSE=false
 
+# Exit on first error, print all commands.
+set -ev
+set -o pipefail
+
 # Delete old aritfacts, if any.
 if [ -d "organizations/peerOrganizations" ]; then
   rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
 fi
 
-# Create crypto keys and Orgs.
-cryptogen generate --config=./organizations/cryptogen/crypto-config-orgNetzbetreiber.yaml --output="organizations"
-cryptogen generate --config=./organizations/cryptogen/crypto-config-orgKunde.yaml --output="organizations"
-cryptogen generate --config=./organizations/cryptogen/crypto-config-orderer.yaml --output="organizations"
+MAX_RETRY=5
+CLI_DELAY=3
+CHANNEL_NAME="mychannel"
 
-# Generate CCP files for Org1 and Org2
+COMPOSE_FILE_BASE=docker/docker-compose-test-net.yaml
+COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml
+COMPOSE_FILE_CA=docker/docker-compose-ca.yaml
+
+docker-compose -f $COMPOSE_FILE_CA up -d 2>&1
+
+. organizations/fabric-ca/registerEnroll.sh
+
+while :
+  do
+    if [ ! -f "organizations/fabric-ca/orgNetzbetreiber/tls-cert.pem" ]; then
+      sleep 1
+    else
+      break
+    fi
+  done
+
+createorgNetzbetreiber
+createorgKunde
+createOrderer
+
 ./organizations/ccp-generate.sh
 
-# Create consortium.
 configtxgen -profile TwoOrgsOrdererGenesis -channelID system-channel -outputBlock ./system-genesis-block/genesis.block
 
-# Create and start containers.
-docker-compose -f "docker/docker-compose-test-net.yaml" up -d 2>&1
 
-# Print all running container.
+COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
+COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
+docker-compose ${COMPOSE_FILES} up -d 2>&1
+
 docker ps -a
 
-# create system channel
-./network.sh createChannel
-
-# Deploy Chaincode
-./scripts/deployCC.sh
-
-# add OrgHaushaltA
-./addOrg.sh
+scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE

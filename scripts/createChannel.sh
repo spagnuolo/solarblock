@@ -128,9 +128,9 @@ infoln "Creating channel ${CHANNEL_NAME}"
 createChannel
 
 ## Join all the peers to the channel
-infoln "Join Org1 peers to the channel..."
+infoln "Join orgNetzbetreiber peers to the channel..."
 joinChannel 1
-infoln "Join Org2 peers to the channel..."
+infoln "Join orgKunde peers to the channel..."
 joinChannel 2
 
 ## Set the anchor peers for each org in the channel
