@@ -117,6 +117,7 @@ class AssetTransfer extends Contract {
         const assetString = await this.ReadAsset(ctx, id);
         const asset = JSON.parse(assetString);
         asset.Owner = newOwner;
+        asset.Status = 'transfered';
         return ctx.stub.putState(id, Buffer.from(JSON.stringify(asset)));
     }
 
