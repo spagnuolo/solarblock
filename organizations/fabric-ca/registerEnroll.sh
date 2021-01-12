@@ -2,7 +2,7 @@
 
 source scriptUtils.sh
 
-function createOrg1() {
+function createorgNetzbetreiber() {
 
   infoln "Enroll the CA admin"
   mkdir -p organizations/peerOrganizations/orgNetzbetreiber.example.com/
@@ -94,7 +94,7 @@ function createOrg1() {
 
 }
 
-function createOrg2() {
+function createorgKunde() {
 
   infoln "Enroll the CA admin"
   mkdir -p organizations/peerOrganizations/orgKunde.example.com/

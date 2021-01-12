@@ -44,7 +44,7 @@ Organizations:
         OrdererEndpoints:
             - orderer.example.com:7050
 
-    - &Org1
+    - &orgNetzbetreiber
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
         Name: OrgNetzbetreiberMSP
@@ -79,7 +79,7 @@ Organizations:
             - Host: peer0.orgNetzbetreiber.example.com
               Port: 7051
 
-    - &Org2
+    - &orgKunde
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
         Name: OrgKundeMSP
@@ -327,15 +327,15 @@ Profiles:
         Consortiums:
             SampleConsortium:
                 Organizations:
-                    - *Org1
-                    - *Org2
+                    - *orgNetzbetreiber
+                    - *orgKunde
     TwoOrgsChannel:
         Consortium: SampleConsortium
         <<: *ChannelDefaults
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Org1
-                - *Org2
+                - *orgNetzbetreiber
+                - *orgKunde
             Capabilities:
                 <<: *ApplicationCapabilities
