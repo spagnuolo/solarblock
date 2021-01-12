@@ -130,7 +130,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface)
 
 	// Save asset to private data collection
 	// Typical logger, logs to stdout/file in the fabric managed docker container, running this chaincode
-	// Look for container name like dev-peer0.org1.example.com-{chaincodename_version}-xyz
+	// Look for container name like dev-peer0.orgNetzbetreiber.example.com-{chaincodename_version}-xyz
 	log.Printf("CreateAsset Put: collection %v, ID %v", assetCollection, assetInput.ID)
 	err = ctx.GetStub().PutPrivateData(assetCollection, assetInput.ID, assetJSONasBytes)
 	if err != nil {

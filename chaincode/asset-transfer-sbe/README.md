@@ -75,7 +75,7 @@ export FABRIC_CFG_PATH=$PWD/../config/
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID="OrgNetzbetreiberMSP"
 export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp
-export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt
 export CORE_PEER_ADDRESS=localhost:7051
 ```
 
@@ -83,7 +83,7 @@ export CORE_PEER_ADDRESS=localhost:7051
 
 We can now invoke the SBE smart contract to create a new asset:
 ```
-peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"function":"CreateAsset","Args":["asset1","100","Org1User1"]}'
+peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"function":"CreateAsset","Args":["asset1","100","Org1User1"]}'
 ```
 The create transaction needs to target both peers from Org1 and Org2 to meet the chaincode endorsement policy. The chaincode will read the MSP ID of the client user submitting the transaction and assign that organization as the asset owner. As a result, the asset will initially be owned by Org1.
 
@@ -105,7 +105,7 @@ Error: transaction invalidated with status (ENDORSEMENT_POLICY_FAILURE) - propos
 
 If we attempt to update the asset with an endorsement from the Org1 peer, the update succeeds:
 ```
-peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt -c '{"function":"UpdateAsset","Args":["asset1","200"]}'
+peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt -c '{"function":"UpdateAsset","Args":["asset1","200"]}'
 ```
 You can query the asset one more time to verify that the update was successful:
 ```
@@ -120,7 +120,7 @@ The asset value is now 200:
 Now that we have tested the asset key-level endorsement policy, we can transfer the asset to Org2. Run the following command to transfer the asset from Org1 to Org2. This time the Org2 MSP ID is provided as a transaction input. The `TransferAsset` function will update the endorsement policy to specify that only a peer of the new owner can update the asset. Note that this command targets the Org1 peer.
 
 ```
-peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt -c '{"function":"TransferAsset","Args":["asset1","Org2User1","OrgKundeMSP"]}'
+peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt -c '{"function":"TransferAsset","Args":["asset1","Org2User1","OrgKundeMSP"]}'
 ```
 
 We can query the asset to see that the owner has been updated from Org1 to Org2:
@@ -135,7 +135,7 @@ The owning organization is now Org2:
 
 Org2 now needs to endorse any asset updates. Run the following command to try to update the asset with an endorsement from the Org1 peer:
 ```
-peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt -c '{"function":"UpdateAsset","Args":["asset1","300"]}'
+peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt -c '{"function":"UpdateAsset","Args":["asset1","300"]}'
 ```
 
 The response will be an endorsement policy failure:
