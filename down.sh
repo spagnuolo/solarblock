@@ -26,9 +26,11 @@ fi
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf system-genesis-block/*.block organizations/peerOrganizations organizations/ordererOrganizations'
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/orgNetzbetreiber/msp organizations/fabric-ca/orgNetzbetreiber/tls-cert.pem organizations/fabric-ca/orgNetzbetreiber/ca-cert.pem organizations/fabric-ca/orgNetzbetreiber/IssuerPublicKey organizations/fabric-ca/orgNetzbetreiber/IssuerRevocationPublicKey organizations/fabric-ca/orgNetzbetreiber/fabric-ca-server.db'
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/orgKunde/msp organizations/fabric-ca/orgKunde/tls-cert.pem organizations/fabric-ca/orgKunde/ca-cert.pem organizations/fabric-ca/orgKunde/IssuerPublicKey organizations/fabric-ca/orgKunde/IssuerRevocationPublicKey organizations/fabric-ca/orgKunde/fabric-ca-server.db'
+docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/orgHaushaltC/msp organizations/fabric-ca/orgHaushaltC/tls-cert.pem organizations/fabric-ca/orgHaushaltC/ca-cert.pem organizations/fabric-ca/orgHaushaltC/IssuerPublicKey organizations/fabric-ca/orgHaushaltC/IssuerRevocationPublicKey organizations/fabric-ca/orgHaushaltC/fabric-ca-server.db'
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db'
 # docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf addOrg3/fabric-ca/org3/msp addOrg3/fabric-ca/org3/tls-cert.pem addOrg3/fabric-ca/org3/ca-cert.pem addOrg3/fabric-ca/org3/IssuerPublicKey addOrg3/fabric-ca/org3/IssuerRevocationPublicKey addOrg3/fabric-ca/org3/fabric-ca-server.db'
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf channel-artifacts log.txt *.tar.gz'
 
 rm organization/kunde/identity/user/viet/wallet/viet.id
+rm organization/haushalt_c/identity/user/henry/wallet/henry.id
 rm organization/netzbetreiber/identity/user/giuliano/wallet/giuliano.id

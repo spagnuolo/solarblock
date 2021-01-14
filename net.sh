@@ -35,6 +35,7 @@ while :
 
 createorgNetzbetreiber
 createorgKunde
+createorgHaushaltC
 createOrderer
 
 ./organizations/ccp-generate.sh
