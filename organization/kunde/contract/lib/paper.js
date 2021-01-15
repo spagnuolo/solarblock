@@ -9,7 +9,7 @@
 // Utility class for ledger state
 const State = require('./../ledger-api/state.js');
 
-// Enumerate commercial paper state values
+// Enumerate solar energy state values
 const cpState = {
     ISSUED: 1,
     PENDING: 2,
@@ -24,7 +24,7 @@ const cpState = {
 class CommercialPaper extends State {
 
     constructor(obj) {
-        super(CommercialPaper.getClass(), [obj.issuer, obj.paperNumber]);
+        super(CommercialPaper.getClass(), [obj.issuer, obj.eneryNumber]);
         Object.assign(this, obj);
     }
 
@@ -56,7 +56,7 @@ class CommercialPaper extends State {
     }
 
     /**
-     * Useful methods to encapsulate commercial paper states
+     * Useful methods to encapsulate solar energy states
      */
     setIssued() {
         this.currentState = cpState.ISSUED;
@@ -99,7 +99,7 @@ class CommercialPaper extends State {
     }
 
     /**
-     * Deserialize a state data to commercial paper
+     * Deserialize a state data to solar energy
      * @param {Buffer} data to form back into the object
      */
     static deserialize(data) {
@@ -107,14 +107,14 @@ class CommercialPaper extends State {
     }
 
     /**
-     * Factory method to create a commercial paper object
+     * Factory method to create a solar energy object
      */
-    static createInstance(issuer, paperNumber, issueDateTime, maturityDateTime, faceValue) {
-        return new CommercialPaper({ issuer, paperNumber, issueDateTime, maturityDateTime, faceValue });
+    static createInstance(issuer, eneryNumber, issueDateTime, expiredDateTime, faceValue) {
+        return new CommercialPaper({ issuer, eneryNumber, issueDateTime, expiredDateTime, faceValue });
     }
 
     static getClass() {
-        return 'org.papernet.commercialpaper';
+        return 'org.solarnet.solarenergy';
     }
 }
 

@@ -9,7 +9,7 @@
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
  * 3. Access PaperNet network
- * 4. Construct request to issue commercial paper
+ * 4. Construct request to issue solar energy
  * 5. Submit transaction
  * 6. Process response
  */
@@ -58,22 +58,22 @@ async function main() {
 
         const network = await gateway.getNetwork('mychannel');
 
-        // Get addressability to commercial paper contract
-        console.log('Use org.papernet.commercialpaper smart contract.');
+        // Get addressability to solar energy contract
+        console.log('Use org.solarnet.solarenergy smart contract.');
 
         const contract = await network.getContract('papercontract');
 
-        // issue commercial paper
-        console.log('Submit commercial paper issue transaction.');
+        // issue solar energy
+        console.log('Submit solar energy issue transaction.');
 
-        const issueResponse = await contract.submitTransaction('issue', 'MagnetoCorp', '00001', '2020-05-31', '2020-11-30', '5000000');
+        const issueResponse = await contract.submitTransaction('issue', 'orgKunde', '00002', '2021-01-25', '2021-02-25', '750kWh');
 
         // process response
         console.log('Process issue transaction response.' + issueResponse);
 
         let paper = CommercialPaper.fromBuffer(issueResponse);
 
-        console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
+        console.log(`${paper.issuer} solar energy : ${paper.eneryNumber} successfully issued for value ${paper.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {

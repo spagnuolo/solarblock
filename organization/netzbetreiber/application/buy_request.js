@@ -9,7 +9,7 @@
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
  * 3. Access PaperNet network
- * 4. Construct request to buy (buy_request) commercial paper
+ * 4. Construct request to buy (buy_request) solar energy
  * 5. Submit transaction
  * 6. Process response
  */
@@ -60,13 +60,13 @@ async function main() {
 
         const network = await gateway.getNetwork('mychannel');
 
-        // Get addressability to commercial paper contract
-        console.log('Use org.papernet.commercialpaper smart contract.');
+        // Get addressability to solar energy contract
+        console.log('Use org.solarnet.solarenergy smart contract.');
 
-        const contract = await network.getContract('papercontract', 'org.papernet.commercialpaper');
+        const contract = await network.getContract('papercontract', 'org.solarnet.solarenergy');
 
-        // request to buy commercial paper using buy_request / transfer two-part transaction
-        console.log('Submit commercial paper buy_request transaction.');
+        // request to buy solar energy using buy_request / transfer two-part transaction
+        console.log('Submit solar energy buy_request transaction.');
 
         const buyResponse = await contract.submitTransaction('buy_request', 'MagnetoCorp', '00001', 'MagnetoCorp', 'DigiBank', '4900000', '2020-05-31');
 
@@ -75,7 +75,7 @@ async function main() {
 
         let paper = CommercialPaper.fromBuffer(buyResponse);
 
-        console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} has been provisionally purchased : the transfer must now be completed by paper owner`);
+        console.log(`${paper.issuer} solar energy : ${paper.eneryNumber} has been provisionally purchased : the transfer must now be completed by paper owner`);
         console.log('Transaction complete.');
 
     } catch (error) {

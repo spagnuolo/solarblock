@@ -22,13 +22,13 @@ class QueryUtils {
     // getAssetHistory takes the composite key as arg, gets returns results as JSON to 'main contract'
     // =========================================================================================
     /**
-    * Get Asset History for a commercial paper
+    * Get Asset History for a solar energy
     * @param {String} issuer the CP issuer
-    * @param {String} paperNumber commercial paper number
+    * @param {String} eneryNumber solar energy number
     */
-    async getAssetHistory(issuer, paperNumber) {
+    async getAssetHistory(issuer, eneryNumber) {
 
-        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [issuer, paperNumber]);
+        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [issuer, eneryNumber]);
         const resultsIterator = await this.ctx.stub.getHistoryForKey(ledgerKey);
         let results = await this.getAllResults(resultsIterator, true);
 
@@ -47,7 +47,7 @@ class QueryUtils {
     // 
     // ===========================================================================================
     /**
-    * queryOwner commercial paper
+    * queryOwner solar energy
     * @param {String} assetspace the asset space (eg MagnetoCorp's assets)
     */
     async queryKeyByPartial(assetspace) {
@@ -72,8 +72,8 @@ class QueryUtils {
     // Only available on state databases that support rich query (e.g. CouchDB)
     // =========================================================================================
     /**
-    * queryKeyByOwner commercial paper
-    * @param {String} owner commercial paper owner
+    * queryKeyByOwner solar energy
+    * @param {String} owner solar energy owner
     */
     async queryKeyByOwner(owner) {
         //  
@@ -100,7 +100,7 @@ class QueryUtils {
     // example passed using VS Code ext: ["{\"selector\": {\"owner\": \"MagnetoCorp\"}}"]
     // =========================================================================================
     /**
-    * query By AdHoc string (commercial paper)
+    * query By AdHoc string (solar energy)
     * @param {String} queryString actual MangoDB query string (escaped)
     */
     async queryByAdhoc(queryString) {
@@ -166,7 +166,7 @@ class QueryUtils {
                     } else {
                         try {
                             jsonRes.Value = JSON.parse(res.value.value.toString('utf8'));
-                            // report the commercial paper states during the asset lifecycle, just for asset history reporting
+                            // report the solar energy states during the asset lifecycle, just for asset history reporting
                             switch (jsonRes.Value.currentState) {
                                 case 1:
                                     jsonRes.Value.currentState = 'ISSUED';
