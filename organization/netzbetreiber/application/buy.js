@@ -68,14 +68,14 @@ async function main() {
         // buy solar energy
         console.log('Submit solar energy buy transaction.');
 
-        const buyResponse = await contract.submitTransaction('buy', 'orgKunde', '00003', 'orgKunde', 'orgNetzbetreiber', '600', '2021-01-19');
+        const buyResponse = await contract.submitTransaction('buy', 'orgKunde', '00001', 'orgKunde', 'orgNetzbetreiber', '600', '2021-01-19');
 
         // process response
         console.log('Process buy transaction response.');
 
         let energy = Energy.fromBuffer(buyResponse);
 
-        console.log(`${energy.issuer} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`);
+        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`);
         console.log('Transaction complete.');
 
     } catch (error) {

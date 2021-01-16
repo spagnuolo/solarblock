@@ -9,7 +9,7 @@
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
  * 3. Access EnergyNet network
- * 4. Construct request to issue solar energy
+ * 4. Construct request to sell solar energy
  * 5. Submit transaction
  * 6. Process response
  */
@@ -35,7 +35,7 @@ async function main() {
     try {
 
         // Specify userName for network access
-        // const userName = 'viet.issuer@kunde.com';
+        // const userName = 'viet.seller@kunde.com';
         const userName = 'viet';
 
         // Load connection profile; will be used to locate a gateway
@@ -63,17 +63,17 @@ async function main() {
 
         const contract = await network.getContract('energycontract');
 
-        // issue solar energy
-        console.log('Submit solar energy issue transaction.');
+        // sell solar energy
+        console.log('Submit solar energy sell transaction.');
 
-        const issueResponse = await contract.submitTransaction('issue', 'orgKunde', '00001', '2021-01-25', '2021-02-25', '500kWh');
+        const sellResponse = await contract.submitTransaction('sell', 'orgKunde', '00001', '2021-01-25', '2021-02-25', '500kWh');
 
         // process response
-        console.log('Process issue transaction response.' + issueResponse);
+        console.log('Process sell transaction response.' + sellResponse);
 
-        let energy = Energy.fromBuffer(issueResponse);
+        let energy = Energy.fromBuffer(sellResponse);
 
-        console.log(`${energy.issuer} solar energy : ${energy.energyNumber} successfully issued for value ${energy.faceValue}`);
+        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully selld for value ${energy.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {

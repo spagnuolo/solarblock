@@ -22,7 +22,7 @@ const cpState = {
 class Energy extends State {
 
     constructor(obj) {
-        super(Energy.getClass(), [obj.issuer, obj.energyNumber]);
+        super(Energy.getClass(), [obj.seller, obj.energyNumber]);
         Object.assign(this, obj);
     }
 
@@ -30,11 +30,11 @@ class Energy extends State {
      * Basic getters and setters
     */
     getSeller() {
-        return this.issuer;
+        return this.seller;
     }
 
     setSeller(newIssuer) {
-        this.issuer = newIssuer;
+        this.seller = newIssuer;
     }
 
     getOwner() {
@@ -91,8 +91,8 @@ class Energy extends State {
     /**
      * Factory method to create a solar energy object
      */
-    static createInstance(issuer, energyNumber, issueDateTime, expiredDateTime, faceValue) {
-        return new Energy({ issuer, energyNumber, issueDateTime, expiredDateTime, faceValue });
+    static createInstance(seller, energyNumber, sellDateTime, expiredDateTime, faceValue) {
+        return new Energy({ seller, energyNumber, sellDateTime, expiredDateTime, faceValue });
     }
 
     static getClass() {

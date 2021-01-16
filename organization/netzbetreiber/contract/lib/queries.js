@@ -23,12 +23,12 @@ class QueryUtils {
     // =========================================================================================
     /**
     * Get Asset History for a solar energy
-    * @param {String} issuer the CP issuer
+    * @param {String} seller the CP seller
     * @param {String} energyNumber solar energy number
     */
-    async getAssetHistory(issuer, energyNumber) {
+    async getAssetHistory(seller, energyNumber) {
 
-        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [issuer, energyNumber]);
+        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [seller, energyNumber]);
         const resultsIterator = await this.ctx.stub.getHistoryForKey(ledgerKey);
         let results = await this.getAllResults(resultsIterator, true);
 

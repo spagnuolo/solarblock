@@ -72,7 +72,7 @@ async function main() {
         // 1 asset history
         console.log('1. Query solar energy History....');
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00003');
+        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00001');
 
         let json = JSON.parse(queryResponse.toString());
         console.log(json);
@@ -81,7 +81,7 @@ async function main() {
         console.log('-----------------------------------------------------------------------------------------\n\n');
 
         // 2 ownership query
-        console.log('2. Query solar energy Ownership.... Energys owned by MagnetoCorp');
+        console.log('2. Query solar energy Ownership.... Energys owned by orgNetzbetreiber');
         console.log('-----------------------------------------------------------------------------------------\n');
         let queryResponse2 = await contract.evaluateTransaction('queryOwner', 'orgNetzbetreiber');
         json = JSON.parse(queryResponse2.toString());

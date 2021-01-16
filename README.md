@@ -22,7 +22,7 @@ User erstellen und Chaincode ausführen mit:
 cd organization/kunde/application
 npm install # einmalig nodejs Abhängigkeiten downloaden
 node enrollUser.js # wallet anlegen
-node issue.js # chaincode
+node sell.js # chaincode
 ```
 
 ```bash

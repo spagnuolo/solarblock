@@ -105,7 +105,7 @@ crl:
 #     (also known as an enrollment ID and secret).
 #  2) once authenticated, retrieves the identity's attribute names and
 #     values which the fabric-ca-server optionally puts into TCerts
-#     which it issues for transacting on the Hyperledger Fabric blockchain.
+#     which it sells for transacting on the Hyperledger Fabric blockchain.
 #     These attributes are useful for making access control decisions in
 #     chaincode.
 #  There are two main configuration options:
@@ -251,9 +251,9 @@ affiliations:
 #
 #  The "ca" profile subsection is used to sign intermediate CA certificates;
 #  the default expiration ("expiry" field) is "43800h" which is 5 years in hours.
-#  Note that "isca" is true, meaning that it issues a CA certificate.
-#  A maxpathlen of 0 means that the intermediate CA cannot issue other
-#  intermediate CA certificates, though it can still issue end entity certificates.
+#  Note that "isca" is true, meaning that it sells a CA certificate.
+#  A maxpathlen of 0 means that the intermediate CA cannot sell other
+#  intermediate CA certificates, though it can still sell end entity certificates.
 #  (See RFC 5280, section 4.2.1.9)
 #
 #  The "tls" profile subsection is used to sign TLS certificate requests;
@@ -293,12 +293,12 @@ signing:
 #  Examples:
 #  1) No pathlength value means no limit is requested.
 #  2) pathlength == 1 means a limit of 1 is requested which is the default for
-#     a root CA.  This means the root CA can issue intermediate CA certificates,
-#     but these intermediate CAs may not in turn issue other CA certificates
-#     though they can still issue end entity certificates.
+#     a root CA.  This means the root CA can sell intermediate CA certificates,
+#     but these intermediate CAs may not in turn sell other CA certificates
+#     though they can still sell end entity certificates.
 #  3) pathlength == 0 means a limit of 0 is requested;
-#     this is the default for an intermediate CA, which means it can not issue
-#     CA certificates though it can still issue end entity certificates.
+#     this is the default for an intermediate CA, which means it can not sell
+#     CA certificates though it can still sell end entity certificates.
 ###########################################################################
 csr:
    cn: ca.orgKunde.example.com

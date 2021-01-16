@@ -59,16 +59,16 @@ class EnergyContract extends Contract {
      * Issue solar energy
      *
      * @param {Context} ctx the transaction context
-     * @param {String} issuer solar energy issuer
-     * @param {Integer} energyNumber energy number for this issuer
-     * @param {String} issueDateTime energy issue date
+     * @param {String} seller solar energy seller
+     * @param {Integer} energyNumber energy number for this seller
+     * @param {String} sellDateTime energy sell date
      * @param {String} expiredDateTime energy expired date
      * @param {Integer} faceValue face value of energy
     */
-    async issue(ctx, issuer, energyNumber, issueDateTime, expiredDateTime, faceValue) {
+    async sell(ctx, seller, energyNumber, sellDateTime, expiredDateTime, faceValue) {
 
         // create an instance of the energy
-        let energy = Energy.createInstance(issuer, energyNumber, issueDateTime, expiredDateTime, parseInt(faceValue));
+        let energy = Energy.createInstance(seller, energyNumber, sellDateTime, expiredDateTime, parseInt(faceValue));
 
         // Smart contract, rather than energy, moves energy into ISSUED state
         energy.setSelling();
@@ -77,8 +77,8 @@ class EnergyContract extends Contract {
         let mspid = ctx.clientIdentity.getMSPID();
         energy.setOwnerMSP(mspid);
 
-        // Newly issued energy is owned by the issuer to begin with (recorded for reporting purposes)
-        energy.setOwner(issuer);
+        // Newly selld energy is owned by the seller to begin with (recorded for reporting purposes)
+        energy.setOwner(seller);
 
         // Add the energy to the list of all similar solar energys in the ledger world state
         await ctx.energyList.addEnergy(energy);
@@ -91,22 +91,22 @@ class EnergyContract extends Contract {
      * Buy solar energy
      *
       * @param {Context} ctx the transaction context
-      * @param {String} issuer solar energy issuer
-      * @param {Integer} energyNumber energy number for this issuer
+      * @param {String} seller solar energy seller
+      * @param {Integer} energyNumber energy number for this seller
       * @param {String} currentOwner current owner of energy
       * @param {String} newOwner new owner of energy
       * @param {Integer} price price paid for this energy // transaction input - not written to asset
       * @param {String} purchaseDateTime time energy was purchased (i.e. traded)  // transaction input - not written to asset
      */
-    async buy(ctx, issuer, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
+    async buy(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
 
         // Retrieve the current energy using key fields provided
-        let energyKey = Energy.makeKey([issuer, energyNumber]);
+        let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
         // Validate current owner
         if (energy.getOwner() !== currentOwner) {
-            throw new Error('\nEnergy ' + issuer + energyNumber + ' is not owned by ' + currentOwner);
+            throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + currentOwner);
         }
 
         // First buy moves state from ISSUED to TRADING (when running )
@@ -121,7 +121,7 @@ class EnergyContract extends Contract {
             let mspid = ctx.clientIdentity.getMSPID();
             energy.setOwnerMSP(mspid);
         } else {
-            throw new Error('\nEnergy ' + issuer + energyNumber + ' is not trading. Current state = ' + energy.getCurrentState());
+            throw new Error('\nEnergy ' + seller + energyNumber + ' is not trading. Current state = ' + energy.getCurrentState());
         }
 
         // Update the energy
@@ -135,23 +135,23 @@ class EnergyContract extends Contract {
       *  Note: 'buy_request' puts energy in 'PENDING' state - subject to transfer confirmation [below].
       * 
       * @param {Context} ctx the transaction context
-      * @param {String} issuer solar energy issuer
-      * @param {Integer} energyNumber energy number for this issuer
+      * @param {String} seller solar energy seller
+      * @param {Integer} energyNumber energy number for this seller
       * @param {String} currentOwner current owner of energy
       * @param {String} newOwner new owner of energy                              // transaction input - not written to asset per se - but written to block
       * @param {Integer} price price paid for this energy                         // transaction input - not written to asset per se - but written to block
       * @param {String} purchaseDateTime time energy was requested                // transaction input - ditto.
      */
-    async buy_request(ctx, issuer, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
+    async buy_request(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
         
 
         // Retrieve the current energy using key fields provided
-        let energyKey = Energy.makeKey([issuer, energyNumber]);
+        let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
         // Validate current owner - this is really information for the user trying the sample, rather than any 'authorisation' check per se FYI
         if (energy.getOwner() !== currentOwner) {
-            throw new Error('\nEnergy ' + issuer + energyNumber + ' is not owned by ' + currentOwner + ' provided as a paraneter');
+            throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + currentOwner + ' provided as a paraneter');
         }
         // energy set to 'PENDING' - can only be transferred (confirmed) by identity from owning org (MSP check).
         energy.setPending();
@@ -166,15 +166,15 @@ class EnergyContract extends Contract {
     /**
      * Query history of a solar energy
      * @param {Context} ctx the transaction context
-     * @param {String} issuer solar energy issuer
-     * @param {Integer} energyNumber energy number for this issuer
+     * @param {String} seller solar energy seller
+     * @param {Integer} energyNumber energy number for this seller
     */
-    async queryHistory(ctx, issuer, energyNumber) {
+    async queryHistory(ctx, seller, energyNumber) {
 
         // Get a key to be used for History query
 
         let query = new QueryUtils(ctx, 'org.solarnet.solarenergy');
-        let results = await query.getAssetHistory(issuer, energyNumber); // (cpKey);
+        let results = await query.getAssetHistory(seller, energyNumber); // (cpKey);
         return results;
 
     }
@@ -193,9 +193,9 @@ class EnergyContract extends Contract {
     }
 
     /**
-    * queryPartial solar energy - provide a prefix eg. "DigiBank" will list all energys _issued_ by DigiBank etc etc
+    * queryPartial solar energy - provide a prefix eg. "DigiBank" will list all energys _selld_ by DigiBank etc etc
     * @param {Context} ctx the transaction context
-    * @param {String} prefix asset class prefix (added to energylist namespace) eg. org.solarnet.solarenergyMagnetoCorp asset listing: energys issued by MagnetoCorp.
+    * @param {String} prefix asset class prefix (added to energylist namespace) eg. org.solarnet.solarenergyMagnetoCorp asset listing: energys selld by MagnetoCorp.
     */
     async queryPartial(ctx, prefix) {
 
@@ -240,7 +240,7 @@ class EnergyContract extends Contract {
                 break;
             case "value":
                 // may change to provide as a param - fixed value for now in this sample
-                querySelector = { "selector": { "faceValue": { "$gt": 4000000 } } };  // to test, issue CommEnergys with faceValue <= or => this figure.
+                querySelector = { "selector": { "faceValue": { "$gt": 4000000 } } };  // to test, sell CommEnergys with faceValue <= or => this figure.
                 break;
             default: // else, unknown named query
                 throw new Error('invalid named query supplied: ' + queryname + '- please try again ');

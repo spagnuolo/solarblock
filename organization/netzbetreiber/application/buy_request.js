@@ -75,7 +75,7 @@ async function main() {
 
         let energy = Energy.fromBuffer(buyResponse);
 
-        console.log(`${energy.issuer} solar energy : ${energy.energyNumber} has been provisionally purchased : the transfer must now be completed by energy owner`);
+        console.log(`${energy.seller} solar energy : ${energy.energyNumber} has been provisionally purchased : the transfer must now be completed by energy owner`);
         console.log('Transaction complete.');
 
     } catch (error) {
