@@ -8,7 +8,7 @@
  * This application has 6 basic steps:
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
- * 3. Access PaperNet network
+ * 3. Access EnergyNet network
  * 4. Construct request to query the ledger
  * 5. Evaluate transactions (queries)
  * 6. Process responses
@@ -54,7 +54,7 @@ async function main() {
 
         await gateway.connect(connectionProfile, connectionOptions);
 
-        // Access PaperNet network
+        // Access EnergyNet network
         console.log('Use network channel: mychannel.');
 
         const network = await gateway.getNetwork('mychannel');
@@ -62,7 +62,7 @@ async function main() {
         // Get addressability to solar energy contract
         console.log('Use org.solarnet.solarenergy smart contract.');
 
-        const contract = await network.getContract('papercontract', 'org.solarnet.solarenergy');
+        const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
         // queries - solar energy
         console.log('-----------------------------------------------------------------------------------------');
@@ -72,7 +72,7 @@ async function main() {
         // 1 asset history
         console.log('1. Query solar energy History....');
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00002');
+        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00003');
 
         let json = JSON.parse(queryResponse.toString());
         console.log(json);
@@ -81,18 +81,18 @@ async function main() {
         console.log('-----------------------------------------------------------------------------------------\n\n');
 
         // 2 ownership query
-        console.log('2. Query solar energy Ownership.... Papers owned by MagnetoCorp');
+        console.log('2. Query solar energy Ownership.... Energys owned by MagnetoCorp');
         console.log('-----------------------------------------------------------------------------------------\n');
         let queryResponse2 = await contract.evaluateTransaction('queryOwner', 'orgNetzbetreiber');
         json = JSON.parse(queryResponse2.toString());
         console.log(json);
 
         console.log('\n\n');
-        console.log('\n  Paper Ownership query complete.');
+        console.log('\n  Energy Ownership query complete.');
         console.log('-----------------------------------------------------------------------------------------\n\n');
 
         // // 3 partial key query
-        // console.log('3. Query solar energy Partial Key.... Papers in org.solarnet.solarenergys namespace and prefixed MagnetoCorp');
+        // console.log('3. Query solar energy Partial Key.... Energys in org.solarnet.solarenergys namespace and prefixed MagnetoCorp');
         // console.log('-----------------------------------------------------------------------------------------\n');
         // let queryResponse3 = await contract.evaluateTransaction('queryPartial', 'MagnetoCorp');
 
@@ -104,8 +104,8 @@ async function main() {
         // console.log('-----------------------------------------------------------------------------------------\n\n');
 
 
-        // // 4 Named query - all redeemed papers
-        // console.log('4. Named Query: ... All papers in org.solarnet.solarenergys that are in current state of redeemed');
+        // // 4 Named query - all redeemed energys
+        // console.log('4. Named Query: ... All energys in org.solarnet.solarenergys that are in current state of redeemed');
         // console.log('-----------------------------------------------------------------------------------------\n');
         // let queryResponse4 = await contract.evaluateTransaction('queryNamed', 'redeemed');
 
@@ -118,7 +118,7 @@ async function main() {
 
 
         // // 5 named query - by value
-        // console.log('5. Named Query:.... All papers in org.solarnet.solarenergys with faceValue > 4000000');
+        // console.log('5. Named Query:.... All energys in org.solarnet.solarenergys with faceValue > 4000000');
         // console.log('-----------------------------------------------------------------------------------------\n');
         // let queryResponse5 = await contract.evaluateTransaction('queryNamed', 'value');
 

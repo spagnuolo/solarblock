@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 'use strict';
 
 const State = require('../ledger-api/state.js');
-//const CommercialPaper = require('./paper.js');
+//const Energy = require('./energy.js');
 /**
  * Query Class for query functions such as history etc
  *

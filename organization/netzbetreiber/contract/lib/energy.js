@@ -16,13 +16,13 @@ const cpState = {
 };
 
 /**
- * CommercialPaper class extends State class
- * Class will be used by application and smart contract to define a paper
+ * Energy class extends State class
+ * Class will be used by application and smart contract to define a energy
  */
-class CommercialPaper extends State {
+class Energy extends State {
 
     constructor(obj) {
-        super(CommercialPaper.getClass(), [obj.issuer, obj.energyNumber]);
+        super(Energy.getClass(), [obj.issuer, obj.energyNumber]);
         Object.assign(this, obj);
     }
 
@@ -73,7 +73,7 @@ class CommercialPaper extends State {
     }
 
     static fromBuffer(buffer) {
-        return CommercialPaper.deserialize(buffer);
+        return Energy.deserialize(buffer);
     }
 
     toBuffer() {
@@ -85,14 +85,14 @@ class CommercialPaper extends State {
      * @param {Buffer} data to form back into the object
      */
     static deserialize(data) {
-        return State.deserializeClass(data, CommercialPaper);
+        return State.deserializeClass(data, Energy);
     }
 
     /**
      * Factory method to create a solar energy object
      */
     static createInstance(issuer, energyNumber, issueDateTime, expiredDateTime, faceValue) {
-        return new CommercialPaper({ issuer, energyNumber, issueDateTime, expiredDateTime, faceValue });
+        return new Energy({ issuer, energyNumber, issueDateTime, expiredDateTime, faceValue });
     }
 
     static getClass() {
@@ -100,4 +100,4 @@ class CommercialPaper extends State {
     }
 }
 
-module.exports = CommercialPaper;
+module.exports = Energy;

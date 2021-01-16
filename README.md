@@ -34,6 +34,6 @@ node redeem.js # chaincode
 ```
 
 ## Links
-* [solar energy tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_paper.html#examine-the-commercial-paper-smart-contract)
+* [solar energy tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_energy.html#examine-the-commercial-energy-smart-contract)
 * [Smart Contracts](organization/netzbetreiber/contract/lib)
 * [Chaincode](organization/kunde/application)

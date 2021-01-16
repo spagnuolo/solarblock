@@ -8,7 +8,7 @@
  * This application has 6 basic steps:
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
- * 3. Access PaperNet network
+ * 3. Access EnergyNet network
  * 4. Construct request to buy (buy_request) solar energy
  * 5. Submit transaction
  * 6. Process response
@@ -20,7 +20,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
-const CommercialPaper = require('../../kunde/contract/lib/paper.js');
+const Energy = require('../../kunde/contract/lib/energy.js');
 
 
 // Main program function
@@ -55,7 +55,7 @@ async function main() {
 
         await gateway.connect(connectionProfile, connectionOptions);
 
-        // Access PaperNet network
+        // Access EnergyNet network
         console.log('Use network channel: mychannel.');
 
         const network = await gateway.getNetwork('mychannel');
@@ -63,7 +63,7 @@ async function main() {
         // Get addressability to solar energy contract
         console.log('Use org.solarnet.solarenergy smart contract.');
 
-        const contract = await network.getContract('papercontract', 'org.solarnet.solarenergy');
+        const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
         // request to buy solar energy using buy_request / transfer two-part transaction
         console.log('Submit solar energy buy_request transaction.');
@@ -73,9 +73,9 @@ async function main() {
         // process response
         console.log('Process buy_request transaction response.');
 
-        let paper = CommercialPaper.fromBuffer(buyResponse);
+        let energy = Energy.fromBuffer(buyResponse);
 
-        console.log(`${paper.issuer} solar energy : ${paper.energyNumber} has been provisionally purchased : the transfer must now be completed by paper owner`);
+        console.log(`${energy.issuer} solar energy : ${energy.energyNumber} has been provisionally purchased : the transfer must now be completed by energy owner`);
         console.log('Transaction complete.');
 
     } catch (error) {

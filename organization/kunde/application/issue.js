@@ -8,7 +8,7 @@
  * This application has 6 basic steps:
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
- * 3. Access PaperNet network
+ * 3. Access EnergyNet network
  * 4. Construct request to issue solar energy
  * 5. Submit transaction
  * 6. Process response
@@ -20,7 +20,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
-const CommercialPaper = require('../contract/lib/paper.js');
+const Energy = require('../contract/lib/energy.js');
 
 // Main program function
 async function main() {
@@ -53,7 +53,7 @@ async function main() {
 
         await gateway.connect(connectionProfile, connectionOptions);
 
-        // Access PaperNet network
+        // Access EnergyNet network
         console.log('Use network channel: mychannel.');
 
         const network = await gateway.getNetwork('mychannel');
@@ -61,19 +61,19 @@ async function main() {
         // Get addressability to solar energy contract
         console.log('Use org.solarnet.solarenergy smart contract.');
 
-        const contract = await network.getContract('papercontract');
+        const contract = await network.getContract('energycontract');
 
         // issue solar energy
         console.log('Submit solar energy issue transaction.');
 
-        const issueResponse = await contract.submitTransaction('issue', 'orgKunde', '00002', '2021-01-25', '2021-02-25', '500kWh');
+        const issueResponse = await contract.submitTransaction('issue', 'orgKunde', '00001', '2021-01-25', '2021-02-25', '500kWh');
 
         // process response
         console.log('Process issue transaction response.' + issueResponse);
 
-        let paper = CommercialPaper.fromBuffer(issueResponse);
+        let energy = Energy.fromBuffer(issueResponse);
 
-        console.log(`${paper.issuer} solar energy : ${paper.energyNumber} successfully issued for value ${paper.faceValue}`);
+        console.log(`${energy.issuer} solar energy : ${energy.energyNumber} successfully issued for value ${energy.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {
