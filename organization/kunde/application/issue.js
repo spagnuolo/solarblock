@@ -66,14 +66,14 @@ async function main() {
         // issue solar energy
         console.log('Submit solar energy issue transaction.');
 
-        const issueResponse = await contract.submitTransaction('issue', 'orgKunde', '00002', '2021-01-25', '2021-02-25', '750kWh');
+        const issueResponse = await contract.submitTransaction('issue', 'orgKunde', '00002', '2021-01-25', '2021-02-25', '500kWh');
 
         // process response
         console.log('Process issue transaction response.' + issueResponse);
 
         let paper = CommercialPaper.fromBuffer(issueResponse);
 
-        console.log(`${paper.issuer} solar energy : ${paper.eneryNumber} successfully issued for value ${paper.faceValue}`);
+        console.log(`${paper.issuer} solar energy : ${paper.energyNumber} successfully issued for value ${paper.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {

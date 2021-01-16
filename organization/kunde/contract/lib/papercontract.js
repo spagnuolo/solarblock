@@ -60,18 +60,18 @@ class CommercialPaperContract extends Contract {
      *
      * @param {Context} ctx the transaction context
      * @param {String} issuer solar energy issuer
-     * @param {Integer} eneryNumber paper number for this issuer
+     * @param {Integer} energyNumber paper number for this issuer
      * @param {String} issueDateTime paper issue date
      * @param {String} expiredDateTime paper expired date
      * @param {Integer} faceValue face value of paper
     */
-    async issue(ctx, issuer, eneryNumber, issueDateTime, expiredDateTime, faceValue) {
+    async issue(ctx, issuer, energyNumber, issueDateTime, expiredDateTime, faceValue) {
 
         // create an instance of the paper
-        let paper = CommercialPaper.createInstance(issuer, eneryNumber, issueDateTime, expiredDateTime, parseInt(faceValue));
+        let paper = CommercialPaper.createInstance(issuer, energyNumber, issueDateTime, expiredDateTime, parseInt(faceValue));
 
-        // Smart contract, rather than paper, moves paper into ISSUED state
-        paper.setIssued();
+        // Smart contract, rather than paper, moves paper into SELLING state
+        paper.setSelling();
 
         // save the owner's MSP 
         let mspid = ctx.clientIdentity.getMSPID();
@@ -92,36 +92,36 @@ class CommercialPaperContract extends Contract {
      *
       * @param {Context} ctx the transaction context
       * @param {String} issuer solar energy issuer
-      * @param {Integer} eneryNumber paper number for this issuer
+      * @param {Integer} energyNumber paper number for this issuer
       * @param {String} currentOwner current owner of paper
       * @param {String} newOwner new owner of paper
       * @param {Integer} price price paid for this paper // transaction input - not written to asset
       * @param {String} purchaseDateTime time paper was purchased (i.e. traded)  // transaction input - not written to asset
      */
-    async buy(ctx, issuer, eneryNumber, currentOwner, newOwner, price, purchaseDateTime) {
+    async buy(ctx, issuer, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
 
         // Retrieve the current paper using key fields provided
-        let paperKey = CommercialPaper.makeKey([issuer, eneryNumber]);
+        let paperKey = CommercialPaper.makeKey([issuer, energyNumber]);
         let paper = await ctx.paperList.getPaper(paperKey);
 
         // Validate current owner
         if (paper.getOwner() !== currentOwner) {
-            throw new Error('\nPaper ' + issuer + eneryNumber + ' is not owned by ' + currentOwner);
+            throw new Error('\nPaper ' + issuer + energyNumber + ' is not owned by ' + currentOwner);
         }
 
-        // First buy moves state from ISSUED to TRADING (when running )
-        if (paper.isIssued()) {
-            paper.setTrading();
+        // First buy moves state from SELLING to TRANSFER (when running )
+        if (paper.isSelling()) {
+            paper.setBought();
         }
 
         // Check paper is not already REDEEMED
-        if (paper.isTrading()) {
+        if (paper.isBought()) {
             paper.setOwner(newOwner);
             // save the owner's MSP 
             let mspid = ctx.clientIdentity.getMSPID();
             paper.setOwnerMSP(mspid);
         } else {
-            throw new Error('\nPaper ' + issuer + eneryNumber + ' is not trading. Current state = ' + paper.getCurrentState());
+            throw new Error('\nPaper ' + issuer + energyNumber + ' is not trading. Current state = ' + paper.getCurrentState());
         }
 
         // Update the paper
@@ -136,109 +136,27 @@ class CommercialPaperContract extends Contract {
       * 
       * @param {Context} ctx the transaction context
       * @param {String} issuer solar energy issuer
-      * @param {Integer} eneryNumber paper number for this issuer
+      * @param {Integer} energyNumber paper number for this issuer
       * @param {String} currentOwner current owner of paper
       * @param {String} newOwner new owner of paper                              // transaction input - not written to asset per se - but written to block
       * @param {Integer} price price paid for this paper                         // transaction input - not written to asset per se - but written to block
       * @param {String} purchaseDateTime time paper was requested                // transaction input - ditto.
      */
-    async buy_request(ctx, issuer, eneryNumber, currentOwner, newOwner, price, purchaseDateTime) {
+    async buy_request(ctx, issuer, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
         
 
         // Retrieve the current paper using key fields provided
-        let paperKey = CommercialPaper.makeKey([issuer, eneryNumber]);
+        let paperKey = CommercialPaper.makeKey([issuer, energyNumber]);
         let paper = await ctx.paperList.getPaper(paperKey);
 
         // Validate current owner - this is really information for the user trying the sample, rather than any 'authorisation' check per se FYI
         if (paper.getOwner() !== currentOwner) {
-            throw new Error('\nPaper ' + issuer + eneryNumber + ' is not owned by ' + currentOwner + ' provided as a paraneter');
+            throw new Error('\nPaper ' + issuer + energyNumber + ' is not owned by ' + currentOwner + ' provided as a paraneter');
         }
         // paper set to 'PENDING' - can only be transferred (confirmed) by identity from owning org (MSP check).
         paper.setPending();
 
         // Update the paper
-        await ctx.paperList.updatePaper(paper);
-        return paper;
-    }
-
-    /**
-     * transfer solar energy: only the owning org has authority to execute. It is the complement to the 'buy_request' transaction. '[]' is optional below.
-     * eg. issue -> buy_request -> transfer -> [buy ...n | [buy_request...n | transfer ...n] ] -> redeem
-     * this transaction 'pair' is an alternative to the straight issue -> buy -> [buy....n] -> redeem ...path
-     *
-     * @param {Context} ctx the transaction context
-     * @param {String} issuer solar energy issuer
-     * @param {Integer} eneryNumber paper number for this issuer
-     * @param {String} newOwner new owner of paper
-     * @param {String} newOwnerMSP  MSP id of the transferee
-     * @param {String} confirmDateTime  confirmed transfer date.
-    */
-    async transfer(ctx, issuer, eneryNumber, newOwner, newOwnerMSP, confirmDateTime) {
-
-        // Retrieve the current paper using key fields provided
-        let paperKey = CommercialPaper.makeKey([issuer, eneryNumber]);
-        let paper = await ctx.paperList.getPaper(paperKey);
-
-        // Validate current owner's MSP in the paper === invoking transferor's MSP id - can only transfer if you are the owning org.
-
-        if (paper.getOwnerMSP() !== ctx.clientIdentity.getMSPID()) {
-            throw new Error('\nPaper ' + issuer + eneryNumber + ' is not owned by the current invoking Organisation, and not authorised to transfer');
-        }
-
-        // Paper needs to be 'pending' - which means you need to have run 'buy_pending' transaction first.
-        if ( ! paper.isPending()) {
-            throw new Error('\nPaper ' + issuer + eneryNumber + ' is not currently in state: PENDING for transfer to occur: \n must run buy_request transaction first');
-        }
-        // else all good
-
-        paper.setOwner(newOwner);
-        // set the MSP of the transferee (so that, that org may also pass MSP check, if subsequently transferred/sold on)
-        paper.setOwnerMSP(newOwnerMSP);
-        paper.setTrading();
-        paper.confirmDateTime = confirmDateTime;
-
-        // Update the paper
-        await ctx.paperList.updatePaper(paper);
-        return paper;
-    }
-
-    /**
-     * Redeem solar energy
-     *
-     * @param {Context} ctx the transaction context
-     * @param {String} issuer solar energy issuer
-     * @param {Integer} eneryNumber paper number for this issuer
-     * @param {String} redeemingOwner redeeming owner of paper
-     * @param {String} issuingOwnerMSP the MSP of the org that the paper will be redeemed with.
-     * @param {String} redeemDateTime time paper was redeemed
-    */
-    async redeem(ctx, issuer, eneryNumber, redeemingOwner, issuingOwnerMSP, redeemDateTime) {
-
-        let paperKey = CommercialPaper.makeKey([issuer, eneryNumber]);
-
-        let paper = await ctx.paperList.getPaper(paperKey);
-
-        // Check paper is not alread in a state of REDEEMED
-        if (paper.isRedeemed()) {
-            throw new Error('\nPaper ' + issuer + eneryNumber + ' has already been redeemed');
-        }
-
-        // Validate current redeemer's MSP matches the invoking redeemer's MSP id - can only redeem if you are the owning org.
-
-        if (paper.getOwnerMSP() !== ctx.clientIdentity.getMSPID()) {
-            throw new Error('\nPaper ' + issuer + eneryNumber + ' cannot be redeemed by ' + ctx.clientIdentity.getMSPID() + ', as it is not the authorised owning Organisation');
-        }
-
-        // As this is just a sample, can show additional verification check: that the redeemer provided matches that on record, before redeeming it
-        if (paper.getOwner() === redeemingOwner) {
-            paper.setOwner(paper.getIssuer());
-            paper.setOwnerMSP(issuingOwnerMSP);
-            paper.setRedeemed();
-            paper.redeemDateTime = redeemDateTime; // record redemption date against the asset (the complement to 'issue date')
-        } else {
-            throw new Error('\nRedeeming owner: ' + redeemingOwner + ' organisation does not currently own paper: ' + issuer + eneryNumber);
-        }
-
         await ctx.paperList.updatePaper(paper);
         return paper;
     }
@@ -249,14 +167,14 @@ class CommercialPaperContract extends Contract {
      * Query history of a solar energy
      * @param {Context} ctx the transaction context
      * @param {String} issuer solar energy issuer
-     * @param {Integer} eneryNumber paper number for this issuer
+     * @param {Integer} energyNumber paper number for this issuer
     */
-    async queryHistory(ctx, issuer, eneryNumber) {
+    async queryHistory(ctx, issuer, energyNumber) {
 
         // Get a key to be used for History query
 
-        let query = new QueryUtils(ctx, 'org.papernet.paper');
-        let results = await query.getAssetHistory(issuer, eneryNumber); // (cpKey);
+        let query = new QueryUtils(ctx, 'org.solarnet.solarenergy');
+        let results = await query.getAssetHistory(issuer, energyNumber); // (cpKey);
         return results;
 
     }
@@ -268,7 +186,7 @@ class CommercialPaperContract extends Contract {
     */
     async queryOwner(ctx, owner) {
 
-        let query = new QueryUtils(ctx, 'org.papernet.paper');
+        let query = new QueryUtils(ctx, 'org.solarnet.solarenergy');
         let owner_results = await query.queryKeyByOwner(owner);
 
         return owner_results;
@@ -277,11 +195,11 @@ class CommercialPaperContract extends Contract {
     /**
     * queryPartial solar energy - provide a prefix eg. "DigiBank" will list all papers _issued_ by DigiBank etc etc
     * @param {Context} ctx the transaction context
-    * @param {String} prefix asset class prefix (added to paperlist namespace) eg. org.papernet.paperMagnetoCorp asset listing: papers issued by MagnetoCorp.
+    * @param {String} prefix asset class prefix (added to paperlist namespace) eg. org.solarnet.solarenergyMagnetoCorp asset listing: papers issued by MagnetoCorp.
     */
     async queryPartial(ctx, prefix) {
 
-        let query = new QueryUtils(ctx, 'org.papernet.paper');
+        let query = new QueryUtils(ctx, 'org.solarnet.solarenergy');
         let partial_results = await query.queryKeyByPartial(prefix);
 
         return partial_results;
@@ -298,7 +216,7 @@ class CommercialPaperContract extends Contract {
     */
     async queryAdhoc(ctx, queryString) {
 
-        let query = new QueryUtils(ctx, 'org.papernet.paper');
+        let query = new QueryUtils(ctx, 'org.solarnet.solarenergy');
         let querySelector = JSON.parse(queryString);
         let adhoc_results = await query.queryByAdhoc(querySelector);
 
@@ -328,7 +246,7 @@ class CommercialPaperContract extends Contract {
                 throw new Error('invalid named query supplied: ' + queryname + '- please try again ');
         }
 
-        let query = new QueryUtils(ctx, 'org.papernet.paper');
+        let query = new QueryUtils(ctx, 'org.solarnet.solarenergy');
         let adhoc_results = await query.queryByAdhoc(querySelector);
 
         return adhoc_results;

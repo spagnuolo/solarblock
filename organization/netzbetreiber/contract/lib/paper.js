@@ -11,10 +11,8 @@ const State = require('./../ledger-api/state.js');
 
 // Enumerate solar energy state values
 const cpState = {
-    ISSUED: 1,
-    PENDING: 2,
-    TRADING: 3,
-    REDEEMED: 4
+    SELLING: 1,
+    BOUGHT: 2,
 };
 
 /**
@@ -24,18 +22,18 @@ const cpState = {
 class CommercialPaper extends State {
 
     constructor(obj) {
-        super(CommercialPaper.getClass(), [obj.issuer, obj.eneryNumber]);
+        super(CommercialPaper.getClass(), [obj.issuer, obj.energyNumber]);
         Object.assign(this, obj);
     }
 
     /**
      * Basic getters and setters
     */
-    getIssuer() {
+    getSeller() {
         return this.issuer;
     }
 
-    setIssuer(newIssuer) {
+    setSeller(newIssuer) {
         this.issuer = newIssuer;
     }
 
@@ -58,36 +56,20 @@ class CommercialPaper extends State {
     /**
      * Useful methods to encapsulate solar energy states
      */
-    setIssued() {
-        this.currentState = cpState.ISSUED;
+    setSelling() {
+        this.currentState = cpState.SELLING;
     }
 
-    setTrading() {
-        this.currentState = cpState.TRADING;
+    setBought() {
+        this.currentState = cpState.BOUGHT;
     }
 
-    setRedeemed() {
-        this.currentState = cpState.REDEEMED;
+    isSelling() {
+        return this.currentState === cpState.SELLING;
     }
 
-    setPending() {
-        this.currentState = cpState.PENDING;
-    }
-
-    isIssued() {
-        return this.currentState === cpState.ISSUED;
-    }
-
-    isTrading() {
-        return this.currentState === cpState.TRADING;
-    }
-
-    isRedeemed() {
-        return this.currentState === cpState.REDEEMED;
-    }
-
-    isPending() {
-        return this.currentState === cpState.PENDING;
+    isBought() {
+        return this.currentState === cpState.BOUGHT;
     }
 
     static fromBuffer(buffer) {
@@ -109,8 +91,8 @@ class CommercialPaper extends State {
     /**
      * Factory method to create a solar energy object
      */
-    static createInstance(issuer, eneryNumber, issueDateTime, expiredDateTime, faceValue) {
-        return new CommercialPaper({ issuer, eneryNumber, issueDateTime, expiredDateTime, faceValue });
+    static createInstance(issuer, energyNumber, issueDateTime, expiredDateTime, faceValue) {
+        return new CommercialPaper({ issuer, energyNumber, issueDateTime, expiredDateTime, faceValue });
     }
 
     static getClass() {

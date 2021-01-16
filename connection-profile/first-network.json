@@ -38,7 +38,7 @@
 		"OrgNetzbetreiberMSP": {
 			"mspid": "OrgNetzbetreiberMSP",
 			"adminPrivateKey": {
-				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/keystore/d961df66d57a8794c32d710523c88ce663f3ea308e6195c53e089fbf6ce669bb_sk"
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/keystore/227238cb7eb2609d4a0caa281b9beefebeff4bd84aad62436462762cd320809b_sk"
 			},
 			"peers": ["peer0.orgNetzbetreiber.example.com"],
 			"signedCert": {

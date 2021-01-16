@@ -14,7 +14,7 @@ const CommercialPaper = require('./paper.js');
 class PaperList extends StateList {
 
     constructor(ctx) {
-        super(ctx, 'org.papernet.paper');
+        super(ctx, 'org.solarnet.solarenergy');
         this.use(CommercialPaper);
     }
 

@@ -75,7 +75,7 @@ async function main() {
 
         let paper = CommercialPaper.fromBuffer(buyResponse);
 
-        console.log(`${paper.issuer} solar energy : ${paper.eneryNumber} has been provisionally purchased : the transfer must now be completed by paper owner`);
+        console.log(`${paper.issuer} solar energy : ${paper.energyNumber} has been provisionally purchased : the transfer must now be completed by paper owner`);
         console.log('Transaction complete.');
 
     } catch (error) {

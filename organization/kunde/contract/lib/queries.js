@@ -24,11 +24,11 @@ class QueryUtils {
     /**
     * Get Asset History for a solar energy
     * @param {String} issuer the CP issuer
-    * @param {String} eneryNumber solar energy number
+    * @param {String} energyNumber solar energy number
     */
-    async getAssetHistory(issuer, eneryNumber) {
+    async getAssetHistory(issuer, energyNumber) {
 
-        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [issuer, eneryNumber]);
+        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [issuer, energyNumber]);
         const resultsIterator = await this.ctx.stub.getHistoryForKey(ledgerKey);
         let results = await this.getAllResults(resultsIterator, true);
 
@@ -56,8 +56,8 @@ class QueryUtils {
             throw new Error('Incorrect number of arguments. Expecting 1');
         }
         // ie namespace + prefix to assets etc eg 
-        // "Key":"org.papernet.paperMagnetoCorp0001"   (0002, etc)
-        // "Partial":'org.papernet.paperlistMagnetoCorp"'  (using partial key, find keys "0001", "0002" etc)
+        // "Key":"org.solarnet.solarenergyMagnetoCorp0001"   (0002, etc)
+        // "Partial":'org.solarnet.solarenergylistMagnetoCorp"'  (using partial key, find keys "0001", "0002" etc)
         const resultsIterator = await this.ctx.stub.getStateByPartialCompositeKey(this.name, [assetspace]);
         let method = this.getAllResults;
         let results = await method(resultsIterator, false);
@@ -169,16 +169,10 @@ class QueryUtils {
                             // report the solar energy states during the asset lifecycle, just for asset history reporting
                             switch (jsonRes.Value.currentState) {
                                 case 1:
-                                    jsonRes.Value.currentState = 'ISSUED';
+                                    jsonRes.Value.currentState = 'SELLING';
                                     break;
                                 case 2:
-                                    jsonRes.Value.currentState = 'PENDING';
-                                    break;
-                                case 3:
-                                    jsonRes.Value.currentState = 'TRADING';
-                                    break;
-                                case 4:
-                                    jsonRes.Value.currentState = 'REDEEMED';
+                                    jsonRes.Value.currentState = 'BOUGHT';
                                     break;
                                 default: // else, unknown named query
                                     jsonRes.Value.currentState = 'UNKNOWN';

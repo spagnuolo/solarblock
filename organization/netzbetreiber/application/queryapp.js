@@ -72,7 +72,7 @@ async function main() {
         // 1 asset history
         console.log('1. Query solar energy History....');
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00001');
+        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00002');
 
         let json = JSON.parse(queryResponse.toString());
         console.log(json);
@@ -92,7 +92,7 @@ async function main() {
         console.log('-----------------------------------------------------------------------------------------\n\n');
 
         // // 3 partial key query
-        // console.log('3. Query solar energy Partial Key.... Papers in org.papernet.papers namespace and prefixed MagnetoCorp');
+        // console.log('3. Query solar energy Partial Key.... Papers in org.solarnet.solarenergys namespace and prefixed MagnetoCorp');
         // console.log('-----------------------------------------------------------------------------------------\n');
         // let queryResponse3 = await contract.evaluateTransaction('queryPartial', 'MagnetoCorp');
 
@@ -105,7 +105,7 @@ async function main() {
 
 
         // // 4 Named query - all redeemed papers
-        // console.log('4. Named Query: ... All papers in org.papernet.papers that are in current state of redeemed');
+        // console.log('4. Named Query: ... All papers in org.solarnet.solarenergys that are in current state of redeemed');
         // console.log('-----------------------------------------------------------------------------------------\n');
         // let queryResponse4 = await contract.evaluateTransaction('queryNamed', 'redeemed');
 
@@ -118,7 +118,7 @@ async function main() {
 
 
         // // 5 named query - by value
-        // console.log('5. Named Query:.... All papers in org.papernet.papers with faceValue > 4000000');
+        // console.log('5. Named Query:.... All papers in org.solarnet.solarenergys with faceValue > 4000000');
         // console.log('-----------------------------------------------------------------------------------------\n');
         // let queryResponse5 = await contract.evaluateTransaction('queryNamed', 'value');
 
