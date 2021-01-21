@@ -51,7 +51,7 @@ class State {
      * @return {buffer} buffer with the data to store
      */
     static serialize(object) {
-        // don't write the key:value passed in - we already have a real composite key, issuer and paper Number.
+        // don't write the key:value passed in - we already have a real composite key, seller and energy Number.
         delete object.key;
         return Buffer.from(JSON.stringify(object));
     }

@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 'use strict';
 
 const State = require('../ledger-api/state.js');
-//const CommercialPaper = require('./paper.js');
+//const Energy = require('./energy.js');
 /**
  * Query Class for query functions such as history etc
  *
@@ -22,13 +22,13 @@ class QueryUtils {
     // getAssetHistory takes the composite key as arg, gets returns results as JSON to 'main contract'
     // =========================================================================================
     /**
-    * Get Asset History for a commercial paper
-    * @param {String} issuer the CP issuer
-    * @param {String} paperNumber commercial paper number
+    * Get Asset History for a solar energy
+    * @param {String} seller the CP seller
+    * @param {String} energyNumber solar energy number
     */
-    async getAssetHistory(issuer, paperNumber) {
+    async getAssetHistory(seller, energyNumber) {
 
-        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [issuer, paperNumber]);
+        let ledgerKey = await this.ctx.stub.createCompositeKey(this.name, [seller, energyNumber]);
         const resultsIterator = await this.ctx.stub.getHistoryForKey(ledgerKey);
         let results = await this.getAllResults(resultsIterator, true);
 
@@ -47,7 +47,7 @@ class QueryUtils {
     // 
     // ===========================================================================================
     /**
-    * queryOwner commercial paper
+    * queryOwner solar energy
     * @param {String} assetspace the asset space (eg MagnetoCorp's assets)
     */
     async queryKeyByPartial(assetspace) {
@@ -56,8 +56,8 @@ class QueryUtils {
             throw new Error('Incorrect number of arguments. Expecting 1');
         }
         // ie namespace + prefix to assets etc eg 
-        // "Key":"org.papernet.paperMagnetoCorp0001"   (0002, etc)
-        // "Partial":'org.papernet.paperlistMagnetoCorp"'  (using partial key, find keys "0001", "0002" etc)
+        // "Key":"org.solarnet.solarenergyMagnetoCorp0001"   (0002, etc)
+        // "Partial":'org.solarnet.solarenergylistMagnetoCorp"'  (using partial key, find keys "0001", "0002" etc)
         const resultsIterator = await this.ctx.stub.getStateByPartialCompositeKey(this.name, [assetspace]);
         let method = this.getAllResults;
         let results = await method(resultsIterator, false);
@@ -72,8 +72,8 @@ class QueryUtils {
     // Only available on state databases that support rich query (e.g. CouchDB)
     // =========================================================================================
     /**
-    * queryKeyByOwner commercial paper
-    * @param {String} owner commercial paper owner
+    * queryKeyByOwner solar energy
+    * @param {String} owner solar energy owner
     */
     async queryKeyByOwner(owner) {
         //  
@@ -100,7 +100,7 @@ class QueryUtils {
     // example passed using VS Code ext: ["{\"selector\": {\"owner\": \"MagnetoCorp\"}}"]
     // =========================================================================================
     /**
-    * query By AdHoc string (commercial paper)
+    * query By AdHoc string (solar energy)
     * @param {String} queryString actual MangoDB query string (escaped)
     */
     async queryByAdhoc(queryString) {
@@ -166,19 +166,13 @@ class QueryUtils {
                     } else {
                         try {
                             jsonRes.Value = JSON.parse(res.value.value.toString('utf8'));
-                            // report the commercial paper states during the asset lifecycle, just for asset history reporting
+                            // report the solar energy states during the asset lifecycle, just for asset history reporting
                             switch (jsonRes.Value.currentState) {
                                 case 1:
-                                    jsonRes.Value.currentState = 'ISSUED';
+                                    jsonRes.Value.currentState = 'SELLING';
                                     break;
                                 case 2:
-                                    jsonRes.Value.currentState = 'PENDING';
-                                    break;
-                                case 3:
-                                    jsonRes.Value.currentState = 'TRADING';
-                                    break;
-                                case 4:
-                                    jsonRes.Value.currentState = 'REDEEMED';
+                                    jsonRes.Value.currentState = 'BOUGHT';
                                     break;
                                 default: // else, unknown named query
                                     jsonRes.Value.currentState = 'UNKNOWN';
