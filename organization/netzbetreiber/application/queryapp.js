@@ -8,7 +8,7 @@
  * This application has 6 basic steps:
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
- * 3. Access PaperNet network
+ * 3. Access EnergyNet network
  * 4. Construct request to query the ledger
  * 5. Evaluate transactions (queries)
  * 6. Process responses
@@ -54,25 +54,25 @@ async function main() {
 
         await gateway.connect(connectionProfile, connectionOptions);
 
-        // Access PaperNet network
+        // Access EnergyNet network
         console.log('Use network channel: mychannel.');
 
         const network = await gateway.getNetwork('mychannel');
 
-        // Get addressability to commercial paper contract
-        console.log('Use org.papernet.commercialpaper smart contract.');
+        // Get addressability to solar energy contract
+        console.log('Use org.solarnet.solarenergy smart contract.');
 
-        const contract = await network.getContract('papercontract', 'org.papernet.commercialpaper');
+        const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
-        // queries - commercial paper
+        // queries - solar energy
         console.log('-----------------------------------------------------------------------------------------');
-        console.log('****** Submitting commercial paper queries ****** \n\n ');
+        console.log('****** Submitting solar energy queries ****** \n\n ');
 
 
         // 1 asset history
-        console.log('1. Query Commercial Paper History....');
+        console.log('1. Query solar energy History....');
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse = await contract.evaluateTransaction('queryHistory', 'MagnetoCorp', '00001');
+        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00001');
 
         let json = JSON.parse(queryResponse.toString());
         console.log(json);
@@ -81,52 +81,52 @@ async function main() {
         console.log('-----------------------------------------------------------------------------------------\n\n');
 
         // 2 ownership query
-        console.log('2. Query Commercial Paper Ownership.... Papers owned by MagnetoCorp');
+        console.log('2. Query solar energy Ownership.... Energys owned by orgNetzbetreiber');
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse2 = await contract.evaluateTransaction('queryOwner', 'MagnetoCorp');
+        let queryResponse2 = await contract.evaluateTransaction('queryOwner', 'orgNetzbetreiber');
         json = JSON.parse(queryResponse2.toString());
         console.log(json);
 
         console.log('\n\n');
-        console.log('\n  Paper Ownership query complete.');
+        console.log('\n  Energy Ownership query complete.');
         console.log('-----------------------------------------------------------------------------------------\n\n');
 
-        // 3 partial key query
-        console.log('3. Query Commercial Paper Partial Key.... Papers in org.papernet.papers namespace and prefixed MagnetoCorp');
-        console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse3 = await contract.evaluateTransaction('queryPartial', 'MagnetoCorp');
+        // // 3 partial key query
+        // console.log('3. Query solar energy Partial Key.... Energys in org.solarnet.solarenergys namespace and prefixed MagnetoCorp');
+        // console.log('-----------------------------------------------------------------------------------------\n');
+        // let queryResponse3 = await contract.evaluateTransaction('queryPartial', 'MagnetoCorp');
 
-        json = JSON.parse(queryResponse3.toString());
-        console.log(json);
-        console.log('\n\n');
+        // json = JSON.parse(queryResponse3.toString());
+        // console.log(json);
+        // console.log('\n\n');
 
-        console.log('\n  Partial Key query complete.');
-        console.log('-----------------------------------------------------------------------------------------\n\n');
-
-
-        // 4 Named query - all redeemed papers
-        console.log('4. Named Query: ... All papers in org.papernet.papers that are in current state of redeemed');
-        console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse4 = await contract.evaluateTransaction('queryNamed', 'redeemed');
-
-        json = JSON.parse(queryResponse4.toString());
-        console.log(json);
-        console.log('\n\n');
-
-        console.log('\n  Named query "redeemed" complete.');
-        console.log('-----------------------------------------------------------------------------------------\n\n');
+        // console.log('\n  Partial Key query complete.');
+        // console.log('-----------------------------------------------------------------------------------------\n\n');
 
 
-        // 5 named query - by value
-        console.log('5. Named Query:.... All papers in org.papernet.papers with faceValue > 4000000');
-        console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse5 = await contract.evaluateTransaction('queryNamed', 'value');
+        // // 4 Named query - all redeemed energys
+        // console.log('4. Named Query: ... All energys in org.solarnet.solarenergys that are in current state of redeemed');
+        // console.log('-----------------------------------------------------------------------------------------\n');
+        // let queryResponse4 = await contract.evaluateTransaction('queryNamed', 'redeemed');
 
-        json = JSON.parse(queryResponse5.toString());
-        console.log(json);
-        console.log('\n\n');
+        // json = JSON.parse(queryResponse4.toString());
+        // console.log(json);
+        // console.log('\n\n');
 
-        console.log('\n  Named query by "value" complete.');
+        // console.log('\n  Named query "redeemed" complete.');
+        // console.log('-----------------------------------------------------------------------------------------\n\n');
+
+
+        // // 5 named query - by value
+        // console.log('5. Named Query:.... All energys in org.solarnet.solarenergys with faceValue > 4000000');
+        // console.log('-----------------------------------------------------------------------------------------\n');
+        // let queryResponse5 = await contract.evaluateTransaction('queryNamed', 'value');
+
+        // json = JSON.parse(queryResponse5.toString());
+        // console.log(json);
+        // console.log('\n\n');
+
+        // console.log('\n  Named query by "value" complete.');
         console.log('-----------------------------------------------------------------------------------------\n\n');
     } catch (error) {
 

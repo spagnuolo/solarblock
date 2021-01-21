@@ -22,7 +22,7 @@ User erstellen und Chaincode ausführen mit:
 cd organization/kunde/application
 npm install # einmalig nodejs Abhängigkeiten downloaden
 node enrollUser.js # wallet anlegen
-node issue.js # chaincode
+node sell.js # chaincode
 ```
 
 ```bash
@@ -34,6 +34,6 @@ node redeem.js # chaincode
 ```
 
 ## Links
-* [Commercial paper tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_paper.html#examine-the-commercial-paper-smart-contract)
+* [solar energy tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_energy.html#examine-the-commercial-energy-smart-contract)
 * [Smart Contracts](organization/netzbetreiber/contract/lib)
 * [Chaincode](organization/kunde/application)
