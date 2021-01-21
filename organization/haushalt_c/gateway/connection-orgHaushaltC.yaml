@@ -1,0 +1,63 @@
+---
+name: test-network-orgHaushaltC
+version: 1.0.0
+client:
+  organization: OrgHaushaltC
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgHaushaltC:
+    mspid: OrgHaushaltCMSP
+    peers:
+    - peer0.orgHaushaltC.example.com
+    certificateAuthorities:
+    - ca.orgHaushaltC.example.com
+peers:
+  peer0.orgHaushaltC.example.com:
+    url: grpcs://localhost:18051
+    tlsCACerts:
+      pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICFjCCAb2gAwIBAgIUMiwgz5DhFxY4Lel7h18vOLOnhzQwCgYIKoZIzj0EAwIw
+          aDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+          EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt
+          Y2Etc2VydmVyMB4XDTIxMDEyMTE5MzcwMFoXDTM2MDExODE5MzcwMFowaDELMAkG
+          A1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl
+          cmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy
+          dmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEo76p2ZYgizXWrMoTQ9SmmVop
+          57wRpnnY4gYN93O+rYZircXQwpAFY65Tjgeja0XM83dNcSufZpi+7c2RL+gqgqNF
+          MEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE
+          FHqD85XNeoFCNHUSx4ksdf7qAhQTMAoGCCqGSM49BAMCA0cAMEQCIHzP/S+mJ5yF
+          QAvL0LygX+UqaGvuNVXwegYIJzZRkBkPAiADfRIs/DuNOndYCeP62GUq+wBSO7Af
+          Wg8DT5Kxjgik6A==
+          -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer0.orgHaushaltC.example.com
+      hostnameOverride: peer0.orgHaushaltC.example.com
+certificateAuthorities:
+  ca.orgHaushaltC.example.com:
+    url: https://localhost:18054
+    caName: ca-orgHaushaltC
+    tlsCACerts:
+      pem: 
+        - |
+          -----BEGIN CERTIFICATE-----
+          MIICFjCCAb2gAwIBAgIUMiwgz5DhFxY4Lel7h18vOLOnhzQwCgYIKoZIzj0EAwIw
+          aDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+          EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt
+          Y2Etc2VydmVyMB4XDTIxMDEyMTE5MzcwMFoXDTM2MDExODE5MzcwMFowaDELMAkG
+          A1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl
+          cmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy
+          dmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEo76p2ZYgizXWrMoTQ9SmmVop
+          57wRpnnY4gYN93O+rYZircXQwpAFY65Tjgeja0XM83dNcSufZpi+7c2RL+gqgqNF
+          MEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE
+          FHqD85XNeoFCNHUSx4ksdf7qAhQTMAoGCCqGSM49BAMCA0cAMEQCIHzP/S+mJ5yF
+          QAvL0LygX+UqaGvuNVXwegYIJzZRkBkPAiADfRIs/DuNOndYCeP62GUq+wBSO7Af
+          Wg8DT5Kxjgik6A==
+          -----END CERTIFICATE-----
+          
+    httpOptions:
+      verify: false

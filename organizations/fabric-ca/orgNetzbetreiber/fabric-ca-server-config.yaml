@@ -240,7 +240,7 @@ affiliations:
    orgNetzbetreiber:
       - department1
       - department2
-   orgKunde:
+   orgHaushaltA:
       - department1
 
 #############################################################################

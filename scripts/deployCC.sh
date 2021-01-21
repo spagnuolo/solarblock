@@ -318,10 +318,10 @@ chaincodeQuery() {
 ## package the chaincode
 packageChaincode 1
 
-## Install chaincode on peer0.orgNetzbetreiber and peer0.orgKunde
+## Install chaincode on peer0.orgNetzbetreiber and peer0.orgHaushaltA
 infoln "Installing chaincode on peer0.orgNetzbetreiber..."
 installChaincode 1
-infoln "Install chaincode on peer0.orgKunde..."
+infoln "Install chaincode on peer0.orgHaushaltA..."
 installChaincode 2
 
 ## query whether the chaincode is installed
@@ -331,17 +331,17 @@ queryInstalled 1
 approveForMyOrg 1
 
 ## check whether the chaincode definition is ready to be committed
-## expect orgNetzbetreiber to have approved and orgKunde not to
-checkCommitReadiness 1 "\"OrgNetzbetreiberMSP\": true" "\"OrgKundeMSP\": false"
-checkCommitReadiness 2 "\"OrgNetzbetreiberMSP\": true" "\"OrgKundeMSP\": false"
+## expect orgNetzbetreiber to have approved and orgHaushaltA not to
+checkCommitReadiness 1 "\"OrgNetzbetreiberMSP\": true" "\"OrgHaushaltAMSP\": false"
+checkCommitReadiness 2 "\"OrgNetzbetreiberMSP\": true" "\"OrgHaushaltAMSP\": false"
 
-## now approve also for orgKunde
+## now approve also for orgHaushaltA
 approveForMyOrg 2
 
 ## check whether the chaincode definition is ready to be committed
 ## expect them both to have approved
-checkCommitReadiness 1 "\"OrgNetzbetreiberMSP\": true" "\"OrgKundeMSP\": true"
-checkCommitReadiness 2 "\"OrgNetzbetreiberMSP\": true" "\"OrgKundeMSP\": true"
+checkCommitReadiness 1 "\"OrgNetzbetreiberMSP\": true" "\"OrgHaushaltAMSP\": true"
+checkCommitReadiness 2 "\"OrgNetzbetreiberMSP\": true" "\"OrgHaushaltAMSP\": true"
 
 ## now that we know for sure both orgs have approved, commit the definition
 commitChaincodeDefinition 1 2

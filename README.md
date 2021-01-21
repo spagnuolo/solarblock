@@ -19,7 +19,7 @@ cc.sh
 
 User erstellen und Chaincode ausführen mit:
 ```bash
-cd organization/kunde/application
+cd organization/haushalt_a/application
 npm install # einmalig nodejs Abhängigkeiten downloaden
 node enrollUser.js # wallet anlegen
 node sell.js # chaincode
@@ -36,4 +36,4 @@ node redeem.js # chaincode
 ## Links
 * [solar energy tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_energy.html#examine-the-commercial-energy-smart-contract)
 * [Smart Contracts](organization/netzbetreiber/contract/lib)
-* [Chaincode](organization/kunde/application)
+* [Chaincode](organization/haushalt_a/application)

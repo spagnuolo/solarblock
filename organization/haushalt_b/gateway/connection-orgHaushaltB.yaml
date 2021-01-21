@@ -1,0 +1,65 @@
+---
+name: test-network-orgHaushaltB
+version: 1.0.0
+client:
+  organization: OrgHaushaltB
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgHaushaltB:
+    mspid: OrgHaushaltBMSP
+    peers:
+    - peer0.orgHaushaltB.example.com
+    certificateAuthorities:
+    - ca.orgHaushaltB.example.com
+peers:
+  peer0.orgHaushaltB.example.com:
+    url: grpcs://localhost:19051
+    tlsCACerts:
+      pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICPzCCAeWgAwIBAgIUFtACGsrykI8btakTZN/Qlgnaq3QwCgYIKoZIzj0EAwIw
+          fDELMAkGA1UEBhMCVUsxEjAQBgNVBAgTCUhhbXBzaGlyZTEQMA4GA1UEBxMHSHVy
+          c2xleTEhMB8GA1UEChMYb3JnSGF1c2hhbHRCLmV4YW1wbGUuY29tMSQwIgYDVQQD
+          ExtjYS5vcmdIYXVzaGFsdEIuZXhhbXBsZS5jb20wHhcNMjEwMTIxMTkzNzAwWhcN
+          MzYwMTE4MTkzNzAwWjB8MQswCQYDVQQGEwJVSzESMBAGA1UECBMJSGFtcHNoaXJl
+          MRAwDgYDVQQHEwdIdXJzbGV5MSEwHwYDVQQKExhvcmdIYXVzaGFsdEIuZXhhbXBs
+          ZS5jb20xJDAiBgNVBAMTG2NhLm9yZ0hhdXNoYWx0Qi5leGFtcGxlLmNvbTBZMBMG
+          ByqGSM49AgEGCCqGSM49AwEHA0IABHvkdVnHuTgWqAD2S2Kk8vVwuST7rUVAkFso
+          xqsWKOEnsgbv6lnXrG3KohK3bmUV4VHOQw2tcvK1O1xbsfVmhX6jRTBDMA4GA1Ud
+          DwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0GA1UdDgQWBBSqbhdh3bWn
+          hTILQ0X+q4fHp7ZonzAKBggqhkjOPQQDAgNIADBFAiEA8KDID4/CpxruqmLccCHm
+          xBNZzH7drf/r1Anc18sHgxYCICrxygRFrffBlrv87EGVZD2cAL4WIRCElCaANjAI
+          vz47
+          -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer0.orgHaushaltB.example.com
+      hostnameOverride: peer0.orgHaushaltB.example.com
+certificateAuthorities:
+  ca.orgHaushaltB.example.com:
+    url: https://localhost:19054
+    caName: ca-orgHaushaltB
+    tlsCACerts:
+      pem: 
+        - |
+          -----BEGIN CERTIFICATE-----
+          MIICPzCCAeWgAwIBAgIUFtACGsrykI8btakTZN/Qlgnaq3QwCgYIKoZIzj0EAwIw
+          fDELMAkGA1UEBhMCVUsxEjAQBgNVBAgTCUhhbXBzaGlyZTEQMA4GA1UEBxMHSHVy
+          c2xleTEhMB8GA1UEChMYb3JnSGF1c2hhbHRCLmV4YW1wbGUuY29tMSQwIgYDVQQD
+          ExtjYS5vcmdIYXVzaGFsdEIuZXhhbXBsZS5jb20wHhcNMjEwMTIxMTkzNzAwWhcN
+          MzYwMTE4MTkzNzAwWjB8MQswCQYDVQQGEwJVSzESMBAGA1UECBMJSGFtcHNoaXJl
+          MRAwDgYDVQQHEwdIdXJzbGV5MSEwHwYDVQQKExhvcmdIYXVzaGFsdEIuZXhhbXBs
+          ZS5jb20xJDAiBgNVBAMTG2NhLm9yZ0hhdXNoYWx0Qi5leGFtcGxlLmNvbTBZMBMG
+          ByqGSM49AgEGCCqGSM49AwEHA0IABHvkdVnHuTgWqAD2S2Kk8vVwuST7rUVAkFso
+          xqsWKOEnsgbv6lnXrG3KohK3bmUV4VHOQw2tcvK1O1xbsfVmhX6jRTBDMA4GA1Ud
+          DwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0GA1UdDgQWBBSqbhdh3bWn
+          hTILQ0X+q4fHp7ZonzAKBggqhkjOPQQDAgNIADBFAiEA8KDID4/CpxruqmLccCHm
+          xBNZzH7drf/r1Anc18sHgxYCICrxygRFrffBlrv87EGVZD2cAL4WIRCElCaANjAI
+          vz47
+          -----END CERTIFICATE-----
+          
+    httpOptions:
+      verify: false

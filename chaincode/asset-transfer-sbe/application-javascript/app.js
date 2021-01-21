@@ -66,7 +66,7 @@ const channelName = 'mychannel';
 const chaincodeName = 'sbe';
 
 const org1 = 'OrgNetzbetreiberMSP';
-const org2 = 'OrgKundeMSP';
+const org2 = 'OrgHaushaltAMSP';
 const Org1UserId = 'appUser1';
 const Org2UserId = 'appUser2';
 
@@ -142,7 +142,7 @@ function checkAsset(org, assetKey, resultBuffer, value, ownerOrg) {
 		} else {
 			console.log(`*** Failed from ${org} - asset ${asset.ID} has value of ${asset.Value} and owned by ${asset.OwnerOrg}`);
 		}
-	} else if (!asset && value === 0 ) {
+	} else if (!asset && value === 0) {
 		console.log(`*** Success from ${org} - asset ${assetKey} does not exist`);
 	} else {
 		console.log('*** Failed - asset read failed');

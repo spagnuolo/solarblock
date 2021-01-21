@@ -29,7 +29,7 @@
 //   to deploy a chaincode to a channel with the endorsement and private collection
 //   settings.
 //         ===> from directory /fabric-samples/test-network
-//         ./network.sh deployCC -ccn secured -ccl go -ccep "OR('OrgNetzbetreiberMSP.peer','OrgKundeMSP.peer')"
+//         ./network.sh deployCC -ccn secured -ccl go -ccep "OR('OrgNetzbetreiberMSP.peer','OrgHaushaltAMSP.peer')"
 //
 // - Be sure that node.js is installed
 //         ===> from directory /fabric-samples/asset-transfer-sbe/application-javascript
@@ -69,7 +69,7 @@ const channelName = 'mychannel';
 const chaincodeName = 'secured';
 
 const org1 = 'OrgNetzbetreiberMSP';
-const org2 = 'OrgKundeMSP';
+const org2 = 'OrgHaushaltAMSP';
 const Org1UserId = 'appUser1';
 const Org2UserId = 'appUser2';
 

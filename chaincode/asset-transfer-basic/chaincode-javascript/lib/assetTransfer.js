@@ -20,7 +20,7 @@ class AssetTransfer extends Contract {
     // export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt
     // export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp
     // export CORE_PEER_ADDRESS=localhost:7051
-    // Command to initialize  : peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgKunde.example.com/peers/peer0.orgKunde.example.com/tls/ca.crt -c '{"function":"InitLedger","Args":[]}'
+    // Command to initialize  : peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/orgHaushaltA.example.com/peers/peer0.orgHaushaltA.example.com/tls/ca.crt -c '{"function":"InitLedger","Args":[]}'
     // REMEMBER: Chaincodes are invoked when a network member wants to transfer or change an asset on the ledger(like InitLedger,CreateAsset,UpdateAsset,DeleteAsset and pass the appropriate parameters in Args).
     // To QUERY ReadAsset,AssetExists,GetAllAssets use chaincode query: .e.g. chaincode query  peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}' 
 
@@ -40,13 +40,13 @@ class AssetTransfer extends Contract {
             },
             {
                 ID: 'asset3',
-                Owner: 'OrgKunde',
+                Owner: 'OrgHaushaltA',
                 Status: 'transfered',
                 Energy: '350kWh',
             },
             {
                 ID: 'asset4',
-                Owner: 'OrgKunde',
+                Owner: 'OrgHaushaltA',
                 Status: 'transfered',
                 Energy: '800kWh',
             },
@@ -60,7 +60,7 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset sells a new asset to the world state with given details.
-    async CreateAsset(ctx, id, owner,status, energy) {
+    async CreateAsset(ctx, id, owner, status, energy) {
         const asset = {
             ID: id,
             Owner: owner,
@@ -81,7 +81,7 @@ class AssetTransfer extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id, owner,status,energy) {
+    async UpdateAsset(ctx, id, owner, status, energy) {
         const exists = await this.AssetExists(ctx, id);
         if (!exists) {
             throw new Error(`The asset ${id} does not exist`);
