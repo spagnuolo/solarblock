@@ -3,9 +3,6 @@ export PATH=${PWD}/bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/configtx
 export VERBOSE=false
 
-# Exit on first error, print all commands.
-set -ev
-set -o pipefail
 
 # Delete old aritfacts, if any.
 if [ -d "organizations/peerOrganizations" ]; then
@@ -35,6 +32,7 @@ while :
 
 createorgNetzbetreiber
 createorgKunde
+createorgHaushaltB
 createorgHaushaltC
 createOrderer
 

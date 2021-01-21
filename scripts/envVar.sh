@@ -12,8 +12,8 @@ export CORE_PEER_TLS_ENABLED=true
 export ORDERER_CA=${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 export PEER0_ORGNETZBETREIBER_CA=${PWD}/organizations/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt
 export PEER0_ORGKUNDE_CA=${PWD}/organizations/peerOrganizations/orgKunde.example.com/peers/peer0.orgKunde.example.com/tls/ca.crt
+export PEER0_ORGHAUSHALTB_CA=${PWD}/organizations/peerOrganizations/orgHaushaltB.example.com/peers/peer0.orgHaushaltB.example.com/tls/ca.crt
 export PEER0_ORGHAUSHALTC_CA=${PWD}/organizations/peerOrganizations/orgHaushaltC.example.com/peers/peer0.orgHaushaltC.example.com/tls/ca.crt
-export PEER0_ORG3_CA=${PWD}/organizations/peerOrganizations/orgHaushaltA.example.com/peers/peer0.orgHaushaltA.example.com/tls/ca.crt
 
 # Set OrdererOrg.Admin globals
 setOrdererGlobals() {
@@ -42,16 +42,15 @@ setGlobals() {
     export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/orgKunde.example.com/users/Admin@orgKunde.example.com/msp
     export CORE_PEER_ADDRESS=localhost:9051
   elif [ $USING_ORG -eq 3 ]; then
+    export CORE_PEER_LOCALMSPID="OrgHaushaltBMSP"
+    export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORGHAUSHALTB_CA
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/orgHaushaltB.example.com/users/Admin@orgHaushaltB.example.com/msp
+    export CORE_PEER_ADDRESS=localhost:19051
+  elif [ $USING_ORG -eq 4 ]; then
     export CORE_PEER_LOCALMSPID="OrgHaushaltCMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORGHAUSHALTC_CA
     export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/orgHaushaltC.example.com/users/Admin@orgHaushaltC.example.com/msp
     export CORE_PEER_ADDRESS=localhost:18051
-
-  elif [ $USING_ORG -eq 4 ]; then
-    export CORE_PEER_LOCALMSPID="OrgHaushaltAMSP"
-    export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG3_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/orgHaushaltA.example.com/users/Admin@orgHaushaltA.example.com/msp
-    export CORE_PEER_ADDRESS=localhost:11051
   else
     errorln "ORG Unknown"
   fi

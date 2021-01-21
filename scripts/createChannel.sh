@@ -32,7 +32,7 @@ createChannelTx() {
 
 createAncorPeerTx() {
 
-	for orgmsp in OrgNetzbetreiberMSP OrgKundeMSP OrgHaushaltCMSP; do
+	for orgmsp in OrgNetzbetreiberMSP OrgKundeMSP OrgHaushaltBMSP OrgHaushaltCMSP; do
 
 	infoln "Generating anchor peer update transaction for ${orgmsp}"
 	set -x
@@ -132,16 +132,20 @@ infoln "Join orgNetzbetreiber peers to the channel..."
 joinChannel 1
 infoln "Join orgKunde peers to the channel..."
 joinChannel 2
-infoln "Join orgHaushaltC peers to the channel..."
+infoln "Join orgHaushaltB peers to the channel..."
 joinChannel 3
+infoln "Join orgHaushaltC peers to the channel..."
+joinChannel 4
 
 ## Set the anchor peers for each org in the channel
 infoln "Updating anchor peers for orgNetzbetreiber..."
 updateAnchorPeers 1
 infoln "Updating anchor peers for orgKunde..."
 updateAnchorPeers 2
-infoln "Updating anchor peers for orgHaushaltC..."
+infoln "Updating anchor peers for orgHaushaltB..."
 updateAnchorPeers 3
+infoln "Updating anchor peers for orgHaushaltC..."
+updateAnchorPeers 4
 
 successln "Channel successfully joined"
 

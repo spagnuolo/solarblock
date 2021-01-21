@@ -113,6 +113,40 @@ Organizations:
             - Host: peer0.orgKunde.example.com
               Port: 9051
 
+    - &orgHaushaltB
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: OrgHaushaltBMSP
+
+        # ID to load the MSP definition as
+        ID: OrgHaushaltBMSP
+
+        MSPDir: ../organizations/peerOrganizations/orgHaushaltB.example.com/msp
+
+        # Policies defines the set of policies at this level of the config tree
+        # For organization policies, their canonical path is usually
+        #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrgHaushaltBMSP.admin', 'OrgHaushaltBMSP.peer', 'OrgHaushaltBMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrgHaushaltBMSP.admin', 'OrgHaushaltBMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrgHaushaltBMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('OrgHaushaltBMSP.peer')"
+
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: peer0.orgHaushaltB.example.com
+              Port: 19051
+
     - &orgHaushaltC
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
@@ -363,6 +397,7 @@ Profiles:
                 Organizations:
                     - *orgNetzbetreiber
                     - *orgKunde
+                    - *orgHaushaltB
                     - *orgHaushaltC
     TwoOrgsChannel:
         Consortium: SampleConsortium
@@ -372,6 +407,7 @@ Profiles:
             Organizations:
                 - *orgNetzbetreiber
                 - *orgKunde
+                - *orgHaushaltB
                 - *orgHaushaltC
             Capabilities:
                 <<: *ApplicationCapabilities

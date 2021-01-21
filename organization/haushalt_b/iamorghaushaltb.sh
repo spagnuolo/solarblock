@@ -21,11 +21,11 @@ DIR=${PWD}
 cd "${DIR}/../.."
 env | sort > /tmp/env.orig
 
-OVERRIDE_ORG="4"
+OVERRIDE_ORG="3"
 . ./scripts/envVar.sh
 
 
-parsePeerConnectionParameters 1 4
+parsePeerConnectionParameters 1 3
 export PEER_PARMS="${PEER_CONN_PARMS##*( )}"
 
 # set the fabric config path
