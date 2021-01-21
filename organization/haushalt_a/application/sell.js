@@ -8,8 +8,8 @@
  * This application has 6 basic steps:
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
- * 3. Access PaperNet network
- * 4. Construct request to transfer commercial paper
+ * 3. Access EnergyNet network
+ * 4. Construct request to sell solar energy
  * 5. Submit transaction
  * 6. Process response
  */
@@ -20,7 +20,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
-const CommercialPaper = require('../contract/lib/paper.js');
+const Energy = require('../contract/lib/energy.js');
 
 // Main program function
 async function main() {
@@ -35,11 +35,11 @@ async function main() {
     try {
 
         // Specify userName for network access
-        // const userName = 'viet.issuer@haushalta.com';
+        // const userName = 'viet.seller@kunde.com';
         const userName = 'viet';
 
         // Load connection profile; will be used to locate a gateway
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgHaushaltA.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgKunde.yaml', 'utf8'));
 
         // Set connection options; identity and wallet
         let connectionOptions = {
@@ -53,27 +53,27 @@ async function main() {
 
         await gateway.connect(connectionProfile, connectionOptions);
 
-        // Access PaperNet network
+        // Access EnergyNet network
         console.log('Use network channel: mychannel.');
 
         const network = await gateway.getNetwork('mychannel');
 
-        // Get addressability to commercial paper contract
-        console.log('Use org.papernet.commercialpaper smart contract.');
+        // Get addressability to solar energy contract
+        console.log('Use org.solarnet.solarenergy smart contract.');
 
-        const contract = await network.getContract('papercontract');
+        const contract = await network.getContract('energycontract');
 
-        // transfer commercial paper
-        console.log('Submit commercial paper transfer transaction.');
+        // sell solar energy
+        console.log('Submit solar energy sell transaction.');
 
-        const transferResponse = await contract.submitTransaction('transfer', 'MagnetoCorp', '00001', 'DigiBank', 'OrgNetzbetreiberMSP', '2020-06-01');
+        const sellResponse = await contract.submitTransaction('sell', 'orgKunde', '00001', '2021-01-25', '2021-02-25', '500kWh');
 
         // process response
-        console.log('Process transfer transaction response.' + transferResponse);
+        console.log('Process sell transaction response.' + sellResponse);
 
-        let paper = CommercialPaper.fromBuffer(transferResponse);
+        let energy = Energy.fromBuffer(sellResponse);
 
-        console.log(`commercial paper issued by ${paper.issuer}  : ${paper.paperNumber} was successfully transferred`);
+        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully selld for value ${energy.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {
@@ -91,11 +91,11 @@ async function main() {
 }
 main().then(() => {
 
-    console.log('Transfer program complete.');
+    console.log('Issue program complete.');
 
 }).catch((e) => {
 
-    console.log('Transfer program exception.');
+    console.log('Issue program exception.');
     console.log(e);
     console.log(e.stack);
     process.exit(-1);

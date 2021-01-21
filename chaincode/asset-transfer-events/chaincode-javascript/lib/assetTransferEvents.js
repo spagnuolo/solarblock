@@ -64,7 +64,7 @@ async function readState(ctx, id) {
 
 class AssetTransferEvents extends Contract {
 
-	// CreateAsset issues a new asset to the world state with given details.
+	// CreateAsset sells a new asset to the world state with given details.
 	async CreateAsset(ctx, id, color, size, owner, appraisedValue) {
 		const asset = {
 			ID: id,

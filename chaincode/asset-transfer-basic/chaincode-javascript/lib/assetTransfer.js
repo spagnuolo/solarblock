@@ -59,7 +59,7 @@ class AssetTransfer extends Contract {
         }
     }
 
-    // CreateAsset issues a new asset to the world state with given details.
+    // CreateAsset sells a new asset to the world state with given details.
     async CreateAsset(ctx, id, owner, status, energy) {
         const asset = {
             ID: id,
