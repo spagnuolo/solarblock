@@ -9,7 +9,7 @@
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
  * 3. Access PaperNet network
- * 4. Construct request to issue commercial paper
+ * 4. Construct request to transfer commercial paper
  * 5. Submit transaction
  * 6. Process response
  */
@@ -35,11 +35,11 @@ async function main() {
     try {
 
         // Specify userName for network access
-        // const userName = 'viet.issuer@kunde.com';
+        // const userName = 'viet.issuer@haushalta.com';
         const userName = 'viet';
 
         // Load connection profile; will be used to locate a gateway
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgKunde.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgHaushaltA.yaml', 'utf8'));
 
         // Set connection options; identity and wallet
         let connectionOptions = {
@@ -63,17 +63,17 @@ async function main() {
 
         const contract = await network.getContract('papercontract');
 
-        // issue commercial paper
-        console.log('Submit commercial paper issue transaction.');
+        // transfer commercial paper
+        console.log('Submit commercial paper transfer transaction.');
 
-        const issueResponse = await contract.submitTransaction('issue', 'MagnetoCorp', '00001', '2020-05-31', '2020-11-30', '5000000');
+        const transferResponse = await contract.submitTransaction('transfer', 'MagnetoCorp', '00001', 'DigiBank', 'OrgNetzbetreiberMSP', '2020-06-01');
 
         // process response
-        console.log('Process issue transaction response.' + issueResponse);
+        console.log('Process transfer transaction response.' + transferResponse);
 
-        let paper = CommercialPaper.fromBuffer(issueResponse);
+        let paper = CommercialPaper.fromBuffer(transferResponse);
 
-        console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
+        console.log(`commercial paper issued by ${paper.issuer}  : ${paper.paperNumber} was successfully transferred`);
         console.log('Transaction complete.');
 
     } catch (error) {
@@ -91,11 +91,11 @@ async function main() {
 }
 main().then(() => {
 
-    console.log('Issue program complete.');
+    console.log('Transfer program complete.');
 
 }).catch((e) => {
 
-    console.log('Issue program exception.');
+    console.log('Transfer program exception.');
     console.log(e);
     console.log(e.stack);
     process.exit(-1);

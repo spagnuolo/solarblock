@@ -35,14 +35,14 @@ CAPEM=organizations/peerOrganizations/orgNetzbetreiber.example.com/ca/ca.orgNetz
 echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/orgNetzbetreiber.example.com/connection-orgNetzbetreiber.json
 echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/orgNetzbetreiber.example.com/connection-orgNetzbetreiber.yaml
 
-ORG="Kunde"
+ORG="HaushaltA"
 P0PORT=9051
 CAPORT=8054
-PEERPEM=organizations/peerOrganizations/orgKunde.example.com/tlsca/tlsca.orgKunde.example.com-cert.pem
-CAPEM=organizations/peerOrganizations/orgKunde.example.com/ca/ca.orgKunde.example.com-cert.pem
+PEERPEM=organizations/peerOrganizations/orgHaushaltA.example.com/tlsca/tlsca.orgHaushaltA.example.com-cert.pem
+CAPEM=organizations/peerOrganizations/orgHaushaltA.example.com/ca/ca.orgHaushaltA.example.com-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/orgKunde.example.com/connection-orgKunde.json
-echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/orgKunde.example.com/connection-orgKunde.yaml
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/orgHaushaltA.example.com/connection-orgHaushaltA.json
+echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/orgHaushaltA.example.com/connection-orgHaushaltA.yaml
 
 ORG="HaushaltB"
 P0PORT=19051

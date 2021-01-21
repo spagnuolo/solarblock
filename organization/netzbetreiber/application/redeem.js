@@ -68,7 +68,7 @@ async function main() {
     // redeem commercial paper
     console.log('Submit commercial paper redeem transaction.');
 
-    const redeemResponse = await contract.submitTransaction('redeem', 'MagnetoCorp', '00001', 'DigiBank', 'OrgKundeMSP', '2020-11-30');
+    const redeemResponse = await contract.submitTransaction('redeem', 'MagnetoCorp', '00001', 'DigiBank', 'OrgHaushaltAMSP', '2020-11-30');
 
     // process response
     console.log('Process redeem transaction response.');

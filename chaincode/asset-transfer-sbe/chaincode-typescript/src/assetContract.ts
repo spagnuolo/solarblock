@@ -7,7 +7,7 @@ import { Asset } from './asset';
 import { KeyEndorsementPolicy } from 'fabric-shim';
 import * as fabprotos from 'fabric-shim/bundle';
 
-@Info({title: 'AssetContract', description: 'Asset Transfer Smart Contract, using State Based Endorsement(SBE), implemented in TypeScript' })
+@Info({ title: 'AssetContract', description: 'Asset Transfer Smart Contract, using State Based Endorsement(SBE), implemented in TypeScript' })
 export class AssetContract extends Contract {
 
     // CreateAsset creates a new asset
@@ -32,7 +32,7 @@ export class AssetContract extends Contract {
         await AssetContract.setStateBasedEndorsement(ctx, assetId, [ownerOrg]);
 
         // Optionally, set the endorsement policy of the assetId Key, such that any 1 Org (N) out of the specified Orgs can endorse future updates
-        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["OrgNetzbetreiberMSP", "OrgKundeMSP"]);
+        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["OrgNetzbetreiberMSP", "OrgHaushaltAMSP"]);
     }
 
     // ReadAsset returns asset with given assetId
@@ -86,7 +86,7 @@ export class AssetContract extends Contract {
         await AssetContract.setStateBasedEndorsement(ctx, asset.ID, [newOwnerOrg]);
 
         // Optionally, set the endorsement policy of the assetId Key, such that any 1 Org (N) out of the specified Orgs can endorse future updates
-        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["OrgNetzbetreiberMSP", "OrgKundeMSP"]);
+        // await AssetContract.setStateBasedEndorsementNOutOf(ctx, assetId, 1, ["OrgNetzbetreiberMSP", "OrgHaushaltAMSP"]);
     }
 
     // AssetExists returns true when asset with given ID exists
@@ -110,7 +110,7 @@ export class AssetContract extends Contract {
 
     // setStateBasedEndorsementNOutOf sets an endorsement policy to the assetId Key
     // setStateBasedEndorsementNOutOf enforces that a given number of Orgs (N) out of the specified Orgs must endorse future update transactions for the specified assetId Key.
-    private static async setStateBasedEndorsementNOutOf(ctx: Context, assetId: string, nOrgs:number, ownerOrgs: string[]): Promise<void> {
+    private static async setStateBasedEndorsementNOutOf(ctx: Context, assetId: string, nOrgs: number, ownerOrgs: string[]): Promise<void> {
         await ctx.stub.setStateValidationParameter(assetId, AssetContract.policy(nOrgs, ownerOrgs));
     }
 

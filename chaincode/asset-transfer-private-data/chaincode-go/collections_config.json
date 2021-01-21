@@ -1,7 +1,7 @@
 [
  {
    "name": "assetCollection",
-   "policy": "OR('OrgNetzbetreiberMSP.member', 'OrgKundeMSP.member')",
+   "policy": "OR('OrgNetzbetreiberMSP.member', 'OrgHaushaltAMSP.member')",
    "requiredPeerCount": 1,
    "maxPeerCount": 1,
    "blockToLive":1000000,
@@ -22,14 +22,14 @@
  },
  {
    "name": "Org2MSPPrivateCollection",
-   "policy": "OR('OrgKundeMSP.member')",
+   "policy": "OR('OrgHaushaltAMSP.member')",
    "requiredPeerCount": 0,
    "maxPeerCount": 1,
    "blockToLive":3,
    "memberOnlyRead": true,
    "memberOnlyWrite": false,
    "endorsementPolicy": {
-     "signaturePolicy": "OR('OrgKundeMSP.member')"
+     "signaturePolicy": "OR('OrgHaushaltAMSP.member')"
    }
   }
 ]

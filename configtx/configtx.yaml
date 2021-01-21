@@ -79,15 +79,15 @@ Organizations:
             - Host: peer0.orgNetzbetreiber.example.com
               Port: 7051
 
-    - &orgKunde
+    - &orgHaushaltA
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: OrgKundeMSP
+        Name: OrgHaushaltAMSP
 
         # ID to load the MSP definition as
-        ID: OrgKundeMSP
+        ID: OrgHaushaltAMSP
 
-        MSPDir: ../organizations/peerOrganizations/orgKunde.example.com/msp
+        MSPDir: ../organizations/peerOrganizations/orgHaushaltA.example.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -95,22 +95,22 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('OrgKundeMSP.admin', 'OrgKundeMSP.peer', 'OrgKundeMSP.client')"
+                Rule: "OR('OrgHaushaltAMSP.admin', 'OrgHaushaltAMSP.peer', 'OrgHaushaltAMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('OrgKundeMSP.admin', 'OrgKundeMSP.client')"
+                Rule: "OR('OrgHaushaltAMSP.admin', 'OrgHaushaltAMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('OrgKundeMSP.admin')"
+                Rule: "OR('OrgHaushaltAMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('OrgKundeMSP.peer')"
+                Rule: "OR('OrgHaushaltAMSP.peer')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.orgKunde.example.com
+            - Host: peer0.orgHaushaltA.example.com
               Port: 9051
 
     - &orgHaushaltB
@@ -396,7 +396,7 @@ Profiles:
             SampleConsortium:
                 Organizations:
                     - *orgNetzbetreiber
-                    - *orgKunde
+                    - *orgHaushaltA
                     - *orgHaushaltB
                     - *orgHaushaltC
     TwoOrgsChannel:
@@ -406,7 +406,7 @@ Profiles:
             <<: *ApplicationDefaults
             Organizations:
                 - *orgNetzbetreiber
-                - *orgKunde
+                - *orgHaushaltA
                 - *orgHaushaltB
                 - *orgHaushaltC
             Capabilities:

@@ -21,8 +21,8 @@ async function main() {
         const wallet = await Wallets.newFileSystemWallet('../identity/user/viet/wallet');
 
         // Identity to credentials to be stored in the wallet
-        const credPath = path.join(fixtures, '/organizations/peerOrganizations/orgKunde.example.com/users/User1@orgKunde.example.com');
-        const certificate = fs.readFileSync(path.join(credPath, '/msp/signcerts/User1@orgKunde.example.com-cert.pem')).toString();
+        const credPath = path.join(fixtures, '/organizations/peerOrganizations/orgHaushaltA.example.com/users/User1@orgHaushaltA.example.com');
+        const certificate = fs.readFileSync(path.join(credPath, '/msp/signcerts/User1@orgHaushaltA.example.com-cert.pem')).toString();
         const privateKey = fs.readFileSync(path.join(credPath, '/msp/keystore/priv_sk')).toString();
 
         // Load credentials into wallet
@@ -33,7 +33,7 @@ async function main() {
                 certificate,
                 privateKey
             },
-            mspId: 'OrgKundeMSP',
+            mspId: 'OrgHaushaltAMSP',
             type: 'X.509'
         }
 

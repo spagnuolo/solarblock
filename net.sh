@@ -31,7 +31,7 @@ while :
   done
 
 createorgNetzbetreiber
-createorgKunde
+createorgHaushaltA
 createorgHaushaltB
 createorgHaushaltC
 createOrderer

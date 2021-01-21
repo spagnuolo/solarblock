@@ -120,7 +120,7 @@ The asset value is now 200:
 Now that we have tested the asset key-level endorsement policy, we can transfer the asset to Org2. Run the following command to transfer the asset from Org1 to Org2. This time the Org2 MSP ID is provided as a transaction input. The `TransferAsset` function will update the endorsement policy to specify that only a peer of the new owner can update the asset. Note that this command targets the Org1 peer.
 
 ```
-peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt -c '{"function":"TransferAsset","Args":["asset1","Org2User1","OrgKundeMSP"]}'
+peer chaincode invoke -o localhost:7050 --waitForEvent --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n sbe --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt -c '{"function":"TransferAsset","Args":["asset1","Org2User1","OrgHaushaltAMSP"]}'
 ```
 
 We can query the asset to see that the owner has been updated from Org1 to Org2:
@@ -130,7 +130,7 @@ peer chaincode query -C mychannel -n sbe -c '{"Args":["ReadAsset","asset1"]}'
 
 The owning organization is now Org2:
 ```
-{"ID":"asset1","Value":200,"Owner":"Org2User1","OwnerOrg":"OrgKundeMSP"}
+{"ID":"asset1","Value":200,"Owner":"Org2User1","OwnerOrg":"OrgHaushaltAMSP"}
 ```
 
 Org2 now needs to endorse any asset updates. Run the following command to try to update the asset with an endorsement from the Org1 peer:
@@ -155,7 +155,7 @@ peer chaincode query -C mychannel -n sbe -c '{"Args":["ReadAsset","asset1"]}'
 
 The asset value is now 300:
 ```
-{"ID":"asset1","Value":300,"Owner":"Org2User1","OwnerOrg":"OrgKundeMSP"}
+{"ID":"asset1","Value":300,"Owner":"Org2User1","OwnerOrg":"OrgHaushaltAMSP"}
 ```
 
 Note that the transaction to update the asset was submitted by a user from Org1, even though the asset was owned by Org2. The transfer enabled by the SBE smart contract is a simple scenario meant only to demonstrate the use of state-based endorsement policies. The smart contract can use access control to specify that an asset can only be updated by its owner. Private data collections can also be used to ensure that transfers need to be endorsed by the owner and recipient of the transfer, instead of just the asset owner. For a more realistic example of an asset transfer scenario, see the [Secured asset transfer in Fabric](https://hyperledger-fabric.readthedocs.io/en/master/secured_asset_transfer/secured_private_asset_transfer_tutorial.html) tutorial.

@@ -19,7 +19,7 @@ cc.sh
 
 User erstellen und Chaincode ausführen mit:
 ```bash
-cd organization/kunde/application
+cd organization/haushalt_a/application
 npm install # einmalig nodejs Abhängigkeiten downloaden
 node enrollUser.js # wallet anlegen
 node issue.js # chaincode
@@ -36,4 +36,4 @@ node redeem.js # chaincode
 ## Links
 * [Commercial paper tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_paper.html#examine-the-commercial-paper-smart-contract)
 * [Smart Contracts](organization/netzbetreiber/contract/lib)
-* [Chaincode](organization/kunde/application)
+* [Chaincode](organization/haushalt_a/application)

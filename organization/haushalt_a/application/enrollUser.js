@@ -15,10 +15,10 @@ const path = require('path');
 async function main() {
     try {
         // load the network configuration
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgKunde.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgHaushaltA.yaml', 'utf8'));
 
         // Create a new CA client for interacting with the CA.
-        const caInfo = connectionProfile.certificateAuthorities['ca.orgKunde.example.com'];
+        const caInfo = connectionProfile.certificateAuthorities['ca.orgHaushaltA.example.com'];
         const caTLSCACerts = caInfo.tlsCACerts.pem;
         const ca = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
 
@@ -41,7 +41,7 @@ async function main() {
                 certificate: enrollment.certificate,
                 privateKey: enrollment.key.toBytes(),
             },
-            mspId: 'OrgKundeMSP',
+            mspId: 'OrgHaushaltAMSP',
             type: 'X.509',
         };
         await wallet.put('viet', x509Identity);

@@ -19,7 +19,7 @@ const memberAssetCollectionName = 'assetCollection';
 const org1PrivateCollectionName = 'Org1MSPPrivateCollection';
 const org2PrivateCollectionName = 'Org2MSPPrivateCollection';
 const mspOrg1 = 'OrgNetzbetreiberMSP';
-const mspOrg2 = 'OrgKundeMSP';
+const mspOrg2 = 'OrgHaushaltAMSP';
 const Org1UserId = 'appUser1';
 const Org2UserId = 'appUser2';
 const userOrg1IdentityString = `x509::CN=${Org1UserId},OU=client+OU=org1+OU=department1::CN=ca.org1.example.com,O=org1.example.com,L=Durham,ST=North Carolina,C=US`;
