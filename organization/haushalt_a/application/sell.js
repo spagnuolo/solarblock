@@ -39,7 +39,7 @@ async function main() {
         const userName = 'viet';
 
         // Load connection profile; will be used to locate a gateway
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgKunde.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgHaushaltA.yaml', 'utf8'));
 
         // Set connection options; identity and wallet
         let connectionOptions = {
@@ -66,14 +66,14 @@ async function main() {
         // sell solar energy
         console.log('Submit solar energy sell transaction.');
 
-        const sellResponse = await contract.submitTransaction('sell', 'orgKunde', '00001', '2021-01-25', '2021-02-25', '500kWh');
+        const sellResponse = await contract.submitTransaction('sell', 'orgHaushaltA', '00001', '2021-01-25', '2021-02-25', '500kWh');
 
         // process response
         console.log('Process sell transaction response.' + sellResponse);
 
         let energy = Energy.fromBuffer(sellResponse);
 
-        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully selld for value ${energy.faceValue}`);
+        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully sell for value ${energy.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {

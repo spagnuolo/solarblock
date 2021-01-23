@@ -35,7 +35,7 @@ async function main() {
     try {
 
         // Specify userName for network access
-        // const userName = 'markus.issuer@haushaltb.com';
+        // const userName = 'markus.seller@haushaltb.com';
         const userName = 'markus';
 
         // Load connection profile; will be used to locate a gateway
@@ -73,7 +73,7 @@ async function main() {
 
         let paper = CommercialPaper.fromBuffer(transferResponse);
 
-        console.log(`commercial paper issued by ${paper.issuer}  : ${paper.paperNumber} was successfully transferred`);
+        console.log(`commercial paper selld by ${paper.seller}  : ${paper.paperNumber} was successfully transferred`);
         console.log('Transaction complete.');
 
     } catch (error) {

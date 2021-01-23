@@ -8,8 +8,8 @@
  * This application has 6 basic steps:
  * 1. Select an identity from a wallet
  * 2. Connect to network gateway
- * 3. Access PaperNet network
- * 4. Construct request to issue commercial paper
+ * 3. Access EnergyNet network
+ * 4. Construct request to sell solar energy
  * 5. Submit transaction
  * 6. Process response
  */
@@ -20,7 +20,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
-const CommercialPaper = require('../contract/lib/paper.js');
+const Energy = require('../contract/lib/energy.js');
 
 // Main program function
 async function main() {
@@ -35,7 +35,7 @@ async function main() {
     try {
 
         // Specify userName for network access
-        // const userName = 'markus.issuer@haushaltb.com';
+        // const userName = 'markus.seller@kunde.com';
         const userName = 'markus';
 
         // Load connection profile; will be used to locate a gateway
@@ -53,27 +53,27 @@ async function main() {
 
         await gateway.connect(connectionProfile, connectionOptions);
 
-        // Access PaperNet network
+        // Access EnergyNet network
         console.log('Use network channel: mychannel.');
 
         const network = await gateway.getNetwork('mychannel');
 
-        // Get addressability to commercial paper contract
-        console.log('Use org.papernet.commercialpaper smart contract.');
+        // Get addressability to solar energy contract
+        console.log('Use org.solarnet.solarenergy smart contract.');
 
-        const contract = await network.getContract('papercontract');
+        const contract = await network.getContract('energycontract');
 
-        // issue commercial paper
-        console.log('Submit commercial paper issue transaction.');
+        // sell solar energy
+        console.log('Submit solar energy sell transaction.');
 
-        const issueResponse = await contract.submitTransaction('issue', 'MagnetoCorp', '00001', '2020-05-31', '2020-11-30', '5000000');
+        const sellResponse = await contract.submitTransaction('sell', 'orgHaushaltB', '00002', '2021-01-25', '2021-02-25', '300kWh');
 
         // process response
-        console.log('Process issue transaction response.' + issueResponse);
+        console.log('Process sell transaction response.' + sellResponse);
 
-        let paper = CommercialPaper.fromBuffer(issueResponse);
+        let energy = Energy.fromBuffer(sellResponse);
 
-        console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
+        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully sell for value ${energy.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {

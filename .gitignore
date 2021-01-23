@@ -7,7 +7,6 @@ log.txt
 organizations/ordererOrganizations
 organizations/peerOrganizations
 system-genesis-block
-organization/haushalt_a/gateway/
 organization/netzbetreiber/gateway/
 *.tar.gz
 
