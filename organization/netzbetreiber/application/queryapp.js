@@ -70,12 +70,23 @@ async function main() {
 
 
         // 1 asset history
-        console.log('1. Query solar energy History....');
+        console.log('1. Query solar energy History orgHaushaltB....');
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse = await contract.evaluateTransaction('queryHistory', 'orgKunde', '00001');
+        let queryResponse1 = await contract.evaluateTransaction('queryHistory', 'orgHaushaltB', '00001');
 
-        let json = JSON.parse(queryResponse.toString());
-        console.log(json);
+        let json1 = JSON.parse(queryResponse1.toString());
+        console.log(json1);
+        console.log('\n\n');
+        console.log('\n  History query complete.');
+        console.log('-----------------------------------------------------------------------------------------\n\n');
+
+        // 2 asset history
+        console.log('1. Query solar energy History orgHaushaltC....');
+        console.log('-----------------------------------------------------------------------------------------\n');
+        let queryResponse2 = await contract.evaluateTransaction('queryHistory', 'orgHaushaltC', '00002');
+
+        let json2 = JSON.parse(queryResponse2.toString());
+        console.log(json2);
         console.log('\n\n');
         console.log('\n  History query complete.');
         console.log('-----------------------------------------------------------------------------------------\n\n');
@@ -83,8 +94,8 @@ async function main() {
         // 2 ownership query
         console.log('2. Query solar energy Ownership.... Energys owned by orgNetzbetreiber');
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse2 = await contract.evaluateTransaction('queryOwner', 'orgNetzbetreiber');
-        json = JSON.parse(queryResponse2.toString());
+        let queryResponse3 = await contract.evaluateTransaction('queryOwner', 'orgNetzbetreiber');
+        json = JSON.parse(queryResponse3.toString());
         console.log(json);
 
         console.log('\n\n');
