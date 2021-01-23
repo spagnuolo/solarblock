@@ -35,3 +35,9 @@ cp ${DIR}/organizations/peerOrganizations/orgHaushaltB.example.com/users/User1@o
 
 cp ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/signcerts/* ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/signcerts/User1@orgHaushaltC.example.com-cert.pem
 cp ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/keystore/* ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/keystore/priv_sk
+
+#Copy the energy contract to every organisations
+cp "${DIR}/chaincode/contract" "${DIR}/organization/haushalt_a"
+cp "${DIR}/chaincode/contract" "${DIR}/organization/haushalt_b"
+cp "${DIR}/chaincode/contract" "${DIR}/organization/haushalt_c"
+cp "${DIR}/chaincode/contract" "${DIR}/organization/netzbetreiber"
