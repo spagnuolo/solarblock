@@ -35,7 +35,7 @@ async function main() {
     try {
 
         // Specify userName for network access
-        // const userName = 'viet.seller@kunde.com';
+        // const userName = 'markus.seller@kunde.com';
         const userName = 'markus';
 
         // Load connection profile; will be used to locate a gateway
