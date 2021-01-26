@@ -18,10 +18,10 @@ export FABRIC_CFG_PATH="${DIR}/config"
 ./net.sh
 
 # Copy the connection profiles so they are in the correct organizations.
-cp "${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/connection-orgNetzbetreiber.yaml" "${DIR}/organization/netzbetreiber/gateway/"
-cp "${DIR}/organizations/peerOrganizations/orgHaushaltA.example.com/connection-orgHaushaltA.yaml" "${DIR}/organization/haushalt_a/gateway/"
-cp "${DIR}/organizations/peerOrganizations/orgHaushaltB.example.com/connection-orgHaushaltB.yaml" "${DIR}/organization/haushalt_b/gateway/"
-cp "${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/connection-orgHaushaltC.yaml" "${DIR}/organization/haushalt_c/gateway/"
+cp "${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/connection-orgNetzbetreiber.yaml" "${DIR}/organization/netzbetreiber/gateway/connection.yaml"
+cp "${DIR}/organizations/peerOrganizations/orgHaushaltA.example.com/connection-orgHaushaltA.yaml" "${DIR}/organization/haushalt_a/gateway/connection.yaml"
+cp "${DIR}/organizations/peerOrganizations/orgHaushaltB.example.com/connection-orgHaushaltB.yaml" "${DIR}/organization/haushalt_b/gateway/connection.yaml"
+cp "${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/connection-orgHaushaltC.yaml" "${DIR}/organization/haushalt_c/gateway/connection.yaml"
 
 
 cp ${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/users/User1@orgNetzbetreiber.example.com/msp/signcerts/* ${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/users/User1@orgNetzbetreiber.example.com/msp/signcerts/User1@orgNetzbetreiber.example.com-cert.pem
@@ -35,9 +35,3 @@ cp ${DIR}/organizations/peerOrganizations/orgHaushaltB.example.com/users/User1@o
 
 cp ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/signcerts/* ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/signcerts/User1@orgHaushaltC.example.com-cert.pem
 cp ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/keystore/* ${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/users/User1@orgHaushaltC.example.com/msp/keystore/priv_sk
-
-#Copy the energy contract to every organisations
-cp "${DIR}/chaincode/contract" "${DIR}/organization/haushalt_a"
-cp "${DIR}/chaincode/contract" "${DIR}/organization/haushalt_b"
-cp "${DIR}/chaincode/contract" "${DIR}/organization/haushalt_c"
-cp "${DIR}/chaincode/contract" "${DIR}/organization/netzbetreiber"
