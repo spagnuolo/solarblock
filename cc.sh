@@ -5,15 +5,15 @@
 # set -o pipefail
 
 #Copy the energy contract to every organisations
-cp -r "chaincode/contract" "organization/haushalt_a/"
-cp -r "chaincode/contract" "organization/haushalt_b/"
-cp -r "chaincode/contract" "organization/haushalt_c/"
-cp -r "chaincode/contract" "organization/netzbetreiber/"
+\cp -r "chaincode/contract" "organization/haushalt_a/"
+\cp -r "chaincode/contract" "organization/haushalt_b/"
+\cp -r "chaincode/contract" "organization/haushalt_c/"
+\cp -r "chaincode/contract" "organization/netzbetreiber/"
 
-cp -r "chaincode/application" "organization/haushalt_a/"
-cp -r "chaincode/application" "organization/haushalt_b/"
-cp -r "chaincode/application" "organization/haushalt_c/"
-cp -r "chaincode/application" "organization/netzbetreiber/"
+\cp -r "chaincode/application" "organization/haushalt_a/"
+\cp -r "chaincode/application" "organization/haushalt_b/"
+\cp -r "chaincode/application" "organization/haushalt_c/"
+\cp -r "chaincode/application" "organization/netzbetreiber/"
 
 cd organization/haushalt_a
 source iamorghaushalta.sh

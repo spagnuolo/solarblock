@@ -25,29 +25,29 @@ const Energy = require('../contract/lib/energy.js');
 
 // Main program function
 async function main() {
+    // Specify userName for network access
+    const userName = process.argv[2];
+    if (!userName) {
+        console.log('Please provide an user name.');
+        return;
+    }
 
     // A wallet stores a collection of identities for use
-    const wallet = await Wallets.newFileSystemWallet('../identity/user/giuliano/wallet');
-
+    const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
 
     // A gateway defines the peers used to access Fabric networks
     const gateway = new Gateway();
 
     // Main try/catch block
     try {
-
-        // Specify userName for network access
-        const userName = 'giuliano';
-
         // Load connection profile; will be used to locate a gateway
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgNetzbetreiber.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
 
         // Set connection options; identity and wallet
         let connectionOptions = {
             identity: userName,
             wallet: wallet,
             discovery: { enabled: true, asLocalhost: true }
-
         };
 
         // Connect to gateway using application specified parameters
@@ -68,7 +68,8 @@ async function main() {
         // buy solar energy
         console.log('Submit solar energy buy transaction.');
 
-        const buyResponse = await contract.submitTransaction('buy', 'orgKunde', '00001', 'orgKunde', 'orgNetzbetreiber', '600', '2021-01-19');
+        const organization = connectionProfile.client.organization;
+        const buyResponse = await contract.submitTransaction('buy', 'OrgHaushaltA', '00001', 'OrgHaushaltA', organization, '600', '2021-01-19');
 
         // process response
         console.log('Process buy transaction response.');
