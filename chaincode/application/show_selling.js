@@ -7,25 +7,21 @@ const { Wallets, Gateway } = require('fabric-network');
 
 
 async function main() {
-    const userName = process.argv[2];
-
-    if (!userName) {
-        console.log('Please provide an user name.');
-        return;
-    }
+    let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
+    const organization = connectionProfile.client.organization;
+    const userName = 'user' + organization;
 
     const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
     const gateway = new Gateway();
 
+    let connectionOptions = {
+        identity: userName,
+        wallet: wallet,
+        discovery: { enabled: true, asLocalhost: true }
+
+    };
+
     try {
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
-        let connectionOptions = {
-            identity: userName,
-            wallet: wallet,
-            discovery: { enabled: true, asLocalhost: true }
-
-        };
-
         console.log('Connect to Fabric gateway.');
         await gateway.connect(connectionProfile, connectionOptions);
 
