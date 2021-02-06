@@ -143,7 +143,7 @@ class EnergyContract extends Contract {
       * @param {String} purchaseDateTime time energy was requested                // transaction input - ditto.
      */
     async buy_request(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
-        
+
 
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
@@ -232,11 +232,11 @@ class EnergyContract extends Contract {
     async queryNamed(ctx, queryname) {
         let querySelector = {};
         switch (queryname) {
-            case "redeemed":
-                querySelector = { "selector": { "currentState": 4 } };  // 4 = redeemd state
+            case "SELLING":
+                querySelector = { "selector": { "currentState": 1 } };  // 4 = redeemd state
                 break;
-            case "trading":
-                querySelector = { "selector": { "currentState": 3 } };  // 3 = trading state
+            case "BOUGHT":
+                querySelector = { "selector": { "currentState": 2 } };  // 3 = trading state
                 break;
             case "value":
                 // may change to provide as a param - fixed value for now in this sample
