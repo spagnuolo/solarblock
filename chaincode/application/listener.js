@@ -8,22 +8,18 @@ const fs = require("fs");
 let finished;
 async function main() {
     try {
-        // Set up the wallet - just use orgHaushaltA's wallet (viet)
-        const wallet = await Wallets.newFileSystemWallet('../identity/user/viet/wallet');
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
+        const organization = connectionProfile.client.organization;
+        const userName = 'user' + organization;
 
-        // Create a new gateway for connecting to our peer node.
+        const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
         const gateway = new Gateway();
 
-        const userName = 'viet';
-
-        // Load connection profile; will be used to locate a gateway
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
-
-        // Set connection options; identity and wallet
         let connectionOptions = {
             identity: userName,
             wallet: wallet,
             discovery: { enabled: true, asLocalhost: true }
+
         };
 
         // connect to the gateway
