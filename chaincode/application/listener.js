@@ -17,7 +17,7 @@ async function main() {
         const userName = 'viet';
 
         // Load connection profile; will be used to locate a gateway
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgHaushaltA.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
 
         // Set connection options; identity and wallet
         let connectionOptions = {
