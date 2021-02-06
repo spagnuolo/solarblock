@@ -27,7 +27,7 @@ docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db'
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf channel-artifacts log.txt *.tar.gz'
 
-rm organization/haushalt_a/identity/user/viet/wallet/viet.id
-rm organization/haushalt_b/identity/user/markus/wallet/markus.id
-rm organization/haushalt_c/identity/user/henry/wallet/henry.id
-rm organization/netzbetreiber/identity/user/giuliano/wallet/giuliano.id
+rm -rf organization/haushalt_a/identity/user/*
+rm -rf organization/haushalt_b/identity/user/*
+rm -rf organization/haushalt_c/identity/user/*
+rm -rf organization/netzbetreiber/identity/user/*
