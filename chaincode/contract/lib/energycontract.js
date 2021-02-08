@@ -66,6 +66,12 @@ class EnergyContract extends Contract {
      * @param {Integer} faceValue face value of energy
     */
     async sell(ctx, seller, energyNumber, sellDateTime, expiredDateTime, faceValue) {
+        let energyKey = Energy.makeKey([seller, energyNumber]);
+        let isEnergy = await ctx.energyList.getEnergy(energyKey);
+
+        if (isEnergy) {
+            throw new Error('\nPlease use an unique ID: ' + seller + energyNumber + ' has already been used. ');
+        }
 
         // create an instance of the energy
         let energy = Energy.createInstance(seller, energyNumber, sellDateTime, expiredDateTime, parseInt(faceValue));

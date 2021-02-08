@@ -1,16 +1,10 @@
-/*
- * Copyright IBM Corp. All Rights Reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
-*/
-
 'use strict';
 
 // Utility class for ledger state
 const State = require('./../ledger-api/state.js');
 
 // Enumerate solar energy state values
-const cpState = {
+const energyState = {
     SELLING: 1,
     BOUGHT: 2,
 };
@@ -26,9 +20,6 @@ class Energy extends State {
         Object.assign(this, obj);
     }
 
-    /**
-     * Basic getters and setters
-    */
     getSeller() {
         return this.seller;
     }
@@ -57,19 +48,19 @@ class Energy extends State {
      * Useful methods to encapsulate solar energy states
      */
     setSelling() {
-        this.currentState = cpState.SELLING;
+        this.currentState = energyState.SELLING;
     }
 
     setBought() {
-        this.currentState = cpState.BOUGHT;
+        this.currentState = energyState.BOUGHT;
     }
 
     isSelling() {
-        return this.currentState === cpState.SELLING;
+        return this.currentState === energyState.SELLING;
     }
 
     isBought() {
-        return this.currentState === cpState.BOUGHT;
+        return this.currentState === energyState.BOUGHT;
     }
 
     static fromBuffer(buffer) {

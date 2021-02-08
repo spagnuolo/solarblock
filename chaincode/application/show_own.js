@@ -31,18 +31,17 @@ async function main() {
         console.log('Use org.solarnet.solarenergy smart contract.');
         const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
-        console.log('All energys in org.solarnet.solarenergys that are in current state of SELLING');
+        console.log(`Query solar energy Ownership.... Energys owned by ${organization}`);
         console.log('-----------------------------------------------------------------------------------------\n');
-        let queryResponse = await contract.evaluateTransaction('queryNamed', 'SELLING');
-
+        let queryResponse = await contract.evaluateTransaction('queryOwner', organization);
         let json = JSON.parse(queryResponse.toString());
         json.forEach(element => {
-            console.log(`${element.Record.energyNumber} ${element.Record.seller} verkauft ${element.Record.faceValue} kWh.`);
+            console.log(`${element.Record.energyNumber} ${element.Record.owner} owns ${element.Record.faceValue} kWh. ${element.Record.currentState == 1 ? 'SELLING' : ''}`);
         });
 
         // console.log(json);
-        console.log('\n-----------------------------------------------------------------------------------------\n');
 
+        console.log('\n-----------------------------------------------------------------------------------------\n');
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
         console.log(error.stack);

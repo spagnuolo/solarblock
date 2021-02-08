@@ -9,12 +9,6 @@ const { Wallets, Gateway } = require('fabric-network');
 
 // Main program function
 async function main() {
-    const userName = process.argv[2];
-
-    if (!userName) {
-        console.log('Please provide an user name.');
-        return;
-    }
     // A wallet stores a collection of identities for use
     const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
 

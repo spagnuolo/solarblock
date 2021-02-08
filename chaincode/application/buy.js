@@ -18,15 +18,15 @@ const Energy = require('../contract/lib/energy.js');
 
 
 async function main() {
-    const seller = process.argv[2];
-    if (!seller) {
-        console.log('Please provide the name of the seller.');
+    const energyNumber = process.argv[2];
+    if (!energyNumber) {
+        console.log('Please provide the energyNumber.');
         return;
     }
 
-    const energyNumber = process.argv[3];
-    if (!energyNumber) {
-        console.log('Please provide the energyNumber.');
+    const seller = process.argv[3];
+    if (!seller) {
+        console.log('Please provide the name of the seller.');
         return;
     }
 

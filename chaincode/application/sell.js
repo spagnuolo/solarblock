@@ -17,6 +17,18 @@ const { Wallets, Gateway } = require('fabric-network');
 const Energy = require('../contract/lib/energy.js');
 
 async function main() {
+    const energyAmount = process.argv[2];
+    if (!energyAmount) {
+        console.log('Please provide how much energy you want to sell');
+        return;
+    }
+
+    const energyNumber = process.argv[3];
+    if (!energyNumber) {
+        console.log('Please provide the energyNumber.');
+        return;
+    }
+
     let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
     const organization = connectionProfile.client.organization;
     const userName = 'user' + organization;
@@ -42,7 +54,9 @@ async function main() {
         const contract = await network.getContract('energycontract');
 
         console.log('Submit solar energy sell transaction.');
-        const sellResponse = await contract.submitTransaction('sell', organization, '00001', '2021-01-25', '2021-02-25', '500kWh');
+        let now = new Date();
+        let nowString = `${now.getDate()}.${now.getMonth() + 1}.${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} Uhr`;
+        const sellResponse = await contract.submitTransaction('sell', organization, energyNumber, nowString, '2021-02-25', energyAmount);
 
         console.log('Process sell transaction response.' + sellResponse);
         let energy = Energy.fromBuffer(sellResponse);
