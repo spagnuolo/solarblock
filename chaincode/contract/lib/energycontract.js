@@ -98,20 +98,22 @@ class EnergyContract extends Contract {
       * @param {Integer} price price paid for this energy // transaction input - not written to asset
       * @param {String} purchaseDateTime time energy was purchased (i.e. traded)  // transaction input - not written to asset
      */
-    async buy(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
+    async buy(ctx, seller, energyNumber, newOwner, price, purchaseDateTime) {
 
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
         // Validate current owner
-        if (energy.getOwner() !== currentOwner) {
-            throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + currentOwner);
+        if (energy.getOwner() !== seller) {
+            throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + seller);
         }
 
         // First buy moves state from SELLING to TRANSFER (when running )
         if (energy.isSelling()) {
             energy.setBought();
+        } else {
+            throw new Error('\nTransaktion ' + seller + energyNumber + ' is not available for sale.');
         }
 
         // Check energy is not already REDEEMED

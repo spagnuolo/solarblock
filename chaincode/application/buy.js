@@ -56,7 +56,7 @@ async function main() {
         const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
         console.log('Submit solar energy buy transaction.');
-        const buyResponse = await contract.submitTransaction('buy', seller, energyNumber, seller, organization, '600', '2021-01-19');
+        const buyResponse = await contract.submitTransaction('buy', seller, energyNumber, organization, '600', '2021-01-19');
 
         console.log('Process buy transaction response.');
         let energy = Energy.fromBuffer(buyResponse);
