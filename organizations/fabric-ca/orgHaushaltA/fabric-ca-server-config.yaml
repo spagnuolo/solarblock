@@ -80,7 +80,7 @@ tls:
 #############################################################################
 ca:
   # Name of this CA
-  name: OrdererCA
+  name: orgHaushaltACA
   # Key file (is only used to import a private key into BCCSP)
   keyfile:
   # Certificate file (default: ca-cert.pem)
@@ -301,16 +301,16 @@ signing:
 #     CA certificates though it can still sell end entity certificates.
 ###########################################################################
 csr:
-   cn: ca.example.com
+   cn: ca.orgHaushaltA.example.com
    names:
-      - C: US
-        ST: "New York"
-        L: "New York"
-        O: example.com
+      - C: UK
+        ST: "Hampshire"
+        L: "Hursley"
+        O: orgHaushaltA.example.com
         OU:
    hosts:
      - localhost
-     - example.com
+     - orgHaushaltA.example.com
    ca:
       expiry: 131400h
       pathlength: 1

@@ -1,6 +1,6 @@
 # solarblock
 ## Install
-...
+TODO
 
 ## Run
 
@@ -10,7 +10,7 @@ Das Fabric-Netzwerk starten mit:
 network-starter.sh
 ```
 
-Smart-Contracts aus `organization\netzbetreiber\contract\lib` deployen mit:
+Smart-Contracts aus `organization\chaincode\contract\lib` deployen mit:
 
 ```bash
 cc.sh
@@ -19,21 +19,14 @@ cc.sh
 
 User erstellen und Chaincode ausführen mit:
 ```bash
-cd organization/kunde/application
+cd organization/haushalt_a/application
 npm install # einmalig nodejs Abhängigkeiten downloaden
-node enrollUser.js # wallet anlegen
-node issue.js # chaincode
+node enrollUser.js viet # wallet anlegen
+node sell.js viet # chaincode
 ```
 
-```bash
-cd organization/netzbetreiber/application
-npm install
-node enrollUser.js
-node buy.js # chaincode
-node redeem.js # chaincode
-```
 
 ## Links
-* [Commercial paper tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_paper.html#examine-the-commercial-paper-smart-contract)
-* [Smart Contracts](organization/netzbetreiber/contract/lib)
-* [Chaincode](organization/kunde/application)
+* [Commercial Paper tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_energy.html#examine-the-commercial-energy-smart-contract)
+* [Smart Contracts](chaincode/contract/lib)
+* [Chaincode](chaincode/application)

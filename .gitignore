@@ -7,8 +7,7 @@ log.txt
 organizations/ordererOrganizations
 organizations/peerOrganizations
 system-genesis-block
-organization/kunde/gateway/
-organization/netzbetreiber/gateway/
+*.tar.gz
 
 # vscode
 .vscode
