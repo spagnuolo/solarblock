@@ -8,12 +8,6 @@ const path = require('path');
 
 async function main() {
     try {
-        const userName = process.argv[2];
-        if (!userName) {
-            console.log('Please provide an user name.');
-            return;
-        }
-
         // load the network configuration
         let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
         const organization = connectionProfile.client.organization;
@@ -26,6 +20,7 @@ async function main() {
         const ca = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
 
         // Create a new file system based wallet for managing identities.
+        const userName = 'user' + organization;
         const walletPath = path.join(process.cwd(), `../identity/user/${userName}/wallet`);
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);

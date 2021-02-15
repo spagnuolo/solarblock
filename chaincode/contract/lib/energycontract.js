@@ -66,6 +66,12 @@ class EnergyContract extends Contract {
      * @param {Integer} faceValue face value of energy
     */
     async sell(ctx, seller, energyNumber, sellDateTime, expiredDateTime, faceValue) {
+        let energyKey = Energy.makeKey([seller, energyNumber]);
+        let isEnergy = await ctx.energyList.getEnergy(energyKey);
+
+        if (isEnergy) {
+            throw new Error('\nPlease use an unique ID: ' + seller + energyNumber + ' has already been used. ');
+        }
 
         // create an instance of the energy
         let energy = Energy.createInstance(seller, energyNumber, sellDateTime, expiredDateTime, parseInt(faceValue));
@@ -98,20 +104,22 @@ class EnergyContract extends Contract {
       * @param {Integer} price price paid for this energy // transaction input - not written to asset
       * @param {String} purchaseDateTime time energy was purchased (i.e. traded)  // transaction input - not written to asset
      */
-    async buy(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
+    async buy(ctx, seller, energyNumber, newOwner, price, purchaseDateTime) {
 
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
         // Validate current owner
-        if (energy.getOwner() !== currentOwner) {
-            throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + currentOwner);
+        if (energy.getOwner() !== seller) {
+            throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + seller);
         }
 
         // First buy moves state from SELLING to TRANSFER (when running )
         if (energy.isSelling()) {
             energy.setBought();
+        } else {
+            throw new Error('\nTransaktion ' + seller + energyNumber + ' is not available for sale.');
         }
 
         // Check energy is not already REDEEMED
@@ -143,7 +151,7 @@ class EnergyContract extends Contract {
       * @param {String} purchaseDateTime time energy was requested                // transaction input - ditto.
      */
     async buy_request(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
-        
+
 
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
@@ -232,11 +240,11 @@ class EnergyContract extends Contract {
     async queryNamed(ctx, queryname) {
         let querySelector = {};
         switch (queryname) {
-            case "redeemed":
-                querySelector = { "selector": { "currentState": 4 } };  // 4 = redeemd state
+            case "SELLING":
+                querySelector = { "selector": { "currentState": 1 } };  // 4 = redeemd state
                 break;
-            case "trading":
-                querySelector = { "selector": { "currentState": 3 } };  // 3 = trading state
+            case "BOUGHT":
+                querySelector = { "selector": { "currentState": 2 } };  // 3 = trading state
                 break;
             case "value":
                 // may change to provide as a param - fixed value for now in this sample
