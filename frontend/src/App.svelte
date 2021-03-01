@@ -20,14 +20,6 @@
     {/each}
   </div>
 
-  <!-- left control -->
-  <div class="bg-gray-200 md:w-1/4 h-full">
-    <!-- card -->
-    <div class="w-min m-2 bg-blue-800 text-white p-2 rounded hover:bg-blue-900">
-      test
-    </div>
-  </div>
-
   <!-- main -->
   <Market />
 </main>
