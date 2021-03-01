@@ -2,12 +2,17 @@
 bin
 
 # Fabric artifacts
+*.tar.gz
 channel-artifacts
 log.txt
+organizations/fabric-ca/ordererOrg
+organizations/fabric-ca/orgHaushaltA
+organizations/fabric-ca/orgHaushaltB
+organizations/fabric-ca/orgHaushaltC
+organizations/fabric-ca/orgNetzbetreiber
 organizations/ordererOrganizations
 organizations/peerOrganizations
 system-genesis-block
-*.tar.gz
 
 # vscode
 .vscode
