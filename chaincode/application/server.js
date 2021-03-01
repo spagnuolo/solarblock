@@ -1,20 +1,14 @@
 'use strict';
 
 const express = require('express');
-const api = express();
+const cors = require('cors');
+
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
 
 let gateway = null;
 let contract = null;
-
-// Set server port.
-const portNumber = process.argv[2];
-if (!portNumber) {
-    console.log('Please provide an open port number to use for the api-server.');
-    return;
-}
 
 // Exit Server on ENTER.
 const readline = require('readline').createInterface({
@@ -29,7 +23,7 @@ readline.question('Press ENTER to exit server.\n\n', () => {
     process.exit(0);
 });
 
-// Connet to fabric network.
+// Connect to fabric network.
 async function connection() {
     const connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
     const organization = connectionProfile.client.organization;
@@ -56,7 +50,7 @@ async function connection() {
 }
 
 connection().then(() => {
-    console.log('Connection to fabric complete.');
+    console.log('Connection to fabric completed.');
 }).catch((e) => {
     console.log('Connection to fabric exception.');
     console.log(e);
@@ -66,18 +60,18 @@ connection().then(() => {
 
 
 // API
-api.get('/', (request, response) => {
-    response.send('API Server is running');
-});
+const api = express();
+api.use(cors()); // Allow requests from frontend dev server.
+api.use(express.static('../public'))
 
 api.get('/getSelling', (request, response) => {
     contract.evaluateTransaction('queryNamed', 'SELLING').then((queryResponse) => {
-        let json = JSON.parse(queryResponse.toString());
-        response.send(json);
+        let data = JSON.parse(queryResponse.toString());
+        response.json(data);
     });
 });
 
-let server = api.listen(portNumber, () => {
+let server = api.listen(8080, () => {
     let port = server.address().port;
     console.log(`Server listening at http://localhost:${port}`);
 });

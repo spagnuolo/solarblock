@@ -1,15 +1,17 @@
 # Svelte TypeScript Tailwindcss Setup
 
-## Install
+Development dependencies installieren:
 ```bash
-npm i
+npm install
 ```
-## Run local dev server
+Run local dev server:
 ```bash
 npm run dev
 ```
 
-## Compile for production
+Produktions Version compilieren:
 ```bash
 npm run build
 ```
+
+Statische Frontend Version under `/public/index.html`
