@@ -1,5 +1,7 @@
 <script lang="ts">
-    let transactions = null;
+    import Transaktion from "./Transaktion.svelte";
+
+    let transactions;
     let promise = getAllSelling();
     async function getAllSelling() {
         const response = await fetch("http://localhost:8080/getSelling");
@@ -12,7 +14,7 @@
         }
     }
 
-    let txn = null;
+    let txn;
     const chooseTransaction = (index) => {
         txn = transactions[index];
     };
@@ -21,22 +23,14 @@
 <!-- left control -->
 <div class="bg-gray-200 md:w-1/4 h-full">
     {#if txn}
-        <p>{txn.Key}</p>
-        <p>{txn.Record.class}</p>
-        <p>{txn.Record.currentState}</p>
-        <p>{txn.Record.energyNumber}</p>
-        <p>{txn.Record.expiredDateTime}</p>
-        <p>{txn.Record.faceValue}</p>
-        <p>{txn.Record.mspid}</p>
-        <p>{txn.Record.owner}</p>
-        <p>{txn.Record.sellDateTime}</p>
-        <p>{txn.Record.seller}</p>
+        <div class="title">Kaufen</div>
+        <Transaktion {txn} />
     {/if}
 </div>
 
 <!-- right main window -->
 <div class="bg-gray-100 w-full h-full shadow-lg text-lg">
-    <div class="my-10 text-3xl ml-10">Markplatz</div>
+    <div class="title">Markplatz</div>
     {#await promise}
         <p>...waiting</p>
     {:then data}
@@ -80,3 +74,9 @@
         <p class="bg-red-600 text-gray-100 m-auto">{error.message}</p>
     {/await}
 </div>
+
+<style lang="postcss">
+    .title {
+        @apply my-10 text-3xl ml-10;
+    }
+</style>
