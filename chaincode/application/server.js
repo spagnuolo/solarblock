@@ -61,7 +61,7 @@ connection().then(() => {
 
 // API
 const api = express();
-api.use(cors()); // Allow requests from frontend dev server.
+api.use(cors({ origin: "http://localhost:5000" })); // Allow requests from frontend dev server.
 api.use(express.static('../public'))
 
 api.get('/getSelling', (request, response) => {
