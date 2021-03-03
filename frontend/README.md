@@ -1,5 +1,8 @@
 # Svelte TypeScript Tailwindcss Setup
 
+* Typescript Framework: https://svelte.dev/
+* CSS Framework: https://tailwindcss.com/
+
 Development dependencies installieren:
 ```bash
 npm install
