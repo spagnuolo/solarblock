@@ -21,10 +21,12 @@
 </script>
 
 <!-- left control -->
-<div class="bg-gray-200 md:w-1/4 h-full">
+<div class="bg-gray-200 w-1/4 h-full text-lg">
+    <div class="title">Kaufen</div>
     {#if txn}
-        <div class="title">Kaufen</div>
         <Transaktion {txn} />
+    {:else}
+        <p class="bg-blue-300 text-center">Wähle ein Angebot aus.</p>
     {/if}
 </div>
 
@@ -32,7 +34,7 @@
 <div class="bg-gray-100 w-full h-full shadow-lg text-lg">
     <div class="title">Markplatz</div>
     {#await promise}
-        <p>...waiting</p>
+        <p class="bg-blue-300 text-center">...waiting</p>
     {:then data}
         <table class="table-auto w-full">
             <thead>
