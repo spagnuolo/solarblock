@@ -1,9 +1,10 @@
 <script lang="ts">
+  import Energy from "./Energy.svelte";
   import Market from "./Market.svelte";
   import Tailwind from "./Tailwind.svelte";
 
   const panels = [
-    { name: "Meine Energy", emoji: "⚡", active: true },
+    { name: "Meine Energie", emoji: "⚡", active: true },
     { name: "Marktplatz", emoji: "🛒", active: false },
     { name: "", emoji: "🔍", active: false },
     { name: "", emoji: "🗑️", active: false },
@@ -42,7 +43,9 @@
   </div>
 
   <!-- main -->
-  {#if panels[1].active}
+  {#if panels[0].active}
+    <Energy />
+  {:else if panels[1].active}
     <Market />
   {/if}
 </main>
