@@ -21,7 +21,7 @@
 </script>
 
 <!-- left control -->
-<div class="bg-gray-200 w-1/4 h-full text-lg">
+<div class="bg-gray-200 w-1/4 h-full text-lg shadow-inner">
     <div class="title">Kaufen</div>
     {#if txn}
         <Transaktion {txn} />
@@ -31,7 +31,7 @@
 </div>
 
 <!-- right main window -->
-<div class="bg-gray-100 w-full h-full shadow-lg text-lg">
+<div class="bg-gray-100 w-full h-full text-lg">
     <div class="title">Markplatz</div>
     {#await promise}
         <p class="bg-blue-300 text-center">...waiting</p>

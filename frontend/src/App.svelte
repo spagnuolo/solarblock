@@ -25,9 +25,9 @@
 <Tailwind />
 
 <!-- screen -->
-<main class="w-scree h-screen flex">
+<main class="w-screen h-screen flex">
   <!-- left sidebar -->
-  <div class="bg-gray-100 border-r-2">
+  <div class="bg-gray-100">
     {#each panels as panel, index}
       <div
         class="{panel.active
