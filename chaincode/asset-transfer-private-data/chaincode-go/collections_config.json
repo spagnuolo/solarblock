@@ -1,0 +1,59 @@
+[
+ {
+   "name": "assetCollection",
+   "policy": "OR('OrgNetzbetreiberMSP.member', 'OrgHaushaltAMSP.member','OrgHaushaltBMSP.member','OrgHaushaltCMSP.member')",
+   "requiredPeerCount": 1,
+   "maxPeerCount": 1,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true
+},
+ {
+   "name": "OrgNetzbetreiberMSPPrivateCollection",
+   "policy": "OR('OrgNetzbetreiberMSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 1,
+   "blockToLive":3,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": false,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('OrgNetzbetreiberMSP.member')"
+   }
+ },
+ {
+   "name": "OrgHaushaltAMSPPrivateCollection",
+   "policy": "OR('OrgHaushaltAMSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 1,
+   "blockToLive":3,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": false,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('OrgHaushaltAMSP.member')"
+   }
+  },
+  {
+    "name": "OrgHaushaltBMSPPrivateCollection",
+    "policy": "OR('OrgHaushaltBMSP.member')",
+    "requiredPeerCount": 0,
+    "maxPeerCount": 1,
+    "blockToLive":3,
+    "memberOnlyRead": true,
+    "memberOnlyWrite": false,
+    "endorsementPolicy": {
+      "signaturePolicy": "OR('OrgHaushaltBMSP.member')"
+    }
+   },
+   {
+    "name": "OrgHaushaltCMSPPrivateCollection",
+    "policy": "OR('OrgHaushaltCMSP.member')",
+    "requiredPeerCount": 0,
+    "maxPeerCount": 1,
+    "blockToLive":3,
+    "memberOnlyRead": true,
+    "memberOnlyWrite": false,
+    "endorsementPolicy": {
+      "signaturePolicy": "OR('OrgHaushaltCMSP.member')"
+    }
+   }
+]
