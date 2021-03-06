@@ -6,6 +6,8 @@ const cors = require('cors');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
+const Energy = require('../contract/lib/energy.js');
+
 
 let gateway;
 let contract;
@@ -63,7 +65,8 @@ connection().then(() => {
 // API
 const api = express();
 api.use(cors({ origin: "http://localhost:5000" })); // Allow requests from frontend dev server.
-api.use(express.static('../public'))
+api.use(express.static('../public'));
+api.use(express.json());
 
 api.get('/getSelling', (request, response) => {
     contract.evaluateTransaction('queryNamed', 'SELLING').then((queryResponse) => {
@@ -76,6 +79,21 @@ api.get('/getOwn', (request, response) => {
     contract.evaluateTransaction('queryOwner', organization).then((queryResponse) => {
         let data = JSON.parse(queryResponse.toString());
         response.json(data);
+    });
+});
+
+/* Test post request with terminal.
+curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:8080/buyEnergy"
+*/
+api.post('/buyEnergy', (request, response) => {
+    contract.submitTransaction('buy', request.body.seller, request.body.energyNumber, organization, 'price', 'purchaseDateTime').then((buyResponse) => {
+        let energy = Energy.fromBuffer(buyResponse);
+        let msg = `${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`;
+        response.json({ msg });
+    }).catch((error) => {
+        let msg = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ msg });
     });
 });
 
