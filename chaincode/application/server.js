@@ -7,8 +7,9 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
 
-let gateway = null;
-let contract = null;
+let gateway;
+let contract;
+let organization;
 
 // Exit Server on ENTER.
 const readline = require('readline').createInterface({
@@ -26,7 +27,7 @@ readline.question('Press ENTER to exit server.\n\n', () => {
 // Connect to fabric network.
 async function connection() {
     const connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
-    const organization = connectionProfile.client.organization;
+    organization = connectionProfile.client.organization;
     const userName = 'user' + organization;
 
     const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
@@ -66,6 +67,13 @@ api.use(express.static('../public'))
 
 api.get('/getSelling', (request, response) => {
     contract.evaluateTransaction('queryNamed', 'SELLING').then((queryResponse) => {
+        let data = JSON.parse(queryResponse.toString());
+        response.json(data);
+    });
+});
+
+api.get('/getOwn', (request, response) => {
+    contract.evaluateTransaction('queryOwner', organization).then((queryResponse) => {
         let data = JSON.parse(queryResponse.toString());
         response.json(data);
     });
