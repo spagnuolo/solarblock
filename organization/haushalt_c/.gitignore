@@ -1,4 +1,5 @@
-identity
-gateway
 application
 contract
+gateway
+identity
+public
