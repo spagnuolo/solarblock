@@ -82,6 +82,19 @@ api.get('/getOwn', (request, response) => {
     });
 });
 
+api.get('/getOwnSelling', (request, response) => {
+    let querySelector = `{"selector":{"owner":"${organization}", "currentState": 1}}`;
+    contract.evaluateTransaction('queryAdhoc', querySelector).then((queryResponse) => {
+        let data = JSON.parse(queryResponse.toString());
+        response.json(data);
+    }).catch((error) => {
+        console.log(error);
+        response.send(error);
+    });
+});
+
+
+
 /* Test post request with terminal.
 curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:8080/buyEnergy"
 */

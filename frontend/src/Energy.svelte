@@ -21,7 +21,7 @@
     <Table bind:txn fetchURL={"http://localhost:8080/getOwn"} />
 
     <div class="title">Energie die ich verkaufe</div>
-    <Table bind:txn fetchURL={"http://localhost:8080/getSelling"} />
+    <Table bind:txn fetchURL={"http://localhost:8080/getOwnSelling"} />
 </div>
 
 <style lang="postcss">
