@@ -21,7 +21,7 @@
 </script>
 
 {#await promise}
-    <p class="bg-blue-300 text-center">...waiting</p>
+    <p class="text-center">...laden</p>
 {:then data}
     <table class="table-auto w-full">
         <thead>
@@ -53,16 +53,16 @@
             {/each}
         </tbody>
         <tfoot>
-            <tr>
+            <!-- <tr>
                 <th><abbr title="Position">Pos</abbr></th>
                 <th>ID</th>
                 <th>Menge</th>
                 <th>Besitzer</th>
                 <th>Verkäufer</th>
                 <th>Datum</th>
-            </tr>
+            </tr> -->
         </tfoot>
     </table>
 {:catch error}
-    <p class="bg-red-600 text-gray-100 m-auto">{error.msg}</p>
+    <p class="bg-red-600 text-gray-100 text-center">{error.message}</p>
 {/await}
