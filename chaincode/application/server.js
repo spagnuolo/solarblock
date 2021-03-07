@@ -93,12 +93,9 @@ api.get('/getOwnSelling', (request, response) => {
     });
 });
 
-
-
-/* Test post request with terminal.
-curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:8080/buyEnergy"
-*/
 api.post('/buyEnergy', (request, response) => {
+    console.log('/buyEnergy JSON:', request.body);
+
     contract.submitTransaction('buy', request.body.seller, request.body.energyNumber, organization, 'price', 'purchaseDateTime').then((buyResponse) => {
         let energy = Energy.fromBuffer(buyResponse);
         let msg = `${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`;
@@ -109,6 +106,7 @@ api.post('/buyEnergy', (request, response) => {
         response.json({ msg });
     });
 });
+
 
 let server = api.listen(8080, () => {
     let port = server.address().port;
