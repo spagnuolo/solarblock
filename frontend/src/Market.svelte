@@ -1,29 +1,9 @@
 <script lang="ts">
+    import PostButton from "./PostButton.svelte";
     import Table from "./Table.svelte";
     import Transaktion from "./Transaktion.svelte";
 
     let txn;
-
-    function handleBuy() {
-        // Send and get json.
-        var xhr = new XMLHttpRequest();
-        var url = "http://localhost:8080/buyEnergy";
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var json = JSON.parse(xhr.responseText);
-                console.log(json);
-                window.location.href = "/"; // TODO: This is just a hack.
-            }
-        };
-        var data = JSON.stringify({
-            seller: txn.Record.seller,
-            energyNumber: txn.Record.energyNumber,
-        });
-        console.log(data);
-        xhr.send(data);
-    }
 </script>
 
 <!-- left control -->
@@ -32,12 +12,14 @@
     {#if txn}
         <Transaktion bind:txn />
         <div class="m-full p-2">
-            <button
-                class="w-full p-2 bg-green-400 hover:bg-green-300 rounded"
-                on:click={handleBuy}
-            >
-                Kaufen?
-            </button>
+            <PostButton
+                label="Kaufen?"
+                url="http://localhost:8080/buyEnergy"
+                json={{
+                    seller: txn.Record.seller,
+                    energyNumber: txn.Record.energyNumber,
+                }}
+            />
         </div>
     {:else}
         <p class="bg-blue-300 text-center">Wähle ein Angebot aus.</p>
