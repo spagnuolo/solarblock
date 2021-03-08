@@ -93,6 +93,28 @@ api.get('/getOwnSelling', (request, response) => {
     });
 });
 
+api.post('/sellEnergy', (request, response) => {
+    console.log('/sellEnergy JSON:', request.body);
+    let txnParams = [
+        'sell',
+        organization,
+        request.body.energyNumber,
+        new Date().toUTCString(),
+        '2021-03-31',
+        request.body.faceValue
+    ];
+
+    contract.submitTransaction(...txnParams).then((buyResponse) => {
+        let energy = Energy.fromBuffer(buyResponse);
+        let msg = `${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`;
+        response.json({ msg });
+    }).catch((error) => {
+        let msg = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ msg });
+    });
+});
+
 api.post('/buyEnergy', (request, response) => {
     console.log('/buyEnergy JSON:', request.body);
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import PostButton from "./PostButton.svelte";
     import Table from "./Table.svelte";
     import Transaktion from "./Transaktion.svelte";
 
@@ -10,6 +11,16 @@
     <div class="title">Info</div>
     {#if txn}
         <Transaktion {txn} />
+        <div class="m-full p-2">
+            <PostButton
+                label="Verkaufen?"
+                url="http://localhost:8080/sellEnergy"
+                json={{
+                    faceValue: txn.Record.faceValue,
+                    energyNumber: txn.Record.energyNumber,
+                }}
+            />
+        </div>
     {:else}
         <p class="bg-blue-300 text-center">Wähle einen Eintrag aus.</p>
     {/if}
