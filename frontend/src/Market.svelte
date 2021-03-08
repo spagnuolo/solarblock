@@ -14,6 +14,7 @@
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var json = JSON.parse(xhr.responseText);
                 console.log(json);
+                window.location.href = "/"; // TODO: This is just a hack.
             }
         };
         var data = JSON.stringify({
