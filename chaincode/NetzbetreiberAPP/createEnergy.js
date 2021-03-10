@@ -57,7 +57,7 @@ async function main() {
         let now = new Date().toUTCString();
         //let nowString = `${now.getDate()}.${now.getMonth() + 1}.${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} Uhr`;
         
-        const sellResponse = await contract.submitTransaction('sell', organization, energyNumber, now, '2021-02-25', energyAmount);
+        const sellResponse = await contract.submitTransaction('create_Energy', organization, energyNumber, now, '2021-02-25', energyAmount);
 
         console.log('Process sell transaction response.' + sellResponse);
         let energy = Energy.fromBuffer(sellResponse);

@@ -65,6 +65,8 @@ class EnergyContract extends Contract {
      * @param {String} expiredDateTime energy expired date
      * @param {Integer} faceValue face value of energy
     */
+
+
     async sell(ctx, seller, energyNumber, sellDateTime, expiredDateTime, faceValue) {
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let isEnergy = await ctx.energyList.getEnergy(energyKey);
@@ -258,6 +260,36 @@ class EnergyContract extends Contract {
         let adhoc_results = await query.queryByAdhoc(querySelector);
 
         return adhoc_results;
+    }
+
+
+    async create_Energy(ctx, owner, energyNumber, sellDateTime , expiredDateTime, faceValue) {
+       //checks if ID is taken
+        let energyKey = Energy.makeKey([owner, energyNumber]);
+        let isEnergy = await ctx.energyList.getEnergy(energyKey);
+
+        if (isEnergy) {
+            throw new Error('\nPlease use an unique ID: ' + owner + energyNumber + ' has already been used. ');
+        }
+
+        // create an instance of the energy
+        let energy = Energy.createInstance(owner, energyNumber, sellDateTime, expiredDateTime, parseInt(faceValue));
+
+        // Smart contract, rather than energy, moves energy into SELLING state
+        //energy.setSelling();
+
+        // save the owner's MSP 
+        let mspid = ctx.clientIdentity.getMSPID();
+        energy.setOwnerMSP(mspid);
+
+        // Newly selld energy is owned by the seller to begin with (recorded for reporting purposes)
+        energy.setOwner(owner);
+
+        // Add the energy to the list of all similar solar energys in the ledger world state
+        await ctx.energyList.addEnergy(energy);
+
+        // Must return a serialized energy to caller of smart contract
+        return energy;
     }
 
 }
