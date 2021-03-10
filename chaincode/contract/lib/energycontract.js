@@ -262,7 +262,16 @@ class EnergyContract extends Contract {
         return adhoc_results;
     }
 
-
+/**
+ * 
+ * @param {*} ctx contracts of the transaction
+ * @param {*} owner organisation for whom the i.r. Netzbetreiber
+ * @param {*} energyNumber unique identifyer of the asset
+ * @param {*} sellDateTime 
+ * @param {*} expiredDateTime 
+ * @param {*} faceValue 
+ * @returns 
+ */
     async create_Energy(ctx, owner, energyNumber, sellDateTime , expiredDateTime, faceValue) {
        //checks if ID is taken
         let energyKey = Energy.makeKey([owner, energyNumber]);
@@ -289,6 +298,35 @@ class EnergyContract extends Contract {
         await ctx.energyList.addEnergy(energy);
 
         // Must return a serialized energy to caller of smart contract
+        return energy;
+    }
+
+    /**
+     * Function to transfer assets without money exchange
+     * @param {*} ctx Transaction context 
+     * @param {*} prevOwner Organisation previously owned the asset i.r. Netzbetreiber
+     * @param {*} energyNumber ID of the asset to be transfered
+     * @param {*} newOwner new intended owner
+     * @returns 
+     */
+
+    async transferEnergy(ctx, prevOwner, energyNumber, newOwner) {
+
+        // Retrieve the current energy using key fields provided
+        let energyKey = Energy.makeKey([prevOwner, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(energyKey);
+
+        // Validate current owner
+        if (energy.getOwner() !== prevOwner) {
+            throw new Error('\nEnergy ' + prevOwner + energyNumber + ' is not owned by ' + prevOwner);
+        }
+            energy.setOwner(newOwner);
+            // save the owner's MSP 
+            let mspid = ctx.clientIdentity.getMSPID();
+            energy.setOwnerMSP(mspid);
+        
+        // Update the energy
+        await ctx.energyList.updateEnergy(energy);
         return energy;
     }
 
