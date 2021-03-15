@@ -32,6 +32,7 @@ async function main() {
         return;
     }
 
+
     let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
     const organization = connectionProfile.client.organization;
     const userName = 'user' + organization;
@@ -47,6 +48,12 @@ async function main() {
     };
 
     try {
+        // checks that only Netzbetreiber can execute createResponse
+        if(userName != 'userOrgNetzbetreiber'){
+            console.log('Only Netzbetreiber can create energy');
+            return false;
+        }
+
         console.log('Connect to Fabric gateway.');
         await gateway.connect(connectionProfile, connectionOptions);
 
@@ -60,8 +67,12 @@ async function main() {
         let now = new Date().toUTCString();
     
         //execute Enegery creation and print response
-        const createResponse = await contract.submitTransaction('create_Energy', organization, energyNumber, now, '2021-02-25', energyAmount);
+        const createResponse = await contract.submitTransaction('create_Energy', organization, energyNumber, now, '2021-02-25', energyAmount, wallet);
         
+        if(createResponse === false){
+            return;
+        }
+
         console.log('Process create transaction response.' + createResponse);
         let energy = Energy.fromBuffer(createResponse);
 
@@ -70,7 +81,7 @@ async function main() {
         const transferResponse = await contract.submitTransaction('transferEnergy',organization, energyNumber, newOwner);
         energy = Energy.fromBuffer(transferResponse);
 
-        console.log(` ${energy.energyNumber} succesfully tranfered to ${energy.newOwner} `);
+        console.log(` ${energy.energyNumber} succesfully tranfered to ${energy.owner} `);
         console.log('Transaction completed')
 
     

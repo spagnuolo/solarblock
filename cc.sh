@@ -11,6 +11,7 @@
 \cp -r "chaincode/application" "organization/haushalt_c/"
 \cp -r "chaincode/application" "organization/netzbetreiber/"
 \cp -r "chaincode/NetzbetreiberAPP/createEnergy.js" "organization/netzbetreiber/application"
+\cp -r "chaincode/NetzbetreiberAPP/createEnergy.js" "organization/haushalt_a/application"
 
 
 

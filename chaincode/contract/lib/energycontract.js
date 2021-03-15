@@ -13,6 +13,7 @@ const { Contract, Context } = require('fabric-contract-api');
 const Energy = require('./energy.js');
 const EnergyList = require('./energylist.js');
 const QueryUtils = require('./queries.js');
+const { Wallets } = require('fabric-network');
 
 /**
  * A custom context provides easy access to list of all solar energys
@@ -272,8 +273,19 @@ class EnergyContract extends Contract {
  * @param {*} faceValue 
  * @returns 
  */
-    async create_Energy(ctx, owner, energyNumber, sellDateTime , expiredDateTime, faceValue) {
-       //checks if ID is taken
+    async create_Energy(ctx, owner, energyNumber, sellDateTime , expiredDateTime, faceValue, wallet) {
+      
+       let userExists = await wallet.get(owner);
+        if (!userExists) {
+            throw new Error('user does not exist');            
+        }
+
+        if(ctx.clientIdentity.getMSPID() !== 'userOrgNetzbetreiber'){
+            throw new Error('no permission to create');
+        
+    }
+      
+        //checks if ID is taken
         let energyKey = Energy.makeKey([owner, energyNumber]);
         let isEnergy = await ctx.energyList.getEnergy(energyKey);
 
@@ -311,6 +323,12 @@ class EnergyContract extends Contract {
      */
 
     async transferEnergy(ctx, prevOwner, energyNumber, newOwner) {
+
+        
+        if(ctx.clientIdentity.getMSPID() !== 'userOrgNetzbetreiber'){
+             throw new Error('no permission to create');
+         
+     }
 
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([prevOwner, energyNumber]);
