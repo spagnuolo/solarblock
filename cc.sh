@@ -13,6 +13,7 @@ CC_VERSION=${1:-"1"}
 \cp -r "chaincode/application" "organization/haushalt_c/"
 \cp -r "chaincode/application" "organization/netzbetreiber/"
 
+
 cd organization/haushalt_a
 source iamorghaushalta.sh
 peer lifecycle chaincode package cp.tar.gz --lang node --path ./contract --label "solar_$CC_VERSION"

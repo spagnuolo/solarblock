@@ -1,29 +1,26 @@
-/*
- * This application has 6 basic steps:
- * 1. Select an identity from a wallet
- * 2. Connect to network gateway
- * 3. Access EnergyNet network
- * 4. Construct request to sell solar energy
- * 5. Submit transaction
- * 6. Process response
- */
-
 'use strict';
+
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
 const Energy = require('../contract/lib/energy.js');
 
 async function main() {
-    const energyNumber = process.argv[2];
+    const energyAmount = process.argv[2];
+    if (!energyAmount) {
+        console.log('Please provide how much energy you want to sell');
+        return;
+    }
+
+    const energyNumber = process.argv[3];
     if (!energyNumber) {
         console.log('Please provide the energyNumber.');
         return;
     }
 
-    const price = process.argv[3];
-    if (!price) {
-        console.log('Please provide for how much you want to sell the energy.');
+    const newOwner = process.argv[4];
+    if (!newOwner) {
+        console.log('Please specify the User for whom you want to create the asset.');
         return;
     }
 
@@ -50,15 +47,14 @@ async function main() {
         console.log('Use org.solarnet.solarenergy smart contract.');
         const contract = await network.getContract('energycontract');
 
-        console.log('Submit solar energy sell transaction.');
+        console.log('Submit solar energy create transaction.');
+        const createResponse = await contract.submitTransaction('create', newOwner, energyNumber, energyAmount);
 
-        const sellResponse = await contract.submitTransaction('sell', organization, energyNumber, price);
+        console.log('Process create transaction response.' + createResponse);
+        let energy = Energy.fromBuffer(createResponse);
 
-        console.log('Process sell transaction response.' + sellResponse);
-        let energy = Energy.fromBuffer(sellResponse);
-
-        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully sell for value ${energy.faceValue}`);
-        console.log('Transaction complete.');
+        console.log(` ${energy.energyNumber} successfully created for value ${energy.faceValue}`);
+        console.log('Transaction completed')
 
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
