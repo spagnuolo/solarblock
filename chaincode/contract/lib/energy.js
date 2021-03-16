@@ -28,6 +28,14 @@ class Energy extends State {
         this.seller = newIssuer;
     }
 
+    getSellDateTime() {
+        return this.sellDateTime;
+    }
+
+    setSellDateTime(newSellDateTime) {
+        this.sellDateTime = newSellDateTime;
+    }
+
     getOwner() {
         return this.owner;
     }

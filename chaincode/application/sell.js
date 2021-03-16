@@ -9,23 +9,21 @@
  */
 
 'use strict';
-
-// Bring key classes into scope, most importantly Fabric SDK network class
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
 const Energy = require('../contract/lib/energy.js');
 
 async function main() {
-    const energyAmount = process.argv[2];
-    if (!energyAmount) {
-        console.log('Please provide how much energy you want to sell');
+    const energyNumber = process.argv[2];
+    if (!energyNumber) {
+        console.log('Please provide the energyNumber.');
         return;
     }
 
-    const energyNumber = process.argv[3];
-    if (!energyNumber) {
-        console.log('Please provide the energyNumber.');
+    const price = process.argv[3];
+    if (!price) {
+        console.log('Please provide for how much you want to sell the energy.');
         return;
     }
 
@@ -40,7 +38,6 @@ async function main() {
         identity: userName,
         wallet: wallet,
         discovery: { enabled: true, asLocalhost: true }
-
     };
 
     try {
@@ -54,10 +51,8 @@ async function main() {
         const contract = await network.getContract('energycontract');
 
         console.log('Submit solar energy sell transaction.');
-        let now = new Date().toUTCString();
-        //let nowString = `${now.getDate()}.${now.getMonth() + 1}.${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} Uhr`;
-        
-        const sellResponse = await contract.submitTransaction('sell', organization, energyNumber, now, '2021-02-25', energyAmount);
+
+        const sellResponse = await contract.submitTransaction('sell', organization, energyNumber, price);
 
         console.log('Process sell transaction response.' + sellResponse);
         let energy = Energy.fromBuffer(sellResponse);

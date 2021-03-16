@@ -1,46 +1,23 @@
-/*
- * Copyright IBM Corp. All Rights Reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
-*/
-
 'use strict';
 
-// Fabric smart contract classes
 const { Contract, Context } = require('fabric-contract-api');
-
-// EnergyNet specifc classes
 const Energy = require('./energy.js');
 const EnergyList = require('./energylist.js');
 const QueryUtils = require('./queries.js');
 
-/**
- * A custom context provides easy access to list of all solar energys
- */
 class EnergyContext extends Context {
-
     constructor() {
         super();
-        // All energys are held in a list of energys
         this.energyList = new EnergyList(this);
     }
-
 }
 
-/**
- * Define solar energy smart contract by extending Fabric Contract class
- *
- */
 class EnergyContract extends Contract {
-
     constructor() {
         // Unique namespace when multiple contracts per chaincode file
         super('org.solarnet.solarenergy');
     }
 
-    /**
-     * Define a custom context for solar energy
-    */
     createContext() {
         return new EnergyContext();
     }
@@ -56,7 +33,7 @@ class EnergyContract extends Contract {
     }
 
     /**
-     * 
+     * Creat new energy. Only the "Netzbetreiber" is allowed to use this function.
      * @param {Context} ctx contracts of the transaction
      * @param {String} owner organisation for whom the i.r. Netzbetreiber
      * @param {String} energyNumber unique identifyer of the asset
@@ -68,7 +45,7 @@ class EnergyContract extends Contract {
             throw new Error('\nNo permission to create energy.');
         }
 
-        //checks if ID is taken
+        //Checks if ID is taken.
         let energyKey = Energy.makeKey([owner, energyNumber]);
         let isEnergy = await ctx.energyList.getEnergy(energyKey);
 
@@ -76,54 +53,49 @@ class EnergyContract extends Contract {
             throw new Error('\nPlease use an unique ID: ' + owner + energyNumber + ' has already been used. ');
         }
 
-        // create an instance of the energy
+        // Create an instance of the energy.
         let energy = Energy.createInstance(owner, energyNumber, '-', '-', parseInt(capacity));
 
+        // Set new owner.
         energy.setOwnerMSP(owner + 'MSP');
         energy.setOwner(owner);
 
-        // Add the energy to the list of all similar solar energys in the ledger world state
+        // Add the energy to the list of all similar solar energys in the ledger world state.
         await ctx.energyList.addEnergy(energy);
 
-        // Must return a serialized energy to caller of smart contract
+        // Must return a serialized energy to caller of smart contract.
         return energy;
     }
 
     /**
-     * Issue solar energy
+     * Sell solar energy.
      *
      * @param {Context} ctx the transaction context
      * @param {String} seller solar energy seller
-     * @param {Integer} energyNumber energy number for this seller
-     * @param {String} sellDateTime energy sell date
-     * @param {String} expiredDateTime energy expired date
-     * @param {Integer} capacity face value of energy
+     * @param {String} energyNumber energy number for this seller
+     * @param {String} price face value of energy
     */
-    async sell(ctx, seller, energyNumber, sellDateTime, expiredDateTime, capacity) {
+    async sell(ctx, seller, energyNumber, price) {
         let energyKey = Energy.makeKey([seller, energyNumber]);
-        let isEnergy = await ctx.energyList.getEnergy(energyKey);
+        let energy = await ctx.energyList.getEnergy(energyKey);
 
-        if (isEnergy) {
-            throw new Error('\nPlease use an unique ID: ' + seller + energyNumber + ' has already been used. ');
+        if (!energy) {
+            throw new Error('\nThis asset does not exist: ' + seller + energyNumber);
         }
 
-        // create an instance of the energy
-        let energy = Energy.createInstance(seller, energyNumber, sellDateTime, expiredDateTime, parseInt(capacity));
+        // Get org out of context.
+        let organisation = ctx.clientIdentity.getMSPID().replace("MSP", "");
+        if (organisation !== seller) {
+            throw new Error("\nYou don't own this asset.");
+        }
 
-        // Smart contract, rather than energy, moves energy into SELLING state
+        // Smart contract, rather than energy, moves energy into SELLING state.
         energy.setSelling();
+        energy.setSellDateTime(new Date().toUTCString());
+        // TODO: set price.
+        await ctx.energyList.updateEnergy(energy);
 
-        // save the owner's MSP 
-        let mspid = ctx.clientIdentity.getMSPID();
-        energy.setOwnerMSP(mspid);
-
-        // Newly selld energy is owned by the seller to begin with (recorded for reporting purposes)
-        energy.setOwner(seller);
-
-        // Add the energy to the list of all similar solar energys in the ledger world state
-        await ctx.energyList.addEnergy(energy);
-
-        // Must return a serialized energy to caller of smart contract
+        // Must return a serialized energy to caller of smart contract.
         return energy;
     }
 
@@ -184,9 +156,7 @@ class EnergyContract extends Contract {
       * @param {Integer} price price paid for this energy                         // transaction input - not written to asset per se - but written to block
       * @param {String} purchaseDateTime time energy was requested                // transaction input - ditto.
      */
-    async buy_request(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
-
-
+    async buyRequest(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
@@ -203,8 +173,8 @@ class EnergyContract extends Contract {
         return energy;
     }
 
-    // Query transactions
 
+    // Query transactions
     /**
      * Query history of a solar energy
      * @param {Context} ctx the transaction context
