@@ -4,11 +4,14 @@ const { Contract, Context } = require('fabric-contract-api');
 const Energy = require('./energy.js');
 const EnergyList = require('./energylist.js');
 const QueryUtils = require('./queries.js');
+const Credit = require('./credit.js');
+const CreditList = require('./creditlist.js');
 
 class EnergyContext extends Context {
     constructor() {
         super();
         this.energyList = new EnergyList(this);
+        this.creditList =new CreditList(this);
     }
 }
 
@@ -46,10 +49,10 @@ class EnergyContract extends Contract {
         }
 
         //Checks if ID is taken.
-        let energyKey = Energy.makeKey([owner, energyNumber]);
-        let isEnergy = await ctx.energyList.getEnergy(energyKey);
+        let creditKey = Energy.makeKey([owner, energyNumber]);
+        let isCredit = await ctx.energyList.getEnergy(creditKey);
 
-        if (isEnergy) {
+        if (isCredit) {
             throw new Error('\nPlease use an unique ID: ' + owner + energyNumber + ' has already been used. ');
         }
 
@@ -76,8 +79,8 @@ class EnergyContract extends Contract {
      * @param {String} price face value of energy
     */
     async sell(ctx, seller, energyNumber, price) {
-        let energyKey = Energy.makeKey([seller, energyNumber]);
-        let energy = await ctx.energyList.getEnergy(energyKey);
+        let creditKey = Energy.makeKey([seller, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(creditKey);
 
         if (!energy) {
             throw new Error('\nThis asset does not exist: ' + seller + energyNumber);
@@ -113,8 +116,8 @@ class EnergyContract extends Contract {
     async buy(ctx, seller, energyNumber, newOwner, price, purchaseDateTime) {
 
         // Retrieve the current energy using key fields provided
-        let energyKey = Energy.makeKey([seller, energyNumber]);
-        let energy = await ctx.energyList.getEnergy(energyKey);
+        let creditKey = Energy.makeKey([seller, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(creditKey);
 
         // Validate current owner
         if (energy.getOwner() !== seller) {
@@ -158,8 +161,8 @@ class EnergyContract extends Contract {
      */
     async buyRequest(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
         // Retrieve the current energy using key fields provided
-        let energyKey = Energy.makeKey([seller, energyNumber]);
-        let energy = await ctx.energyList.getEnergy(energyKey);
+        let creditKey = Energy.makeKey([seller, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(creditKey);
 
         // Validate current owner - this is really information for the user trying the sample, rather than any 'authorisation' check per se FYI
         if (energy.getOwner() !== currentOwner) {
@@ -263,6 +266,29 @@ class EnergyContract extends Contract {
 
         return adhoc_results;
     }
+
+    async createCreditWallet(ctx , organisation ,creditWalletID, initialCreditValue){
+        //Checks if ID is taken.
+        let creditKey = Credit.makeKey([organisation, creditWalletID]);
+        let isCredit = await ctx.creditList.getCredit(creditKey);
+
+        if (isCredit) {
+            throw new Error('\nPlease use an unique ID: ' + organisation + creditWalletID + ' has already been used. ');
+        }
+
+         // Create an instance of the energy.
+         let credit = Credit.createInstance(organisation, parseInt(creditWalletID), parseInt(initialCreditValue));
+
+    
+ 
+         // Add the energy to the list of all similar solar energys in the ledger world state.
+         await ctx.creditList.addCredit(credit);
+ 
+         // Must return a serialized energy to caller of smart contract.
+         return credit;
+        
+    }
+
 }
 
 module.exports = EnergyContract;
