@@ -267,7 +267,24 @@ class EnergyContract extends Contract {
         return adhoc_results;
     }
 
+    /**
+     * Methode enstellt ein neues CreditWallet
+     * 
+     * @param {Context} ctx the context of the method
+     * @param {String} organisation the org for which the Wallet will be created
+     * @param {Int} creditWalletID  The Unique Identifier of the Wallet
+     * @param {Int} initialCreditValue the Amount of Credits with which the Wallet is to be initialized
+     * @returns an Credit object or more exactly an Wallet for Credits
+     */
+
     async createCreditWallet(ctx , organisation ,creditWalletID, initialCreditValue){
+        
+        //check if the one that calls the funtion is OrgNetzbetreiber
+
+        if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
+            throw new Error('\nNo permission to create a Wallet.');
+        }
+
         //Checks if ID is taken.
         let creditKey = Credit.makeKey([organisation, creditWalletID]);
         let isCredit = await ctx.creditList.getCredit(creditKey);
