@@ -13,19 +13,6 @@ let gateway;
 let contract;
 let organization;
 
-// Exit Server on ENTER.
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-readline.question('Press ENTER to exit server.\n\n', () => {
-    console.log('Exit server.');
-    readline.close();
-    gateway.disconnect();
-    process.exit(0);
-});
-
 // Connect to fabric network.
 async function connection() {
     const connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
@@ -61,6 +48,18 @@ connection().then(() => {
     process.exit(-1);
 });
 
+// Exit Server on ENTER.
+const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+readline.question('Press ENTER to exit server.\n\n', () => {
+    console.log('Exit server.');
+    readline.close();
+    gateway.disconnect();
+    process.exit(0);
+});
 
 // API
 const api = express();
@@ -72,6 +71,10 @@ api.get('/getSelling', (request, response) => {
     contract.evaluateTransaction('queryNamed', 'SELLING').then((queryResponse) => {
         let data = JSON.parse(queryResponse.toString());
         response.json(data);
+    }).catch((error) => {
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
     });
 });
 
@@ -79,6 +82,10 @@ api.get('/getOwn', (request, response) => {
     contract.evaluateTransaction('queryOwner', organization).then((queryResponse) => {
         let data = JSON.parse(queryResponse.toString());
         response.json(data);
+    }).catch((error) => {
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
     });
 });
 
@@ -88,44 +95,51 @@ api.get('/getOwnSelling', (request, response) => {
         let data = JSON.parse(queryResponse.toString());
         response.json(data);
     }).catch((error) => {
-        console.log(error);
-        response.send(error);
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
     });
 });
 
 api.post('/sellEnergy', (request, response) => {
     console.log('/sellEnergy JSON:', request.body);
-    let txnParams = [
+    let transactionParameters = [
         'sell',
         organization,
         request.body.energyNumber,
-        new Date().toUTCString(),
-        '2021-03-31',
         request.body.faceValue
     ];
 
-    contract.submitTransaction(...txnParams).then((buyResponse) => {
+    contract.submitTransaction(...transactionParameters).then((buyResponse) => {
         let energy = Energy.fromBuffer(buyResponse);
-        let msg = `${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`;
-        response.json({ msg });
+        let message = `${energy.seller} solar energy : ${energy.energyNumber} successfully offered by ${energy.owner}`;
+        response.json({ message });
     }).catch((error) => {
-        let msg = `Error processing transaction. ${error}`;
+        let message = `Error processing transaction. ${error}`;
         console.log(error.stack);
-        response.json({ msg });
+        response.json({ message });
     });
 });
 
 api.post('/buyEnergy', (request, response) => {
     console.log('/buyEnergy JSON:', request.body);
+    let transactionParameters = [
+        'buy',
+        request.body.seller,
+        request.body.energyNumber,
+        organization,
+        'price',
+        'purchaseDateTime'
+    ];
 
-    contract.submitTransaction('buy', request.body.seller, request.body.energyNumber, organization, 'price', 'purchaseDateTime').then((buyResponse) => {
+    contract.submitTransaction(...transactionParameters).then((buyResponse) => {
         let energy = Energy.fromBuffer(buyResponse);
-        let msg = `${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`;
-        response.json({ msg });
+        let message = `${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`;
+        response.json({ message });
     }).catch((error) => {
-        let msg = `Error processing transaction. ${error}`;
+        let message = `Error processing transaction. ${error}`;
         console.log(error.stack);
-        response.json({ msg });
+        response.json({ message });
     });
 });
 
