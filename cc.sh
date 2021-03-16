@@ -12,9 +12,6 @@ CC_VERSION=${1:-"1"}
 \cp -r "chaincode/application" "organization/haushalt_b/"
 \cp -r "chaincode/application" "organization/haushalt_c/"
 \cp -r "chaincode/application" "organization/netzbetreiber/"
-\cp -r "chaincode/NetzbetreiberAPP/createEnergy.js" "organization/netzbetreiber/application"
-\cp -r "chaincode/NetzbetreiberAPP/createEnergy.js" "organization/haushalt_a/application"
-
 
 
 cd organization/haushalt_a
