@@ -97,7 +97,7 @@ api.post('/buyEnergy', (request, response) => {
     });
 });
 
-let server = api.listen(8080, () => {
+let server = api.listen(3000, () => {
     let port = server.address().port;
     console.log(`Server listening at http://localhost:${port}`);
 });
