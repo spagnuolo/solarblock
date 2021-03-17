@@ -85,8 +85,8 @@ class EnergyContract extends Contract {
      * @param {String} price face value of energy
     */
     async sell(ctx, seller, energyNumber, price) {
-        let creditKey = Energy.makeKey([seller, energyNumber]);
-        let energy = await ctx.energyList.getEnergy(creditKey);
+        let energyKey = Energy.makeKey([seller, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(energyKey);
 
         if (!energy) {
             throw new Error('\nThis asset does not exist: ' + seller + energyNumber);
@@ -123,8 +123,8 @@ class EnergyContract extends Contract {
     async buy(ctx, seller, energyNumber, newOwner, purchaseDateTime) {
 
         // Retrieve the current energy using key fields provided
-        let creditKey = Energy.makeKey([seller, energyNumber]);
-        let energy = await ctx.energyList.getEnergy(creditKey);
+        let energyKey = Energy.makeKey([seller, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(energyKey);
 
         // Validate current owner
         if (energy.getOwner() !== seller) {

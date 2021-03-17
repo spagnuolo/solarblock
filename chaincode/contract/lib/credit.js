@@ -21,11 +21,11 @@ class Credit extends State{
         Object.assign(this, obj);
     }
 
-    getAmountOfCredits() {
+    getAmount() {
         return this.amountOfCredits;
     }
 
-    setAmountOfCredits(newAmountOfCredits) {
+    setAmount(newAmountOfCredits) {
         this.amountOfCredits = newAmountOfCredits;
     }
 
