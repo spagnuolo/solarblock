@@ -8,7 +8,7 @@
 
 <!-- left control -->
 <div class="bg-gray-200 w-1/4 h-full text-lg shadow-inner">
-    <div class="title">Info</div>
+    <div class="title">Energie Info</div>
     {#if txn}
         <Transaktion {txn} />
         <div class="m-full p-2">
