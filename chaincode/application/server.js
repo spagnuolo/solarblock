@@ -12,11 +12,13 @@ const Energy = require('../contract/lib/energy.js');
 let gateway;
 let contract;
 let organization;
+let peer;
 
 // Connect to fabric network.
 async function connection() {
     const connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
     organization = connectionProfile.client.organization;
+    peer = connectionProfile.organizations[organization].peers[0];
     const userName = 'user' + organization;
 
     const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
@@ -66,6 +68,10 @@ const api = express();
 api.use(cors({ origin: "http://localhost:5000" })); // Allow requests from frontend dev server.
 api.use(express.static('../public'));
 api.use(express.json());
+
+api.get('/getInfo', (request, response) => {
+    response.json({ organization, peer });
+});
 
 api.get('/getSelling', (request, response) => {
     contract.evaluateTransaction('queryNamed', 'SELLING').then((queryResponse) => {

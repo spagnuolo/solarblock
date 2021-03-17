@@ -3,8 +3,8 @@
     export let fetchURL = "http://localhost:8080/getOwn";
 
     let transactions;
-    let promise = getAllSelling();
-    async function getAllSelling() {
+    let promise = getRequest();
+    async function getRequest() {
         const response = await fetch(fetchURL);
         transactions = await response.json();
 

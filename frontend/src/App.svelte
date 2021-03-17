@@ -1,5 +1,6 @@
 <script lang="ts">
   import Energy from "./Energy.svelte";
+  import Footer from "./Footer.svelte";
   import Market from "./Market.svelte";
   import Tailwind from "./Tailwind.svelte";
 
@@ -7,7 +8,7 @@
     { name: "Meine Energie", emoji: "⚡", active: true },
     { name: "Marktplatz", emoji: "🛒", active: false },
     { name: "", emoji: "🔍", active: false },
-    { name: "", emoji: "🗑️", active: false },
+    { name: "", emoji: "🔌", active: false },
     { name: "", emoji: "⚙️", active: false },
   ];
 
@@ -52,11 +53,7 @@
   </div>
 
   <!-- footer -->
-  <div
-    class="absolute bottom-0 left-0 w-screen bg-gray-600 text-center text-white text-2xl p-2"
-  >
-    Org
-  </div>
+  <Footer />
 </main>
 
 <style>
