@@ -83,7 +83,7 @@ api.get('/getOwn', (request, response) => {
 });
 
 /* Test post request with terminal.
-curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:8080/buyEnergy"
+curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:3000/buyEnergy"
 */
 api.post('/buyEnergy', (request, response) => {
     contract.submitTransaction('buy', request.body.seller, request.body.energyNumber, organization, 'price', 'purchaseDateTime').then((buyResponse) => {
