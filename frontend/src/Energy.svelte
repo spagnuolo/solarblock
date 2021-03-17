@@ -13,13 +13,14 @@
         <Transaktion {txn} />
         <div class="m-full p-2">
             <PostButton
-                label="Verkaufen?"
+                label="Verkaufen"
                 url="http://localhost:8080/sellEnergy"
                 json={{
                     faceValue: txn.Record.faceValue,
                     energyNumber: txn.Record.energyNumber,
                 }}
             />
+            <PostButton label="Split Energy" />
         </div>
     {:else}
         <p class="bg-blue-300 text-center">Wähle einen Eintrag aus.</p>

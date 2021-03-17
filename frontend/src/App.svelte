@@ -52,6 +52,6 @@
 
 <style>
   .selected {
-    @apply bg-blue-300;
+    @apply bg-blue-400;
   }
 </style>

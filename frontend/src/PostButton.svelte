@@ -3,7 +3,7 @@
     export let url = "/";
     export let json = {};
 
-    function handleBuy() {
+    function handlePost() {
         // Send and get json.
         let xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
@@ -22,8 +22,8 @@
 </script>
 
 <button
-    class="w-full p-2 bg-green-400 hover:bg-green-300 rounded"
-    on:click={handleBuy}
+    class="w-full my-2 p-2 bg-blue-400 hover:bg-blue-300 rounded"
+    on:click={handlePost}
 >
     {label}
 </button>
