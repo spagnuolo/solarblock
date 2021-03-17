@@ -6,25 +6,21 @@ const { Wallets, Gateway } = require('fabric-network');
 const Credit = require('../contract/lib/credit.js');
 
 async function main() {
-    const newOwner
-     = process.argv[2];
-    if (!newOwner
-        ) {
-        console.log('Please provide how much energy you want to sell');
-        return;
-    }
+   
 
-    const creditID = process.argv[3];
-    if (!creditID) {
-        console.log('Please provide the creditID.');
-        return;
-    }
-
-    const initialCreditValue = process.argv[4];
+    const initialCreditValue = process.argv[2];
     if (!initialCreditValue ) {
         console.log('Please provide the creditID.');
         return;
     }
+
+    const newOwner
+    = process.argv[3];
+   if (!newOwner
+       ) {
+       console.log('Please provide how much energy you want to sell');
+       return;
+   }
 
     let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
     const organization = connectionProfile.client.organization;
@@ -50,7 +46,7 @@ async function main() {
         const contract = await network.getContract('energycontract');
 
         console.log('Submit solar energy create transaction.');
-        const createResponse = await contract.submitTransaction('createCreditWallet', newOwner, creditID, initialCreditValue );
+        const createResponse = await contract.submitTransaction('createCreditWallet', newOwner, initialCreditValue );
     
 
         console.log('Process create Wallet transaction response.' + createResponse);

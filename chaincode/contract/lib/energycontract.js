@@ -7,11 +7,14 @@ const QueryUtils = require('./queries.js');
 const Credit = require('./credit.js');
 const CreditList = require('./creditlist.js');
 
+ let energyAssetID = 0;
+ let creditAssetID = 0;
+
 class EnergyContext extends Context {
     constructor() {
         super();
         this.energyList = new EnergyList(this);
-        this.creditList =new CreditList(this);
+        this.creditList = new CreditList(this);
     }
 }
 
@@ -43,10 +46,13 @@ class EnergyContract extends Contract {
      * @param {String} capacity 
      * @returns 
      */
-    async create(ctx, owner, energyNumber, capacity) {
+    async create(ctx, owner, capacity) {
+
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create energy.');
         }
+
+        let energyNumber = (energyAssetID+=1);
 
         //Checks if ID is taken.
         let creditKey = Energy.makeKey([owner, energyNumber]);
@@ -279,7 +285,9 @@ class EnergyContract extends Contract {
      * @returns an Credit object or more exactly an Wallet for Credits
      */
 
-    async createCreditWallet(ctx , organization ,creditID, initialCreditValue){
+    async createCreditWallet(ctx , organization , initialCreditValue){
+
+       let creditID =(creditAssetID+=1);
         
         //check if the one that calls the funtion is OrgNetzbetreiber
 

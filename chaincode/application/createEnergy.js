@@ -12,13 +12,7 @@ async function main() {
         return;
     }
 
-    const energyNumber = process.argv[3];
-    if (!energyNumber) {
-        console.log('Please provide the energyNumber.');
-        return;
-    }
-
-    const newOwner = process.argv[4];
+    const newOwner = process.argv[3];
     if (!newOwner) {
         console.log('Please specify the User for whom you want to create the asset.');
         return;
@@ -48,7 +42,7 @@ async function main() {
         const contract = await network.getContract('energycontract');
 
         console.log('Submit solar energy create transaction.');
-        const createResponse = await contract.submitTransaction('create', newOwner, energyNumber, energyAmount);
+        const createResponse = await contract.submitTransaction('create', newOwner, energyAmount);
 
         console.log('Process create transaction response.' + createResponse);
         let energy = Energy.fromBuffer(createResponse);
