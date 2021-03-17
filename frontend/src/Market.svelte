@@ -7,7 +7,7 @@
 </script>
 
 <!-- left control -->
-<div class="bg-gray-200 w-1/4 h-full text-lg shadow-inner">
+<div class="bg-gray-200 w-1/3 h-full text-lg shadow-inner">
     <div class="title">Kaufen</div>
     {#if txn}
         <Transaktion bind:txn />
