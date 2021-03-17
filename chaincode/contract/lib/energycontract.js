@@ -38,7 +38,7 @@ class EnergyContract extends Contract {
     /**
      * Creat new energy. Only the "Netzbetreiber" is allowed to use this function.
      * @param {Context} ctx contracts of the transaction
-     * @param {String} owner organisation for whom the i.r. Netzbetreiber
+     * @param {String} owner organization for whom the i.r. Netzbetreiber
      * @param {String} energyNumber unique identifyer of the asset
      * @param {String} capacity 
      * @returns 
@@ -87,14 +87,15 @@ class EnergyContract extends Contract {
         }
 
         // Get org out of context.
-        let organisation = ctx.clientIdentity.getMSPID().replace("MSP", "");
-        if (organisation !== seller) {
+        let organization = ctx.clientIdentity.getMSPID().replace("MSP", "");
+        if (organization !== seller) {
             throw new Error("\nYou don't own this asset.");
         }
 
         // Smart contract, rather than energy, moves energy into SELLING state.
         energy.setSelling();
         energy.setSellDateTime(new Date().toUTCString());
+        energy.setPrice(price);
         // TODO: set price.
         await ctx.energyList.updateEnergy(energy);
 
@@ -113,7 +114,7 @@ class EnergyContract extends Contract {
       * @param {Integer} price price paid for this energy // transaction input - not written to asset
       * @param {String} purchaseDateTime time energy was purchased (i.e. traded)  // transaction input - not written to asset
      */
-    async buy(ctx, seller, energyNumber, newOwner, price, purchaseDateTime) {
+    async buy(ctx, seller, energyNumber, newOwner, purchaseDateTime) {
 
         // Retrieve the current energy using key fields provided
         let creditKey = Energy.makeKey([seller, energyNumber]);
@@ -130,6 +131,7 @@ class EnergyContract extends Contract {
         } else {
             throw new Error('\nTransaktion ' + seller + energyNumber + ' is not available for sale.');
         }
+
 
         // Check energy is not already REDEEMED
         if (energy.isBought()) {
@@ -271,13 +273,13 @@ class EnergyContract extends Contract {
      * Methode enstellt ein neues CreditWallet
      * 
      * @param {Context} ctx the context of the method
-     * @param {String} organisation the org for which the Wallet will be created
-     * @param {Int} creditWalletID  The Unique Identifier of the Wallet
+     * @param {String} organization the org for which the Wallet will be created
+     * @param {Int} creditID  The Unique Identifier of the Wallet
      * @param {Int} initialCreditValue the Amount of Credits with which the Wallet is to be initialized
      * @returns an Credit object or more exactly an Wallet for Credits
      */
 
-    async createCreditWallet(ctx , organisation ,creditWalletID, initialCreditValue){
+    async createCreditWallet(ctx , organization ,creditID, initialCreditValue){
         
         //check if the one that calls the funtion is OrgNetzbetreiber
 
@@ -286,15 +288,15 @@ class EnergyContract extends Contract {
         }
 
         //Checks if ID is taken.
-        let creditKey = Credit.makeKey([organisation, creditWalletID]);
+        let creditKey = Credit.makeKey([organization, creditID]);
         let isCredit = await ctx.creditList.getCredit(creditKey);
 
         if (isCredit) {
-            throw new Error('\nPlease use an unique ID: ' + organisation + creditWalletID + ' has already been used. ');
+            throw new Error('\nPlease use an unique ID: ' + organization + creditID + ' has already been used. ');
         }
 
          // Create an instance of the energy.
-         let credit = Credit.createInstance(organisation, creditWalletID, parseInt(initialCreditValue));
+         let credit = Credit.createInstance(organization, creditID, parseInt(initialCreditValue));
 
     
  
@@ -306,18 +308,18 @@ class EnergyContract extends Contract {
         
     }
 
-    async addCredits(ctx,organisation, creditWalletID, amountOfCreditsToAdd){
+    async addCredits(ctx,organization, creditID, amountOfCreditsToAdd){
 
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create a Wallet.');
         }
 
         //Checks if ID is taken.
-        let creditKey = Credit.makeKey([organisation, creditWalletID]);
+        let creditKey = Credit.makeKey([organization, creditID]);
         let isCredit = await ctx.creditList.getCredit(creditKey);
 
         if (!isCredit) {
-            throw new Error('\nno Wallet for ' + organisation +' has  been found. ');
+            throw new Error('\nno Wallet for ' + organization +' has  been found. ');
         }
 
         let credit = await ctx.creditList.getCredit(creditKey);

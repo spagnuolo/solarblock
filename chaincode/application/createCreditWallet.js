@@ -14,15 +14,15 @@ async function main() {
         return;
     }
 
-    const creditWalletId = process.argv[3];
-    if (!creditWalletId) {
-        console.log('Please provide the creditWalletId.');
+    const creditID = process.argv[3];
+    if (!creditID) {
+        console.log('Please provide the creditID.');
         return;
     }
 
     const initialCreditValue = process.argv[4];
     if (!initialCreditValue ) {
-        console.log('Please provide the creditWalletId.');
+        console.log('Please provide the creditID.');
         return;
     }
 
@@ -50,13 +50,13 @@ async function main() {
         const contract = await network.getContract('energycontract');
 
         console.log('Submit solar energy create transaction.');
-        const createResponse = await contract.submitTransaction('createCreditWallet', newOwner, creditWalletId, initialCreditValue );
+        const createResponse = await contract.submitTransaction('createCreditWallet', newOwner, creditID, initialCreditValue );
     
 
         console.log('Process create Wallet transaction response.' + createResponse);
         let credit = Credit.fromBuffer(createResponse);
 
-        console.log(` ${credit.creditWalletId} successfully created for ${credit.creditWalletHolder} value ${credit.amountOfCredits}`);
+        console.log(` ${credit.creditID} successfully created for ${credit.organization} value ${credit.amountOfCredits}`);
         console.log('Transaction completed')
 
     } catch (error) {

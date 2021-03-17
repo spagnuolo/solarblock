@@ -17,7 +17,7 @@ const energyState = {
 class Credit extends State{
 
     constructor(obj) {
-        super(Credit.getClass(), [obj.creditWalletHolder, obj.creditWalletId]);
+        super(Credit.getClass(), [obj.organization, obj.creditID]);
         Object.assign(this, obj);
     }
 
@@ -50,13 +50,13 @@ class Credit extends State{
 
     /**
      * 
-     * @param {String} creditWalletHolder Organisation that the Wallet belongs to
-     * @param {Int} creditWalletId  Unique Identifier of the Wallet
+     * @param {String} organization Organisation that the Wallet belongs to
+     * @param {Int} creditID  Unique Identifier of the Wallet
      * @param {Int} amountOfCredits Credits that the Wallet holds
      * @returns 
      */
-     static createInstance(creditWalletHolder, creditWalletId, amountOfCredits) {
-        return new Credit({ creditWalletHolder, creditWalletId, amountOfCredits});
+     static createInstance(organization, creditID, amountOfCredits) {
+        return new Credit({ organization, creditID, amountOfCredits});
     }
 
     static getClass() {

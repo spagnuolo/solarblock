@@ -9,15 +9,15 @@ const Credit = require('../contract/lib/credit.js');
 
 async function main() {
 
-    const walletOwner = process.argv[2];
-    if (!walletOwner) {
-        console.log('Please provide the walletOwner.');
+    const creditHolder = process.argv[2];
+    if (!creditHolder) {
+        console.log('Please provide the creditHolder.');
         return;
     }
 
-    const creditWalletId = process.argv[3];
-    if (!creditWalletId) {
-        console.log('Please provide the creditWalletId.');
+    const creditID = process.argv[3];
+    if (!creditID) {
+        console.log('Please provide the creditID.');
         return;
     }
 
@@ -53,12 +53,12 @@ async function main() {
         const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
         console.log('Submit add Credit transaction.');
-        const addCredit = await contract.submitTransaction('addCredits', walletOwner, creditWalletId, amountOfCreditsToAdd);
+        const addCredit = await contract.submitTransaction('addCredits', creditHolder, creditID, amountOfCreditsToAdd);
 
         console.log('Process addCredit transaction response.');
         let credit = Credit.fromBuffer(addCredit);
 
-        console.log(`${amountOfCreditsToAdd} was added to ${credit.creditWalletId}, it now contains ${credit.amountOfCredits}`);
+        console.log(`${amountOfCreditsToAdd} was added to ${credit.creditID}, it now contains ${credit.amountOfCredits}`);
         console.log('Transaction complete.');
 
     } catch (error) {
