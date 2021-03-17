@@ -1,11 +1,11 @@
 {
-	"name": "first-network",
+	"name": "solar-network",
 	"version": "1.0.0",
 	"client": {
 		"tlsEnable": true,
 		"adminCredential": {
-			"id": "exploreradmin",
-			"password": "exploreradminpw"
+			"id": "ganymedeAdmin",
+			"password": "ganymedeAdminPw"
 		},
 		"enableAuthentication": true,
 		"organization": "OrgNetzbetreiberMSP",
@@ -38,7 +38,7 @@
 		"OrgNetzbetreiberMSP": {
 			"mspid": "OrgNetzbetreiberMSP",
 			"adminPrivateKey": {
-				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/keystore/227238cb7eb2609d4a0caa281b9beefebeff4bd84aad62436462762cd320809b_sk"
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/keystore/e99bebd62aca7b0c0a43bbbfe5d98832f4d03582895fdfda7a96c3ed8439040d_sk"
 			},
 			"peers": ["peer0.orgNetzbetreiber.example.com"],
 			"signedCert": {

@@ -83,7 +83,7 @@ api.get('/getOwn', (request, response) => {
 });
 
 /* Test post request with terminal.
-curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:8080/buyEnergy"
+curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:3000/buyEnergy"
 */
 api.post('/buyEnergy', (request, response) => {
     contract.submitTransaction('buy', request.body.seller, request.body.energyNumber, organization, 'price', 'purchaseDateTime').then((buyResponse) => {
@@ -97,7 +97,7 @@ api.post('/buyEnergy', (request, response) => {
     });
 });
 
-let server = api.listen(8080, () => {
+let server = api.listen(3000, () => {
     let port = server.address().port;
     console.log(`Server listening at http://localhost:${port}`);
 });

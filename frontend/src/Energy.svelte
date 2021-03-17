@@ -4,7 +4,7 @@
     let transactions;
     let promise = getAllSelling();
     async function getAllSelling() {
-        const response = await fetch("http://localhost:8080/getOwn");
+        const response = await fetch("http://localhost:3000/getOwn");
         transactions = await response.json();
 
         if (response.ok) {
