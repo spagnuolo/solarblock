@@ -21,6 +21,14 @@ class Credit extends State{
         Object.assign(this, obj);
     }
 
+    getAmountOfCredits() {
+        return this.amountOfCredits;
+    }
+
+    setAmountOfCredits(newAmountOfCredits) {
+        this.amountOfCredits = newAmountOfCredits;
+    }
+
 
     //Buffermethods
 

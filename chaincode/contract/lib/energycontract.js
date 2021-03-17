@@ -294,7 +294,7 @@ class EnergyContract extends Contract {
         }
 
          // Create an instance of the energy.
-         let credit = Credit.createInstance(organisation, parseInt(creditWalletID), parseInt(initialCreditValue));
+         let credit = Credit.createInstance(organisation, creditWalletID, parseInt(initialCreditValue));
 
     
  
@@ -304,6 +304,29 @@ class EnergyContract extends Contract {
          // Must return a serialized energy to caller of smart contract.
          return credit;
         
+    }
+
+    async addCredits(ctx,organisation, creditWalletID, amountOfCreditsToAdd){
+
+        if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
+            throw new Error('\nNo permission to create a Wallet.');
+        }
+
+        //Checks if ID is taken.
+        let creditKey = Credit.makeKey([organisation, creditWalletID]);
+        let isCredit = await ctx.creditList.getCredit(creditKey);
+
+        if (!isCredit) {
+            throw new Error('\nno Wallet for ' + organisation +' has  been found. ');
+        }
+
+        let credit = await ctx.creditList.getCredit(creditKey);
+
+        credit.setAmountOfCredits(parseInt(credit.getAmountOfCredits())+parseInt(amountOfCreditsToAdd));
+
+        ctx.creditList.updateCredit(credit)
+
+        return credit
     }
 
 }

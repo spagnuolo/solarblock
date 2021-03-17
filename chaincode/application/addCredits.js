@@ -1,16 +1,17 @@
 'use strict';
 
+// Bring key classes into scope, most importantly Fabric SDK network class
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
 const Credit = require('../contract/lib/credit.js');
 
+
 async function main() {
-    const newOwner
-     = process.argv[2];
-    if (!newOwner
-        ) {
-        console.log('Please provide how much energy you want to sell');
+
+    const walletOwner = process.argv[2];
+    if (!walletOwner) {
+        console.log('Please provide the walletOwner.');
         return;
     }
 
@@ -20,11 +21,12 @@ async function main() {
         return;
     }
 
-    const initialCreditValue = process.argv[4];
-    if (!initialCreditValue ) {
-        console.log('Please provide the creditWalletId.');
+    const amountOfCreditsToAdd = process.argv[4];
+    if (!amountOfCreditsToAdd) {
+        console.log('Please provide the amount of Credits to add to the Wallet.');
         return;
     }
+
 
     let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
     const organization = connectionProfile.client.organization;
@@ -37,6 +39,7 @@ async function main() {
         identity: userName,
         wallet: wallet,
         discovery: { enabled: true, asLocalhost: true }
+
     };
 
     try {
@@ -47,17 +50,16 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         console.log('Use org.solarnet.solarenergy smart contract.');
-        const contract = await network.getContract('energycontract');
+        const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
-        console.log('Submit solar energy create transaction.');
-        const createResponse = await contract.submitTransaction('createCreditWallet', newOwner, creditWalletId, initialCreditValue );
-    
+        console.log('Submit add Credit transaction.');
+        const addCredit = await contract.submitTransaction('addCredits', walletOwner, creditWalletId, amountOfCreditsToAdd);
 
-        console.log('Process create Wallet transaction response.' + createResponse);
-        let credit = Credit.fromBuffer(createResponse);
+        console.log('Process addCredit transaction response.');
+        let credit = Credit.fromBuffer(addCredit);
 
-        console.log(` ${credit.creditWalletId} successfully created for ${credit.creditWalletHolder} value ${credit.amountOfCredits}`);
-        console.log('Transaction completed')
+        console.log(`${amountOfCreditsToAdd} was added to ${credit.creditWalletId}, it now contains ${credit.amountOfCredits}`);
+        console.log('Transaction complete.');
 
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
@@ -69,9 +71,9 @@ async function main() {
     }
 }
 main().then(() => {
-    console.log('Issue program complete.');
+    console.log('Buy program complete.');
 }).catch((e) => {
-    console.log('Issue program exception.');
+    console.log('Buy program exception.');
     console.log(e);
     console.log(e.stack);
     process.exit(-1);
