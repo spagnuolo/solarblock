@@ -8,7 +8,7 @@
 
 // Utility class for collections of ledger states --  a state list
 const StateList = require('./../ledger-api/statelist.js');
-
+const State = require('./../ledger-api/state.js');
 const Credit = require('./credit.js');
 
 class CreditList extends StateList{
@@ -19,7 +19,9 @@ class CreditList extends StateList{
     }
 
     async addCredit(credit) {
-        return this.addState(credit);
+        let data = State.serialize(credit);
+        console.log('\nCredit: '+ credit.getOrganization());
+        return  await this.ctx.stub.putState(credit.organization, data);
     }
 
     async getCredit(creditKey) {

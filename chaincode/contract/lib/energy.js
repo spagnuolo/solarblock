@@ -52,6 +52,14 @@ class Energy extends State {
         this.owner = newOwner;
     }
 
+    setPrice(newPrice) {
+        this.price= newPrice;
+    }
+
+    getPrice(){
+        return this.price();
+    }
+    
     /**
      * Useful methods to encapsulate solar energy states
      */

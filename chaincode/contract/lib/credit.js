@@ -21,6 +21,11 @@ class Credit extends State{
         Object.assign(this, obj);
     }
 
+    getOrganization() {
+        return this.organization;
+    }
+
+
     getAmount() {
         return this.amountOfCredits;
     }
@@ -55,8 +60,8 @@ class Credit extends State{
      * @param {Int} amountOfCredits Credits that the Wallet holds
      * @returns 
      */
-     static createInstance(organization, creditID, amountOfCredits) {
-        return new Credit({ organization, creditID, amountOfCredits});
+     static createInstance(organization,  amountOfCredits) {
+        return new Credit({ organization,  amountOfCredits});
     }
 
     static getClass() {

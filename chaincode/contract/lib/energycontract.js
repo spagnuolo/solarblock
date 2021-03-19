@@ -287,7 +287,6 @@ class EnergyContract extends Contract {
 
     async createCreditWallet(ctx , organization , initialCreditValue){
 
-       let creditID =(creditAssetID+=1);
         
         //check if the one that calls the funtion is OrgNetzbetreiber
 
@@ -296,15 +295,15 @@ class EnergyContract extends Contract {
         }
 
         //Checks if ID is taken.
-        let creditKey = Credit.makeKey([organization, creditID]);
-        let isCredit = await ctx.creditList.getCredit(creditKey);
+
+        let isCredit = await ctx.creditList.getCredit(organization);
 
         if (isCredit) {
-            throw new Error('\nPlease use an unique ID: ' + organization + creditID + ' has already been used. ');
+            throw new Error('\nPlease use an unique ID: ' + organization +  ' has already been used. ');
         }
 
          // Create an instance of the energy.
-         let credit = Credit.createInstance(organization, creditID, parseInt(initialCreditValue));
+         let credit = Credit.createInstance(organization,  parseInt(initialCreditValue));
 
     
  
@@ -316,21 +315,20 @@ class EnergyContract extends Contract {
         
     }
 
-    async addCredits(ctx,organization, creditID, amountOfCreditsToAdd){
+    async addCredits(ctx,organization, amountOfCreditsToAdd){
 
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create a Wallet.');
         }
 
         //Checks if ID is taken.
-        let creditKey = Credit.makeKey([organization, creditID]);
-        let isCredit = await ctx.creditList.getCredit(creditKey);
+        let isCredit = await ctx.creditList.getCredit(organization);
 
         if (!isCredit) {
             throw new Error('\nno Wallet for ' + organization +' has  been found. ');
         }
 
-        let credit = await ctx.creditList.getCredit(creditKey);
+        let credit = await ctx.creditList.getCredit(organization);
 
         credit.setAmountOfCredits(parseInt(credit.getAmountOfCredits())+parseInt(amountOfCreditsToAdd));
 
