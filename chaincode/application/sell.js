@@ -15,15 +15,15 @@ const { Wallets, Gateway } = require('fabric-network');
 const Energy = require('../contract/lib/energy.js');
 
 async function main() {
-    const energyNumber = process.argv[2];
+    const sellAmount = process.argv[2];
     if (!energyNumber) {
-        console.log('Please provide the energyNumber.');
+        console.log('Please provide the amount of energy in KWH that you want to sell.');
         return;
     }
 
     const price = process.argv[3];
     if (!price) {
-        console.log('Please provide for how much you want to sell the energy.');
+        console.log('Please provide for how much you want to sell the energy for.');
         return;
     }
 
@@ -52,7 +52,7 @@ async function main() {
 
         console.log('Submit solar energy sell transaction.');
 
-        const sellResponse = await contract.submitTransaction('sell', organization, energyNumber, price);
+        const sellResponse = await contract.submitTransaction('sell', organization, sellAmount, price);
 
         console.log('Process sell transaction response.' + sellResponse);
         let energy = Energy.fromBuffer(sellResponse);

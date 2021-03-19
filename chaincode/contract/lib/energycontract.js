@@ -84,29 +84,60 @@ class EnergyContract extends Contract {
      * @param {String} energyNumber energy number for this seller
      * @param {String} price face value of energy
     */
-    async sell(ctx, seller, energyNumber, price) {
-        let energyKey = Energy.makeKey([seller, energyNumber]);
-        let energy = await ctx.energyList.getEnergy(energyKey);
+    async sell(ctx, seller, sellAmount, price) {
+        
+        //create an ordered list of energy from lowest to highest for the seller
+        const sort = {faceValue : 1};
+        let query = new QueryUtils(ctx, 'org.solarnet.solarenergy');
+        let owner_results = await query.queryKeyByOwner(owner).sort(sort);
+        let json = JSON.parse(owner_results.toString());
 
-        if (!energy) {
-            throw new Error('\nThis asset does not exist: ' + seller + energyNumber);
-        }
+        let currentValue =0
 
-        // Get org out of context.
-        let organization = ctx.clientIdentity.getMSPID().replace("MSP", "");
-        if (organization !== seller) {
-            throw new Error("\nYou don't own this asset.");
-        }
+        json.forEach(element => {
 
-        // Smart contract, rather than energy, moves energy into SELLING state.
-        energy.setSelling();
-        energy.setSellDateTime(new Date().toUTCString());
-        energy.setPrice(price);
-        // TODO: set price.
-        await ctx.energyList.updateEnergy(energy);
+            
+            let energyKey = Energy.makeKey([seller, element.Record.energyNumber]);
+            let energy = await ctx.energyList.getEnergy(energyKey);
+            
 
-        // Must return a serialized energy to caller of smart contract.
-        return energy;
+            if((currentValue+energy.faceValue)>Sellamount){
+
+                //calculate how mutch energy is contained in the new assets respectively
+                let energyOldAsset =((sellAmount-currentValue)-energy.faceValue)*-1;
+                let energyNewAsset =(energy.faceValue-energyOldAsset)
+
+                //create new Asset with calculated amount fo energy
+                let aID = (energyAssetID+=1);
+                let newEnergy = Energy.createInstance(seller, aID, '-', '-',energyNewAsset);
+                console.log(`\ncreated new Energyasset for ${newEnergy.seller} with ID: ${newEnergy.energyNumber} and Value: ${newEnergy}`)
+                newEnergy.setOwnerMSP(seller + 'MSP');
+                newEnergy.setOwner(seller);
+                await ctx.energyList.addEnergy(newEnergy);
+
+
+                //Set the amount of energy in the Old asset accordingly
+                energy.setFaceValue(energyOldAsset);
+                energy.setSelling();
+                energy.setSellDateTime(new Date().toUTCString());
+                energy.setPrice((energy.faceValue/sellAmount)*price);
+                await ctx.energyList.updateEnergy(energy);
+                console.log(`\nset ${energy.energyNumber} with Value: ${energy.faceValue}state to ${energy.eneryState}`);
+                break;
+            }
+            currentValue+=energy.faceValue;
+            energy.setSelling();
+            energy.setSellDateTime(new Date().toUTCString());
+            //setting the price for the current energy
+            energy.setPrice((energy.faceValue/sellAmount)*price);
+            await ctx.energyList.updateEnergy(energy);
+            if(currentValue===sellAmount){
+                break;
+            }
+        });
+
+        return true;
+        
     }
 
     /**

@@ -20,6 +20,10 @@ class Energy extends State {
         Object.assign(this, obj);
     }
 
+    setFaceValue(newFaceValue){
+        this.faceValue = newFaceValue;
+    }
+
     getSeller() {
         return this.seller;
     }
