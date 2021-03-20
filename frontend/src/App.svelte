@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Create from "./Create.svelte";
   import Energy from "./Energy.svelte";
   import Footer from "./Footer.svelte";
   import Market from "./Market.svelte";
@@ -7,8 +8,8 @@
   let panels = [
     { emoji: "⚡", active: true, component: "Energy", name: "Meine Energie" },
     { emoji: "🛒", active: false, component: "Market", name: "Marktplatz" },
-    { emoji: "🔍", active: false, component: "", name: "" },
-    { emoji: "⚙️", active: false, component: "", name: "" },
+    // { emoji: "🔍", active: false, component: "", name: "" },
+    // { emoji: "⚙️", active: false, component: "", name: "" },
   ];
 
   // Add create panel only for OrgNetzbetreiber.
@@ -62,6 +63,8 @@
       <Energy />
     {:else if panels[1].active}
       <Market />
+    {:else if panels[2].active}
+      <Create />
     {/if}
   </div>
 
