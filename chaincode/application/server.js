@@ -127,6 +127,9 @@ api.post('/sellEnergy', (request, response) => {
     });
 });
 
+/* Test post request with terminal.
+curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:3000/buyEnergy"
+*/
 api.post('/buyEnergy', (request, response) => {
     console.log('/buyEnergy JSON:', request.body);
     let transactionParameters = [
@@ -149,8 +152,7 @@ api.post('/buyEnergy', (request, response) => {
     });
 });
 
-
-let server = api.listen(8080, () => {
+let server = api.listen(3000, () => {
     let port = server.address().port;
     console.log(`Server listening at http://localhost:${port}`);
 });
