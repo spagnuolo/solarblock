@@ -14,7 +14,7 @@
         <div class="m-full p-2">
             <PostButton
                 label="Verkaufen"
-                url="http://localhost:8080/sellEnergy"
+                url="http://localhost:8000/sellEnergy"
                 json={{
                     faceValue: txn.Record.faceValue,
                     energyNumber: txn.Record.energyNumber,
@@ -30,10 +30,10 @@
 <!-- right main window -->
 <div class="bg-gray-100 w-full h-full text-lg">
     <div class="title">Meine Energie</div>
-    <Table bind:txn fetchURL={"http://localhost:8080/getOwn"} />
+    <Table bind:txn fetchURL={"http://localhost:8000/getOwn"} />
 
     <div class="title">Energie die ich verkaufe</div>
-    <Table bind:txn fetchURL={"http://localhost:8080/getOwnSelling"} />
+    <Table bind:txn fetchURL={"http://localhost:8000/getOwnSelling"} />
 </div>
 
 <style lang="postcss">

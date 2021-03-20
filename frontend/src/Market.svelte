@@ -14,7 +14,7 @@
         <div class="m-full p-2">
             <PostButton
                 label="Kaufen?"
-                url="http://localhost:8080/buyEnergy"
+                url="http://localhost:8000/buyEnergy"
                 json={{
                     seller: txn.Record.seller,
                     energyNumber: txn.Record.energyNumber,
@@ -29,7 +29,7 @@
 <!-- right main window -->
 <div class="bg-gray-100 w-full h-full text-lg">
     <div class="title">Markplatz</div>
-    <Table bind:txn fetchURL={"http://localhost:8080/getSelling"} />
+    <Table bind:txn fetchURL={"http://localhost:8000/getSelling"} />
 </div>
 
 <style lang="postcss">

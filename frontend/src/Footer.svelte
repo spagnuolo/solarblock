@@ -2,7 +2,7 @@
     export let org = "Organization";
 
     async function getRequest() {
-        let response = await fetch("http://localhost:8080/getInfo");
+        let response = await fetch("http://localhost:8000/getInfo");
         let data = await response.json();
 
         if (response.ok) {
