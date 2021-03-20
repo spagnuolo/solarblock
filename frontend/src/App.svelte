@@ -4,14 +4,27 @@
   import Market from "./Market.svelte";
   import Tailwind from "./Tailwind.svelte";
 
-  const panels = [
-    { name: "Meine Energie", emoji: "⚡", active: true },
-    { name: "Marktplatz", emoji: "🛒", active: false },
-    { name: "", emoji: "🔍", active: false },
-    { name: "", emoji: "🔌", active: false },
-    { name: "", emoji: "⚙️", active: false },
+  let panels = [
+    { emoji: "⚡", active: true, component: "Energy", name: "Meine Energie" },
+    { emoji: "🛒", active: false, component: "Market", name: "Marktplatz" },
+    { emoji: "🔍", active: false, component: "", name: "" },
+    { emoji: "⚙️", active: false, component: "", name: "" },
   ];
 
+  // Add create panel only for OrgNetzbetreiber.
+  let org = "";
+  $: if (org === "OrgNetzbetreiber") {
+    addCreatePanel();
+  }
+
+  function addCreatePanel() {
+    panels = [
+      ...panels,
+      { emoji: "🔌", active: false, component: "", name: "Create" },
+    ];
+  }
+
+  // Highlight only the selected panel.
   function handleSelection(index: number) {
     // Deactivate all.
     for (let i = 0; i < panels.length; i++) {
@@ -53,7 +66,7 @@
   </div>
 
   <!-- footer -->
-  <Footer />
+  <Footer bind:org />
 </main>
 
 <style>

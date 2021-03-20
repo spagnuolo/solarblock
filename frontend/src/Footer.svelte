@@ -1,9 +1,12 @@
 <script lang="ts">
+    export let org = "Organization";
+
     async function getRequest() {
         let response = await fetch("http://localhost:8080/getInfo");
         let data = await response.json();
 
         if (response.ok) {
+            org = data.organization;
             return data;
         } else {
             throw new Error("Couldn't fetch data.");
@@ -22,7 +25,9 @@
     {#await promise}
         <p>...verbinden</p>
     {:then data}
-        <p>{data.organization} 🌐 {data.peer}</p>
+        <p>
+            {data.organization} 🌐 {data.peer}
+        </p>
     {:catch error}
         <p class="bg-red-600">Keine Verbindung</p>
     {/await}
