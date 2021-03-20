@@ -69,6 +69,7 @@ api.use(cors({ origin: "http://localhost:5000" })); // Allow requests from front
 api.use(express.static('../public'));
 api.use(express.json());
 
+// GET methods.
 api.get('/getInfo', (request, response) => {
     response.json({ organization, peer });
 });
@@ -107,6 +108,27 @@ api.get('/getOwnSelling', (request, response) => {
     });
 });
 
+// POST methods.
+api.post('/createEnergy', (request, response) => {
+    console.log('/createEnergy JSON:', request.body);
+    let transactionParameters = [
+        'create',
+        request.body.newOwner,
+        request.body.energyNumber,
+        request.body.capacity,
+    ];
+
+    contract.submitTransaction(...transactionParameters).then((createResponse) => {
+        let energy = Energy.fromBuffer(createResponse);
+        let message = `${energy.seller} solar energy : ${energy.energyNumber} successfully created.`;
+        response.json({ message });
+    }).catch((error) => {
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
+    });
+});
+
 api.post('/sellEnergy', (request, response) => {
     console.log('/sellEnergy JSON:', request.body);
     let transactionParameters = [
@@ -116,8 +138,8 @@ api.post('/sellEnergy', (request, response) => {
         request.body.faceValue
     ];
 
-    contract.submitTransaction(...transactionParameters).then((buyResponse) => {
-        let energy = Energy.fromBuffer(buyResponse);
+    contract.submitTransaction(...transactionParameters).then((sellResponse) => {
+        let energy = Energy.fromBuffer(sellResponse);
         let message = `${energy.seller} solar energy : ${energy.energyNumber} successfully offered by ${energy.owner}`;
         response.json({ message });
     }).catch((error) => {
