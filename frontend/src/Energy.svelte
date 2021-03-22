@@ -1,30 +1,27 @@
 <script lang="ts">
+    import PostButton from "./PostButton.svelte";
+    import Table from "./Table.svelte";
     import Transaktion from "./Transaktion.svelte";
 
-    let transactions;
-    let promise = getAllSelling();
-    async function getAllSelling() {
-        const response = await fetch("http://localhost:3000/getOwn");
-        transactions = await response.json();
-
-        if (response.ok) {
-            return transactions;
-        } else {
-            throw new Error("Couldn't fetch data.");
-        }
-    }
-
     let txn;
-    const chooseTransaction = (index) => {
-        txn = transactions[index];
-    };
 </script>
 
 <!-- left control -->
-<div class="bg-gray-200 w-1/4 h-full text-lg shadow-inner">
-    <div class="title">Info</div>
+<div class="bg-gray-200 w-1/3 h-full text-lg shadow-inner svg-bg">
+    <div class="title">Energie Info</div>
     {#if txn}
         <Transaktion {txn} />
+        <div class="m-full p-2">
+            <PostButton
+                label="Verkaufen"
+                url="http://localhost:8000/sellEnergy"
+                json={{
+                    faceValue: txn.Record.faceValue,
+                    energyNumber: txn.Record.energyNumber,
+                }}
+            />
+            <PostButton label="Split Energy" />
+        </div>
     {:else}
         <p class="bg-blue-300 text-center">Wähle einen Eintrag aus.</p>
     {/if}
@@ -33,52 +30,10 @@
 <!-- right main window -->
 <div class="bg-gray-100 w-full h-full text-lg">
     <div class="title">Meine Energie</div>
-    {#await promise}
-        <p class="bg-blue-300 text-center">...waiting</p>
-    {:then data}
-        <table class="table-auto w-full">
-            <thead>
-                <tr>
-                    <th><abbr title="Position">Pos</abbr></th>
-                    <th>ID</th>
-                    <th>Menge</th>
-                    <th>Besitzer</th>
-                    <th>Verkäufer</th>
-                    <th>Datum</th>
-                </tr>
-            </thead>
+    <Table bind:txn fetchURL={"http://localhost:8000/getOwn"} />
 
-            <tbody class="text-center">
-                {#each data as entry, i}
-                    <tr
-                        class="{''} hover:bg-gray-600 hover:text-gray-100 cursor-pointer active:bg-blue-500"
-                        on:click={() => {
-                            chooseTransaction(i);
-                        }}
-                    >
-                        <th>{i + 1}</th>
-                        <td>{entry["Record"].energyNumber}</td>
-                        <td>{entry["Record"].faceValue} kWh</td>
-                        <td>{entry["Record"].owner}</td>
-                        <td>{entry["Record"].seller}</td>
-                        <td>{entry["Record"].sellDateTime}</td>
-                    </tr>
-                {/each}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th><abbr title="Position">Pos</abbr></th>
-                    <th>ID</th>
-                    <th>Menge</th>
-                    <th>Besitzer</th>
-                    <th>Verkäufer</th>
-                    <th>Datum</th>
-                </tr>
-            </tfoot>
-        </table>
-    {:catch error}
-        <p class="bg-red-600 text-gray-100 m-auto">{error.message}</p>
-    {/await}
+    <div class="title">Energie die ich verkaufe</div>
+    <Table bind:txn fetchURL={"http://localhost:8000/getOwnSelling"} />
 </div>
 
 <style lang="postcss">

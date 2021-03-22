@@ -1,46 +1,47 @@
 <script lang="ts">
-    export let txn;
+    export let txn = {
+        Key: "",
+        Record: {
+            class: "",
+            currentState: "",
+            energyNumber: "",
+            expiredDateTime: "",
+            faceValue: "",
+            mspid: "",
+            owner: "",
+            sellDateTime: "",
+            seller: "",
+        },
+    };
+
+    const state = ["NEUTRAL", "SELLING", "BOUGHT"];
 </script>
 
-<table class="w-full text-left mx-1">
+<table class="w-full">
     <tr>
-        <th>Key:</th>
-        <td>{txn.Key}</td>
-    </tr>
-    <tr>
-        <th>class:</th>
-        <td>{txn.Record.class}</td>
-    </tr>
-    <tr>
-        <th>currentState:</th>
-        <td>{txn.Record.currentState}</td>
-    </tr>
-    <tr>
-        <th>energyNumber:</th>
+        <th>ID:</th>
         <td>{txn.Record.energyNumber}</td>
     </tr>
     <tr>
-        <th>expiredDateTime:</th>
-        <td>{txn.Record.expiredDateTime}</td>
+        <th>Preis:</th>
+        <td>0 Credits</td>
     </tr>
     <tr>
-        <th>faceValue:</th>
-        <td>{txn.Record.faceValue}</td>
+        <th>Status:</th>
+        <td>{state[txn.Record.currentState]}</td>
     </tr>
     <tr>
-        <th>mspid:</th>
-        <td>{txn.Record.mspid}</td>
+        <th>Menge:</th>
+        <td>{txn.Record.faceValue} kWh</td>
     </tr>
     <tr>
-        <th>owner:</th>
+        <th>Besiztzer:</th>
         <td>{txn.Record.owner}</td>
     </tr>
-    <tr>
-        <th>sellDateTime:</th>
-        <td>{txn.Record.sellDateTime}</td>
-    </tr>
-    <tr>
-        <th>seller:</th>
-        <td>{txn.Record.seller}</td>
-    </tr>
 </table>
+
+<style>
+    th {
+        @apply text-right pr-2;
+    }
+</style>

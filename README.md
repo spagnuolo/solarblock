@@ -48,7 +48,7 @@ cd organization/*/application
 node server.js
 ```
 
-Nun im Browser das Webinterface unter `localhost:3000` öffnen.
+Nun im Browser das Webinterface unter `localhost:8000` öffnen.
 
 ## Links
 * [Commercial Paper tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/tutorial/commercial_energy.html#examine-the-commercial-energy-smart-contract)
