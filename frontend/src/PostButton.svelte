@@ -2,6 +2,7 @@
     export let label = "Button";
     export let url = "/";
     export let json = {};
+    export let active = true;
 
     function handlePost() {
         // Send and get json.
@@ -24,6 +25,7 @@
 <button
     class="w-full my-2 p-2 bg-blue-400 hover:bg-blue-300 rounded"
     on:click={handlePost}
+    disabled={!active}
 >
     {label}
 </button>
