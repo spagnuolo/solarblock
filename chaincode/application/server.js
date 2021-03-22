@@ -114,7 +114,6 @@ api.post('/createEnergy', (request, response) => {
     let transactionParameters = [
         'create',
         request.body.newOwner,
-        request.body.energyNumber,
         request.body.capacity,
     ];
 

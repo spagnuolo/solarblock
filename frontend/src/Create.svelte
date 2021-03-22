@@ -9,7 +9,6 @@
 
     let postBody = {
         capacity: "",
-        energyNumber: "",
         newOwner: "",
     };
 </script>
@@ -24,10 +23,6 @@
         <input
             placeholder="Kapazität in kWh, bspw. 120"
             bind:value={postBody.capacity}
-        />
-        <input
-            placeholder="Energie ID, bspw. 00042"
-            bind:value={postBody.energyNumber}
         />
         <select bind:value={postBody.newOwner}>
             <option value="" selected disabled
