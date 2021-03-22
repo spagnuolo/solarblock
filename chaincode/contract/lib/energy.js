@@ -20,13 +20,6 @@ class Energy extends State {
         Object.assign(this, obj);
     }
 
-    getSeller() {
-        return this.seller;
-    }
-
-    setSeller(newIssuer) {
-        this.seller = newIssuer;
-    }
 
     getSellDateTime() {
         return this.sellDateTime;
@@ -98,8 +91,8 @@ class Energy extends State {
     /**
      * Factory method to create a solar energy object
      */
-    static createInstance(seller, energyNumber, sellDateTime, expiredDateTime, faceValue) {
-        return new Energy({ seller, energyNumber, sellDateTime, expiredDateTime, faceValue });
+    static createInstance(owner, energyNumber, sellDateTime, expiredDateTime, faceValue) {
+        return new Energy({ owner, energyNumber, sellDateTime, expiredDateTime, faceValue });
     }
 
     static getClass() {
