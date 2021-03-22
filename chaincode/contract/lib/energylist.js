@@ -22,8 +22,8 @@ class EnergyList extends StateList {
         let id = await this.ctx.stub.getState('energyID');
 
         if (!id || id.length === 0) {
-            // If the buffer is empty: init id with 0.
-            id = '0';
+            // If the buffer is empty: init id with 1.
+            id = '1';
         }
 
         // Increment ID by one.
