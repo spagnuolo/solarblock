@@ -82,7 +82,8 @@ class EnergyContract extends Contract {
         }
 
         // Can I split by splitAmount?
-        let rest = energy.getCapacity() - splitAmount;
+        let amount = Math.abs(Number(splitAmount));
+        let rest = energy.getCapacity() - amount;
         if (rest <= 0) {
             throw new Error(`\n Can't split ${energy.getCapacity()} by ${splitAmount}!`);
         }
@@ -93,7 +94,7 @@ class EnergyContract extends Contract {
 
         // Create new asset with split amount
         let nextEnergyNumber = await ctx.energyList.nextID();
-        let splitedEnergy = Energy.createInstance(owner, nextEnergyNumber, '-', '-', Number(splitAmount));
+        let splitedEnergy = Energy.createInstance(owner, nextEnergyNumber, '-', '-', amount);
         splitedEnergy.setOwnerMSP(owner + 'MSP');
         splitedEnergy.setOwner(owner);
         await ctx.energyList.addEnergy(splitedEnergy);
