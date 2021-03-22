@@ -18,6 +18,21 @@ class EnergyList extends StateList {
         this.use(Energy);
     }
 
+    async nextID() {
+        let id = await this.ctx.stub.getState('energyID');
+
+        if (!id || id.length === 0) {
+            // If the buffer is empty: init id with 0.
+            id = '0';
+        }
+
+        // Increment ID by one.
+        await this.ctx.stub.putState('energyID', Buffer.from(String(Number(id) + 1)));
+
+        // Return padded string like: "00001".
+        return String(id).padStart(5, '0');
+    }
+
     async addEnergy(energy) {
         return this.addState(energy);
     }
