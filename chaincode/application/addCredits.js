@@ -15,13 +15,8 @@ async function main() {
         return;
     }
 
-    const creditID = process.argv[3];
-    if (!creditID) {
-        console.log('Please provide the creditID.');
-        return;
-    }
 
-    const amountOfCreditsToAdd = process.argv[4];
+    const amountOfCreditsToAdd = process.argv[3];
     if (!amountOfCreditsToAdd) {
         console.log('Please provide the amount of Credits to add to the Wallet.');
         return;
@@ -53,7 +48,7 @@ async function main() {
         const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
         console.log('Submit add Credit transaction.');
-        const addCredit = await contract.submitTransaction('addCredits', creditHolder, creditID, amountOfCreditsToAdd);
+        const addCredit = await contract.submitTransaction('addCredits', creditHolder,  amountOfCreditsToAdd);
 
         console.log('Process addCredit transaction response.');
         let credit = Credit.fromBuffer(addCredit);

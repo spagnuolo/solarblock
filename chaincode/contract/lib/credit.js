@@ -17,14 +17,13 @@ const energyState = {
 class Credit extends State{
 
     constructor(obj) {
-        super(Credit.getClass(), [obj.organization, obj.creditID]);
+        super(Credit.getClass(), [obj.organization]);
         Object.assign(this, obj);
     }
 
     getOrganization() {
         return this.organization;
     }
-
 
     getAmount() {
         return this.amountOfCredits;

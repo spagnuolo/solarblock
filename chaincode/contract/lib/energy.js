@@ -16,7 +16,7 @@ const energyState = {
 class Energy extends State {
 
     constructor(obj) {
-        super(Energy.getClass(), [obj.seller, obj.energyNumber]);
+        super(Energy.getClass(), [obj.owner, obj.energyNumber]);
         Object.assign(this, obj);
     }
 
@@ -46,11 +46,11 @@ class Energy extends State {
     }
 
     setPrice(newPrice) {
-        this.price= newPrice;
+        this.price = newPrice;
     }
 
     getPrice(){
-        return this.price();
+        return this.price;
     }
     
     /**
@@ -91,8 +91,8 @@ class Energy extends State {
     /**
      * Factory method to create a solar energy object
      */
-    static createInstance(owner, energyNumber, sellDateTime, expiredDateTime, faceValue) {
-        return new Energy({ owner, energyNumber, sellDateTime, expiredDateTime, faceValue });
+    static createInstance(owner , energyNumber, sellDateTime, expiredDateTime, faceValue) {
+        return new Energy({ owner , energyNumber, sellDateTime, expiredDateTime, faceValue });
     }
 
     static getClass() {
