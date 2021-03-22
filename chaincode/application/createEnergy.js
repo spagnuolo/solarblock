@@ -53,7 +53,7 @@ async function main() {
         console.log('Process create transaction response.' + createResponse);
         let energy = Energy.fromBuffer(createResponse);
 
-        console.log(` ${energy.energyNumber} successfully created for value ${energy.faceValue}`);
+        console.log(` ${energy.energyNumber} successfully created for value ${energy.capacity}`);
         console.log('Transaction completed')
 
     } catch (error) {

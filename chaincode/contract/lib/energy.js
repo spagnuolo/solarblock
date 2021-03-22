@@ -90,8 +90,8 @@ class Energy extends State {
     /**
      * Factory method to create a solar energy object
      */
-    static createInstance(seller, energyNumber, sellDateTime, expiredDateTime, faceValue) {
-        return new Energy({ seller, energyNumber, sellDateTime, expiredDateTime, faceValue });
+    static createInstance(seller, energyNumber, sellDateTime, expiredDateTime, capacity) {
+        return new Energy({ seller, energyNumber, sellDateTime, expiredDateTime, capacity });
     }
 
     static getClass() {

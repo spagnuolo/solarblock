@@ -135,7 +135,7 @@ api.post('/sellEnergy', (request, response) => {
         'sell',
         organization,
         request.body.energyNumber,
-        request.body.faceValue
+        request.body.capacity
     ];
 
     contract.submitTransaction(...transactionParameters).then((sellResponse) => {

@@ -37,7 +37,7 @@ async function main() {
 
         let json = JSON.parse(queryResponse.toString());
         json.forEach(element => {
-            console.log(`${element.Record.energyNumber} ${element.Record.seller} verkauft ${element.Record.faceValue} kWh.`);
+            console.log(`${element.Record.energyNumber} ${element.Record.seller} verkauft ${element.Record.capacity} kWh.`);
         });
 
         // console.log(json);

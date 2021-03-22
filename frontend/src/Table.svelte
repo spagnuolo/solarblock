@@ -45,7 +45,7 @@
                 >
                     <th>{i + 1}</th>
                     <td>{entry["Record"].energyNumber}</td>
-                    <td>{entry["Record"].faceValue} kWh</td>
+                    <td>{entry["Record"].capacity} kWh</td>
                     <td>{entry["Record"].owner}</td>
                     <td>{entry["Record"].seller}</td>
                     <td>{entry["Record"].sellDateTime}</td>

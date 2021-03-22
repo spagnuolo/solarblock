@@ -16,7 +16,7 @@
                 label="Verkaufen"
                 url="http://localhost:8000/sellEnergy"
                 json={{
-                    faceValue: txn.Record.faceValue,
+                    capacity: txn.Record.capacity,
                     energyNumber: txn.Record.energyNumber,
                 }}
             />
