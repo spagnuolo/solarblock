@@ -36,31 +36,23 @@ class EnergyContract extends Contract {
      * Creat new energy. Only the "Netzbetreiber" is allowed to use this function.
      * @param {Context} ctx contracts of the transaction
      * @param {String} owner organisation for whom the i.r. Netzbetreiber
-     * @param {String} energyNumber unique identifyer of the asset
      * @param {String} capacity 
      * @returns 
      */
-    async create(ctx, owner, energyNumber, capacity) {
+    async create(ctx, owner, capacity) {
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create energy.');
         }
 
-        //Checks if ID is taken.
-        let energyKey = Energy.makeKey([owner, energyNumber]);
-        let isEnergy = await ctx.energyList.getEnergy(energyKey);
-
-        if (isEnergy) {
-            throw new Error('\nPlease use an unique ID: ' + owner + energyNumber + ' has already been used. ');
-        }
-
         // Create an instance of the energy.
+        let energyNumber = await ctx.energyList.nextID();
         let energy = Energy.createInstance(owner, energyNumber, '-', '-', parseInt(capacity));
 
         // Set new owner.
         energy.setOwnerMSP(owner + 'MSP');
         energy.setOwner(owner);
 
-        // Add the energy to the list of all similar solar energys in the ledger world state.
+        // Add the energy to the list in the ledger world state.
         await ctx.energyList.addEnergy(energy);
 
         // Must return a serialized energy to caller of smart contract.
