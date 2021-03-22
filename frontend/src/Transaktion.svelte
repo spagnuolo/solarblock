@@ -6,7 +6,7 @@
             currentState: "",
             energyNumber: "",
             expiredDateTime: "",
-            faceValue: "",
+            capacity: "",
             mspid: "",
             owner: "",
             sellDateTime: "",
@@ -32,7 +32,7 @@
     </tr>
     <tr>
         <th>Menge:</th>
-        <td>{txn.Record.faceValue} kWh</td>
+        <td>{txn.Record.capacity} kWh</td>
     </tr>
     <tr>
         <th>Besiztzer:</th>

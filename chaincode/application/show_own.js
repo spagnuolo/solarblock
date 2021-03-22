@@ -36,7 +36,7 @@ async function main() {
         let queryResponse = await contract.evaluateTransaction('queryOwner', organization);
         let json = JSON.parse(queryResponse.toString());
         json.forEach(element => {
-            console.log(`${element.Record.energyNumber} ${element.Record.owner} owns ${element.Record.faceValue} kWh. ${element.Record.currentState == 1 ? 'SELLING' : ''}`);
+            console.log(`${element.Record.energyNumber} ${element.Record.owner} owns ${element.Record.capacity} kWh. ${element.Record.currentState == 1 ? 'SELLING' : ''}`);
         });
 
         // console.log(json);

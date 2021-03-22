@@ -114,7 +114,6 @@ api.post('/createEnergy', (request, response) => {
     let transactionParameters = [
         'create',
         request.body.newOwner,
-        request.body.energyNumber,
         request.body.capacity,
     ];
 
@@ -129,13 +128,33 @@ api.post('/createEnergy', (request, response) => {
     });
 });
 
+api.post('/splitEnergy', (request, response) => {
+    console.log('/splitEnergy JSON:', request.body);
+    let transactionParameters = [
+        'split',
+        request.body.owner,
+        request.body.energyNumber,
+        request.body.splitAmount,
+    ];
+
+    contract.submitTransaction(...transactionParameters).then((splitResponse) => {
+        let energy = Energy.fromBuffer(splitResponse);
+        let message = `${energy.seller} solar energy : ${energy.energyNumber} successfully splited.`;
+        response.json({ message });
+    }).catch((error) => {
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
+    });
+});
+
 api.post('/sellEnergy', (request, response) => {
     console.log('/sellEnergy JSON:', request.body);
     let transactionParameters = [
         'sell',
         organization,
         request.body.energyNumber,
-        request.body.faceValue
+        request.body.capacity
     ];
 
     contract.submitTransaction(...transactionParameters).then((sellResponse) => {

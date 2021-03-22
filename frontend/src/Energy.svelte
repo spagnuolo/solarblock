@@ -4,6 +4,7 @@
     import Transaktion from "./Transaktion.svelte";
 
     let txn;
+    let splitAmount = "";
 </script>
 
 <!-- left control -->
@@ -16,11 +17,25 @@
                 label="Verkaufen"
                 url="http://localhost:8000/sellEnergy"
                 json={{
-                    faceValue: txn.Record.faceValue,
+                    capacity: txn.Record.capacity,
                     energyNumber: txn.Record.energyNumber,
                 }}
             />
-            <PostButton label="Split Energy" />
+            <input
+                class="block w-full my-2 -mb-2 p-2 bg-white hover:bg-gray-100 rounded text-right appearance-none"
+                placeholder="Aufspalten, bspw. 100"
+                bind:value={splitAmount}
+            />
+            <PostButton
+                label="Split Energy"
+                url="http://localhost:8000/splitEnergy"
+                json={{
+                    owner: txn.Record.owner,
+                    energyNumber: txn.Record.energyNumber,
+                    splitAmount,
+                }}
+                active={Number(splitAmount) ? true : false}
+            />
         </div>
     {:else}
         <p class="bg-blue-300 text-center">Wähle einen Eintrag aus.</p>

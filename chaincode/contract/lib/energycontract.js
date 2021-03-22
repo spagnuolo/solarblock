@@ -46,7 +46,7 @@ class EnergyContract extends Contract {
 
         // Create an instance of the energy.
         let energyNumber = await ctx.energyList.nextID();
-        let energy = Energy.createInstance(owner, energyNumber, '-', '-', parseInt(capacity));
+        let energy = Energy.createInstance(owner, energyNumber, '-', '-', Number(capacity));
 
         // Set new owner.
         energy.setOwnerMSP(owner + 'MSP');
@@ -57,6 +57,50 @@ class EnergyContract extends Contract {
 
         // Must return a serialized energy to caller of smart contract.
         return energy;
+    }
+
+    /**
+     * Creat new energy. Only the "Netzbetreiber" is allowed to use this function.
+     * @param {Context} ctx contracts of the transaction
+     * @param {String} owner organization for whom the i.r. Netzbetreiber
+     * @param {String} energyNumber unique identifyer of the asset
+     * @param {String} splitAmount 
+     * @returns 
+     */
+    async split(ctx, owner, energyNumber, splitAmount) {
+        // Is the caller the owner of this asset?
+        let organization = ctx.clientIdentity.getMSPID().replace("MSP", "");
+        if (organization !== owner) {
+            throw new Error("\nYou don't own this asset.");
+        }
+
+        // Get energy and check if energy asset exists.
+        let energyKey = Energy.makeKey([owner, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(energyKey);
+        if (!energy) {
+            throw new Error('\nThere is no ' + owner + energyNumber + ' energy asset.');
+        }
+
+        // Can I split by splitAmount?
+        let amount = Math.abs(Number(splitAmount));
+        let rest = energy.getCapacity() - amount;
+        if (rest <= 0) {
+            throw new Error(`\n Can't split ${energy.getCapacity()} by ${splitAmount}!`);
+        }
+
+        // Reduce asset by requested amount.
+        energy.setCapacity(rest);
+        await ctx.energyList.updateEnergy(energy);
+
+        // Create new asset with split amount
+        let nextEnergyNumber = await ctx.energyList.nextID();
+        let splitedEnergy = Energy.createInstance(owner, nextEnergyNumber, '-', '-', amount);
+        splitedEnergy.setOwnerMSP(owner + 'MSP');
+        splitedEnergy.setOwner(owner);
+        await ctx.energyList.addEnergy(splitedEnergy);
+
+        // Return a serialized energy to caller of smart contract.
+        return splitedEnergy;
     }
 
     /**

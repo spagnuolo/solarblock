@@ -105,7 +105,7 @@ async function main() {
 
 
         // 5 named query - by value
-        console.log('5. Named Query:.... All energys in org.solarnet.solarenergys with faceValue > 4000000');
+        console.log('5. Named Query:.... All energys in org.solarnet.solarenergys with capacity > 4000000');
         console.log('-----------------------------------------------------------------------------------------\n');
         queryResponse = await contract.evaluateTransaction('queryNamed', 'value');
 
