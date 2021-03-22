@@ -28,6 +28,14 @@ class Energy extends State {
         this.seller = newIssuer;
     }
 
+    getCapacity() {
+        return this.capacity;
+    }
+
+    setCapacity(newCapacity) {
+        this.capacity = newCapacity;
+    }
+
     getSellDateTime() {
         return this.sellDateTime;
     }
