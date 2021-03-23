@@ -19,9 +19,7 @@ class CreditList extends StateList{
     }
 
     async addCredit(credit) {
-        let data = State.serialize(credit);
-        console.log('\nCredit: '+ credit.getOrganization());
-        return  await this.ctx.stub.putState(credit.organization, data);
+        return this.addState(credit);
     }
 
     async getCredit(creditKey) {

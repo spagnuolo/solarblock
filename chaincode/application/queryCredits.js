@@ -4,25 +4,10 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
-const Credit = require('../contract/lib/credit.js');
+
 
 
 async function main() {
-
-    const creditHolder = process.argv[2];
-    if (!creditHolder) {
-        console.log('Please provide the creditHolder.');
-        return;
-    }
-
-
-    const amountOfCreditsToAdd = process.argv[3];
-    if (!amountOfCreditsToAdd) {
-        console.log('Please provide the amount of Credits to add to the Wallet.');
-        return;
-    }
-
-
     let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
     const organization = connectionProfile.client.organization;
     const userName = 'user' + organization;
@@ -47,28 +32,34 @@ async function main() {
         console.log('Use org.solarnet.solarenergy smart contract.');
         const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
-        console.log('Submit add Credit transaction.');
-        const addCredit = await contract.submitTransaction('addCredits', creditHolder,  amountOfCreditsToAdd);
+        console.log(`Query solar energy Ownership.... Credits owned by ${organization}`);
+        console.log('-----------------------------------------------------------------------------------------\n');
+        let queryResponse = await contract.evaluateTransaction('queryCreditOwner', organization);
+        let json = JSON.parse(queryResponse.toString());
+        json.forEach(element => {
+            console.log(` ${element.Record.owner} owns ${element.Record.amountOfCredits} `);
+        });
 
-        console.log('Process addCredit transaction response.');
-        let credit = Credit.fromBuffer(addCredit);
+        // console.log(json);
 
-        console.log(`${amountOfCreditsToAdd} was added to ${credit.organization}s balance, it now contains ${credit.amountOfCredits}`);
-        console.log('Transaction complete.');
-
+        console.log('\n-----------------------------------------------------------------------------------------\n');
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
         console.log(error.stack);
 
     } finally {
+        // Disconnect from the gateway
         console.log('Disconnect from Fabric gateway.');
         gateway.disconnect();
     }
 }
+
+
 main().then(() => {
-    console.log('Buy program complete.');
+    console.log('Query program complete.');
+
 }).catch((e) => {
-    console.log('Buy program exception.');
+    console.log('Query program exception.');
     console.log(e);
     console.log(e.stack);
     process.exit(-1);

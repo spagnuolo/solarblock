@@ -308,6 +308,7 @@ class EnergyContract extends Contract {
     
  
          // Add the energy to the list of all similar solar energys in the ledger world state.
+         console.log('\ncalling "addcredit" ');
          await ctx.creditList.addCredit(credit);
  
          // Must return a serialized energy to caller of smart contract.
@@ -327,15 +328,24 @@ class EnergyContract extends Contract {
         if (!isCredit) {
             throw new Error('\nno Wallet for ' + organization +' has  been found. ');
         }
+        let creditKey = Credit.makeKey([organization]);
+        let credit = await ctx.creditList.getCredit(creditKey);
 
-        let credit = await ctx.creditList.getCredit(organization);
-
-        credit.setAmountOfCredits(parseInt(credit.getAmountOfCredits())+parseInt(amountOfCreditsToAdd));
+        credit.setAmount(parseInt(credit.getAmount())+parseInt(amountOfCreditsToAdd));
 
         ctx.creditList.updateCredit(credit)
 
         return credit
     }
+
+    async queryCreditOwner(ctx, owner) {
+
+        let query = new QueryUtils(ctx, 'org.solarnet.solarcredit');
+        let owner_results = await query.queryKeyByOwner(owner);
+
+        return owner_results;
+    }
+
 
 }
 
