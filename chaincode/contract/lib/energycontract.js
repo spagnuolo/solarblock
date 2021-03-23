@@ -33,9 +33,22 @@ class EnergyContract extends Contract {
      * @param {Context} ctx the transaction context
      */
     async instantiate(ctx) {
+
+        let credit = Credit.createInstance("OrgHaushaltA",  100);
+        await ctx.creditList.addCredit(credit);
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
+        credit = Credit.createInstance("OrgHaushaltB",  100);
+        await ctx.creditList.addCredit(credit);
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
+        credit = Credit.createInstance("OrgHaushaltC",  100);
+        await ctx.creditList.addCredit(credit);
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
+        credit = Credit.createInstance("OrgNetzbetreiber",  100);
+        await ctx.creditList.addCredit(credit);
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
         // No implementation required with this example
         // It could be where data migration is performed, if necessary
-        console.log('Instantiate the contract');
+        console.log('\nInstantiate the contract');
     }
 
     /**
@@ -276,7 +289,7 @@ class EnergyContract extends Contract {
     }
 
     /**
-     * Methode enstellt ein neues CreditWallet
+     * Method creates new CreditWallet
      * 
      * @param {Context} ctx the context of the method
      * @param {String} organization the org for which the Wallet will be created
@@ -316,6 +329,14 @@ class EnergyContract extends Contract {
         
     }
 
+    /**
+     * 
+     * @param {Context} ctx Context of the Method
+     * @param {*} organization Organization to specify to which wallet the credits should be added
+     * @param {*} amountOfCreditsToAdd amountof Credits to be added to the Wallet
+     * @returns 
+     */
+
     async addCredits(ctx,organization, amountOfCreditsToAdd){
 
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
@@ -338,7 +359,21 @@ class EnergyContract extends Contract {
         return credit
     }
 
+    /**
+    * queryCreditOwner suply name of the Org to check how mutch credits they own
+    * @param {Context} ctx the transaction context
+    * @param {String} owner solar energy owner
+    */
+
     async queryCreditOwner(ctx, owner) {
+
+        //we only allow the OrgNetzbetreiber to view the Credits since rn they manage it
+        if(owner !== (ctx.clientIdentity.getMSPID().replace("MSP",""))){
+
+            if("OrgNetzbetreiber" !== (ctx.clientIdentity.getMSPID().replace("MSP","")))
+
+            throw new Error("you have no permission to view this Wallet.");
+        }
 
         let query = new QueryUtils(ctx, 'org.solarnet.solarcredit');
         let owner_results = await query.queryKeyByOwner(owner);

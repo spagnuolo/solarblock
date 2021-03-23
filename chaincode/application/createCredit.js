@@ -52,7 +52,7 @@ async function main() {
         console.log('Process create Wallet transaction response.' + createResponse);
         let credit = Credit.fromBuffer(createResponse);
 
-        console.log(`Successfully created and CreditScore for ${credit.organization} value ${credit.amountOfCredits}`);
+        console.log(`Successfully created and CreditScore for ${credit.owner} value ${credit.amountOfCredits}`);
         console.log('Transaction completed')
 
     } catch (error) {
