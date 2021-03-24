@@ -20,14 +20,14 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
-const Energy = require('../contract/lib/energy.js');
+const Energy = require('./contract/lib/energy.js');
 
 
 // Main program function
 async function main() {
 
     // A wallet stores a collection of identities for use
-    const wallet = await Wallets.newFileSystemWallet('../identity/user/giuliano/wallet');
+    const wallet = await Wallets.newFileSystemWallet('./identity/user/giuliano/wallet');
 
 
     // A gateway defines the peers used to access Fabric networks
@@ -40,7 +40,7 @@ async function main() {
         const userName = 'giuliano';
 
         // Load connection profile; will be used to locate a gateway
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-orgNetzbetreiber.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('./gateway/connection-orgNetzbetreiber.yaml', 'utf8'));
 
         // Set connection options; identity and wallet
         let connectionOptions = {

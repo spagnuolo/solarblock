@@ -14,7 +14,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { Wallets, Gateway } = require('fabric-network');
-const Energy = require('../contract/lib/energy.js');
+const Energy = require('./contract/lib/energy.js');
 
 
 async function main() {
@@ -31,11 +31,11 @@ async function main() {
     }
 
 
-    let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
+    let connectionProfile = yaml.safeLoad(fs.readFileSync('./gateway/connection.yaml', 'utf8'));
     const organization = connectionProfile.client.organization;
     const userName = 'user' + organization;
 
-    const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
+    const wallet = await Wallets.newFileSystemWallet(`./identity/user/${userName}/wallet`);
     const gateway = new Gateway();
 
     let connectionOptions = {

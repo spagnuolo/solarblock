@@ -9,7 +9,7 @@ const path = require('path');
 async function main() {
     try {
         // load the network configuration
-        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('./gateway/connection.yaml', 'utf8'));
         const organization = connectionProfile.client.organization;
         const mspid = connectionProfile.organizations[organization].mspid;
         const certificateAuthority = Object.keys(connectionProfile.certificateAuthorities)[0]
@@ -21,7 +21,7 @@ async function main() {
 
         // Create a new file system based wallet for managing identities.
         const userName = 'user' + organization;
-        const walletPath = path.join(process.cwd(), `../identity/user/${userName}/wallet`);
+        const walletPath = path.join(process.cwd(), `./identity/user/${userName}/wallet`);
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
