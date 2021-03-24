@@ -18,25 +18,27 @@
     class="svg-bg bg-gray-200 w-full h-full text-lg shadow-inner flex justify-center overflow-hidden"
 >
     <div class="w-full lg:w-1/2 p-2">
-        <div class="my-10 text-3xl">Erstelle Energie</div>
-        <div />
-        <input
-            placeholder="Kapazität in kWh, bspw. 120"
-            bind:value={postBody.capacity}
-        />
-        <select bind:value={postBody.newOwner}>
-            <option value="" selected disabled
-                >Wähle die Organisation des neuen Besitzers</option
-            >
-            {#each organisation as org}
-                <option value={org}>{org}</option>
-            {/each}
-        </select>
-        <PostButton
-            label="Create"
-            url="http://localhost:8000/createEnergy"
-            json={postBody}
-        />
+        <div class="p-2 bg-blue-200 rounded-lg">
+            <div class="my-2 text-3xl">Erstelle Energie</div>
+            <div />
+            <input
+                placeholder="Kapazität in kWh, bspw. 120"
+                bind:value={postBody.capacity}
+            />
+            <select bind:value={postBody.newOwner}>
+                <option value="" selected disabled
+                    >Wähle die Organisation des neuen Besitzers</option
+                >
+                {#each organisation as org}
+                    <option value={org}>{org}</option>
+                {/each}
+            </select>
+            <PostButton
+                label="Create"
+                url="http://localhost:8000/createEnergy"
+                json={postBody}
+            />
+        </div>
     </div>
 </div>
 
