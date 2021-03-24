@@ -18,7 +18,7 @@ async function main() {
         let connectionOptions = {
             identity: userName,
             wallet: wallet,
-            discovery: { enabled: true, asLocalhost: true }
+            discovery: { enabled: true, asLocalhost: false }
 
         };
 
