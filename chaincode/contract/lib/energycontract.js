@@ -75,7 +75,7 @@ class EnergyContract extends Contract {
         }
 
         // Get energy and check if energy asset exists.
-        let energyKey = Energy.makeKey([owner, energyNumber]);
+        let energyKey = Energy.makeKey([energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
         if (!energy) {
             throw new Error('\nThere is no ' + owner + energyNumber + ' energy asset.');
@@ -112,7 +112,7 @@ class EnergyContract extends Contract {
      * @param {String} price face value of energy
     */
     async sell(ctx, seller, energyNumber, price) {
-        let energyKey = Energy.makeKey([seller, energyNumber]);
+        let energyKey = Energy.makeKey([energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
         if (!energy) {
@@ -149,7 +149,7 @@ class EnergyContract extends Contract {
     async buy(ctx, seller, energyNumber, newOwner, price, purchaseDateTime) {
 
         // Retrieve the current energy using key fields provided
-        let energyKey = Energy.makeKey([seller, energyNumber]);
+        let energyKey = Energy.makeKey([energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
         // Validate current owner
@@ -194,7 +194,7 @@ class EnergyContract extends Contract {
      */
     async buyRequest(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
         // Retrieve the current energy using key fields provided
-        let energyKey = Energy.makeKey([seller, energyNumber]);
+        let energyKey = Energy.makeKey([energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
         // Validate current owner - this is really information for the user trying the sample, rather than any 'authorisation' check per se FYI
