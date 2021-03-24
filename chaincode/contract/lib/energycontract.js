@@ -171,6 +171,14 @@ class EnergyContract extends Contract {
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
+        let price = energy.getPrice();
+        let buyerCredit = await ctx.creditList.getCredit(newOwner);
+
+        //check if byuer has enough credits to make the purchase
+    
+        if(buyerCredit.getAmount()<price){
+            throw new Error("\n you don't have enough balance to make this purchase")
+        }
         // Validate current owner
         if (energy.getOwner() !== seller) {
             throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + seller);
@@ -186,8 +194,17 @@ class EnergyContract extends Contract {
 
         // Check energy is not already REDEEMED
         if (energy.isBought()) {
+
+            //set creditscores accordingly
+            let sellerCredit = await ctx.creditList.getCredit(seller);
+            sellerCredit.setAmount(sellerCredit.getAmount()+price);
+            ctx.creditList.updateCredit(sellerCredit);
+            buyerCredit.setAmount(buyerCredit.getAmount()-price);
+            ctx.creditList.updateCredit(buyerCredit);
+
             energy.setOwner(newOwner);
             // save the owner's MSP 
+
             let mspid = ctx.clientIdentity.getMSPID();
             energy.setOwnerMSP(mspid);
         } else {
