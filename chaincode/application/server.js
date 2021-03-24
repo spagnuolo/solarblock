@@ -12,7 +12,7 @@ const yaml = require('js-yaml');
 // Fabric Network.
 const FabricCAServices = require('fabric-ca-client');
 const { Wallets, Gateway } = require('fabric-network');
-const Energy = require('../contract/lib/energy.js');
+const Energy = require('./contract/lib/energy.js');
 
 // Globals.
 let gateway;
@@ -59,7 +59,7 @@ async function connection() {
     const connectionOptions = {
         identity: userName,
         wallet: wallet,
-        discovery: { enabled: true, asLocalhost: true }
+        discovery: { enabled: true, asLocalhost: false }
     };
 
     try {
