@@ -6,11 +6,11 @@ const EnergyList = require('./energylist.js');
 const QueryUtils = require('./queries.js');
 const Credit = require('./credit.js');
 const CreditList = require('./creditlist.js');
+const ParamUtil =require('./paramutil.js');
 
- let energyAssetID = 0;
- let creditAssetID = 0;
+let energyAssetID = 0;
 
-class EnergyContext extends Context {
+class EnergyContext extends Context { 
     constructor() {
         super();
         this.energyList = new EnergyList(this);
@@ -61,6 +61,11 @@ class EnergyContract extends Contract {
      */
     async create(ctx, owner, capacity) {
 
+        ParamUtil.validateOrg(owner);
+        ParamUtil.validatePositiveInteger(capacity);
+
+      
+
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create energy.');
         }
@@ -89,6 +94,7 @@ class EnergyContract extends Contract {
         return energy;
     }
 
+    
     /**
      * Sell solar energy.
      *
@@ -98,6 +104,12 @@ class EnergyContract extends Contract {
      * @param {String} price face value of energy
     */
     async sell(ctx, seller, energyNumber, price) {
+
+        
+        ParamUtil.validateOrg(seller);
+        ParamUtil.validatePositiveInteger(energyNumber);
+        ParamUtil.validatePositiveInteger(price);
+
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
@@ -120,6 +132,9 @@ class EnergyContract extends Contract {
 
         // Must return a serialized energy to caller of smart contract.
         return energy;
+        
+    
+        
     }
 
     /**
@@ -135,6 +150,11 @@ class EnergyContract extends Contract {
      */
     async buy(ctx, seller, energyNumber, newOwner, purchaseDateTime) {
 
+        ParamUtil.validateOrg(seller);
+        ParamUtil.validateOrg(newOwner);
+        ParamUtil.validatePositiveInteger(energyNumber);
+
+    
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
@@ -181,6 +201,9 @@ class EnergyContract extends Contract {
       * @param {String} purchaseDateTime time energy was requested                // transaction input - ditto.
      */
     async buyRequest(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
+
+    
+
         // Retrieve the current energy using key fields provided
         let creditKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(creditKey);
@@ -195,6 +218,8 @@ class EnergyContract extends Contract {
         // Update the energy
         await ctx.energyList.updateEnergy(energy);
         return energy;
+
+    
     }
 
 
@@ -299,9 +324,11 @@ class EnergyContract extends Contract {
      */
 
     async createCreditWallet(ctx , organization , initialCreditValue){
+        ParamUtil.validateOrg(organization);
+        ParamUtil.validatePositiveInteger(initialCreditValue);
 
         
-        //check if the one that calls the funtion is OrgNetzbetreiber
+        //check if the function caller is OrgNetzbetreiber
 
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create a Wallet.');
@@ -339,13 +366,17 @@ class EnergyContract extends Contract {
 
     async addCredits(ctx,organization, amountOfCreditsToAdd){
 
+        ParamUtil.validateOrg(organization);
+        ParamUtil.validatePositiveInteger(amountOfCreditsToAdd);
+
+
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create a Wallet.');
         }
 
         //Checks if ID is taken.
         let isCredit = await ctx.creditList.getCredit(organization);
-
+ 
         if (!isCredit) {
             throw new Error('\nno Wallet for ' + organization +' has  been found. ');
         }
@@ -366,6 +397,9 @@ class EnergyContract extends Contract {
     */
 
     async queryCreditOwner(ctx, owner) {
+
+        ParamUtil.validateOrg(owner);
+        
 
         //we only allow the OrgNetzbetreiber to view the Credits since rn they manage it
         if(owner !== (ctx.clientIdentity.getMSPID().replace("MSP",""))){
