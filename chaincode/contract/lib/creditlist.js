@@ -8,10 +8,10 @@
 
 // Utility class for collections of ledger states --  a state list
 const StateList = require('./../ledger-api/statelist.js');
-const State = require('./../ledger-api/state.js');
+
 const Credit = require('./credit.js');
 
-class CreditList extends StateList{
+class CreditList extends StateList {
 
     constructor(ctx) {
         super(ctx, 'org.solarnet.solarcredit');

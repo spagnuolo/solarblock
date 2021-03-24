@@ -3,18 +3,12 @@
 // Utility class for ledger state
 const State = require('../ledger-api/state.js');
 
-// Enumerate credit Wallet state values
-const energyState = {
-    neutral: 0,
-};
-
-
 /**
  * Credit class extends State Class
  * Class wil be used to represent the abstraction of an virtual wallet containing an abstraction
  * of monetary value within our Systhem
  */
-class Credit extends State{
+class Credit extends State {
 
     constructor(obj) {
         super(Credit.getClass(), [obj.owner]);
@@ -48,23 +42,22 @@ class Credit extends State{
      * Deserialize a state data to Credits
      * @param {Buffer} data to form back into the object
      */
-     static deserialize(data) {
+    static deserialize(data) {
         return State.deserializeClass(data, Credit);
     }
 
     /**
      * 
      * @param {String} owner Organisation that the Wallet belongs to
-     * @param {Int} creditID  Unique Identifier of the Wallet
      * @param {Int} amountOfCredits Credits that the Wallet holds
      * @returns 
      */
-     static createInstance(owner,  amountOfCredits) {
-        return new Credit({ owner,  amountOfCredits});
+    static createInstance(owner, amountOfCredits) {
+        return new Credit({ owner, amountOfCredits });
     }
 
     static getClass() {
-        return 'org.solarnet.solarenergy';
+        return 'org.solarnet.solarcredit';
     }
 
 }

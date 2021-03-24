@@ -8,7 +8,6 @@ const Credit = require('./credit.js');
 const CreditList = require('./creditlist.js');
 const ParamUtil = require('./paramutil.js');
 
-let energyAssetID = 0;
 
 class EnergyContext extends Context {
     constructor() {
@@ -71,24 +70,11 @@ class EnergyContract extends Contract {
      * @returns 
      */
     async create(ctx, owner, capacity) {
-
         ParamUtil.validateOrg(owner);
         ParamUtil.validatePositiveInteger(capacity);
 
-
-
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create energy.');
-        }
-
-        let energyNumber = (energyAssetID += 1);
-
-        //Checks if ID is taken.
-        let creditKey = Energy.makeKey([owner, energyNumber]);
-        let isCredit = await ctx.energyList.getEnergy(creditKey);
-
-        if (isCredit) {
-            throw new Error('\nPlease use an unique ID: ' + owner + energyNumber + ' has already been used. ');
         }
 
         // Create an instance of the energy.
