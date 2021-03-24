@@ -56,13 +56,10 @@ async function main() {
         const contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
 
         console.log('Submit solar energy buy transaction.');
-        const buyResponse = await contract.submitTransaction('buy', seller, energyNumber, organization, '2021-01-19');
+        await contract.submitTransaction('buy', seller, energyNumber, organization, '2021-01-19');
 
-        console.log('Process buy transaction response.');
-        let energy = Energy.fromBuffer(buyResponse);
+        console.log('init complete.');
 
-        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully purchased by ${energy.owner}`);
-        console.log('Transaction complete.');
 
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);

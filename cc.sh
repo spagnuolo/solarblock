@@ -46,3 +46,6 @@ peer lifecycle chaincode approveformyorg --orderer localhost:7050 --ordererTLSHo
 
 
 peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --peerAddresses localhost:7051 --tlsRootCertFiles ${PEER0_ORGNETZBETREIBER_CA} --peerAddresses localhost:9051 --tlsRootCertFiles ${PEER0_ORGHAUSHALTA_CA} --peerAddresses localhost:18051 --tlsRootCertFiles ${PEER0_ORGHAUSHALTC_CA} --peerAddresses localhost:19051 --tlsRootCertFiles ${PEER0_ORGHAUSHALTB_CA} --channelID mychannel --name energycontract -v $CC_VERSION --sequence $CC_VERSION --tls --cafile $ORDERER_CA --waitForEvent
+
+#cd ../netzbetreiber/application
+#node init.js

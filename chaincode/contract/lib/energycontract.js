@@ -34,20 +34,32 @@ class EnergyContract extends Contract {
      */
     async instantiate(ctx) {
 
+        //gurantee that this method is only called once!
+
+        let executed = await ctx.stub.getState('initExecuted');
+
+        if(executed.length !== 0){
+            throw new Error("instantiate may only be called once!");
+        }
+
+        await ctx.stub.putState('initExecuted', Buffer.from(String(Boolean(true))));
+        
+        //init credit wallets
+
         let credit = Credit.createInstance("OrgHaushaltA",  100);
         await ctx.creditList.addCredit(credit);
-        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
         credit = Credit.createInstance("OrgHaushaltB",  100);
         await ctx.creditList.addCredit(credit);
-        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
         credit = Credit.createInstance("OrgHaushaltC",  100);
         await ctx.creditList.addCredit(credit);
-        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
         credit = Credit.createInstance("OrgNetzbetreiber",  100);
         await ctx.creditList.addCredit(credit);
-        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit,amountOfCredits}`);
-        // No implementation required with this example
-        // It could be where data migration is performed, if necessary
+        console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
+       
+
         console.log('\nInstantiate the contract');
     }
 
