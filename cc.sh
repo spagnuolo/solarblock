@@ -37,3 +37,9 @@ docker run -d --rm --network solarnet_test --name guiNetzbetreiber --mount type=
 docker run -d --rm --network solarnet_test --name guiHaushaltA --mount type=bind,source="${PWD}/../../organizations/peerOrganizations/orgHaushaltA.example.com/connection-orgHaushaltA.yaml",target=/usr/src/app/gateway/connection.yaml -p 8001:8000 solarnet/backend:latest
 docker run -d --rm --network solarnet_test --name guiHaushaltB --mount type=bind,source="${PWD}/../../organizations/peerOrganizations/orgHaushaltB.example.com/connection-orgHaushaltB.yaml",target=/usr/src/app/gateway/connection.yaml -p 8002:8000 solarnet/backend:latest
 docker run -d --rm --network solarnet_test --name guiHaushaltC --mount type=bind,source="${PWD}/../../organizations/peerOrganizations/orgHaushaltC.example.com/connection-orgHaushaltC.yaml",target=/usr/src/app/gateway/connection.yaml -p 8003:8000 solarnet/backend:latest
+
+# init
+curl "http://localhost:8000/init"
+
+# POST create 9k energy.
+curl -d '{"newOwner":"OrgNetzbetreiber", "capacity": "9000"}' -H 'content-type:application/json'  "http://localhost:8000/createEnergy"

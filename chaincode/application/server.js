@@ -109,6 +109,16 @@ api.get('/getInfo', (request, response) => {
     response.json({ organization, peer });
 });
 
+api.get('/init', (request, response) => {
+    contract.evaluateTransaction('instantiate').then(() => {
+        response.json({ message: "Solarblock initialized." });
+    }).catch((error) => {
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
+    });
+});
+
 api.get('/getSelling', (request, response) => {
     contract.evaluateTransaction('queryNamed', 'SELLING').then((queryResponse) => {
         let data = JSON.parse(queryResponse.toString());
@@ -203,9 +213,6 @@ api.post('/sellEnergy', (request, response) => {
     });
 });
 
-/* Test post request with terminal.
-curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:8000/buyEnergy"
-*/
 api.post('/buyEnergy', (request, response) => {
     console.log('/buyEnergy JSON:', request.body);
     let transactionParameters = [
