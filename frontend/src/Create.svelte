@@ -33,11 +33,7 @@
                     <option value={org}>{org}</option>
                 {/each}
             </select>
-            <PostButton
-                label="Create"
-                url="http://localhost:8000/createEnergy"
-                json={postBody}
-            />
+            <PostButton label="Create" url="/createEnergy" json={postBody} />
         </div>
     </div>
 </div>

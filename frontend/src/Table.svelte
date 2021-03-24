@@ -1,6 +1,6 @@
 <script lang="ts">
     export let txn;
-    export let fetchURL = "http://localhost:8000/getOwn";
+    export let fetchURL = "/getOwn";
 
     let transactions;
     let promise = getRequest();
