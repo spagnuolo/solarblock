@@ -66,10 +66,10 @@ scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
 
 
 # Copy the connection profiles so they are in the correct organizations.
-cp "${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/connection-orgNetzbetreiber.yaml" "${DIR}/organization/netzbetreiber/gateway/connection.yaml"
-cp "${DIR}/organizations/peerOrganizations/orgHaushaltA.example.com/connection-orgHaushaltA.yaml" "${DIR}/organization/haushalt_a/gateway/connection.yaml"
-cp "${DIR}/organizations/peerOrganizations/orgHaushaltB.example.com/connection-orgHaushaltB.yaml" "${DIR}/organization/haushalt_b/gateway/connection.yaml"
-cp "${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/connection-orgHaushaltC.yaml" "${DIR}/organization/haushalt_c/gateway/connection.yaml"
+cp "${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/connection-orgNetzbetreiber.yaml" "${DIR}/chaincode/application/gateway/connection.yaml"
+# cp "${DIR}/organizations/peerOrganizations/orgHaushaltA.example.com/connection-orgHaushaltA.yaml" "${DIR}/organization/haushalt_a/gateway/connection.yaml"
+# cp "${DIR}/organizations/peerOrganizations/orgHaushaltB.example.com/connection-orgHaushaltB.yaml" "${DIR}/organization/haushalt_b/gateway/connection.yaml"
+# cp "${DIR}/organizations/peerOrganizations/orgHaushaltC.example.com/connection-orgHaushaltC.yaml" "${DIR}/organization/haushalt_c/gateway/connection.yaml"
 
 
 cp ${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/users/User1@orgNetzbetreiber.example.com/msp/signcerts/* ${DIR}/organizations/peerOrganizations/orgNetzbetreiber.example.com/users/User1@orgNetzbetreiber.example.com/msp/signcerts/User1@orgNetzbetreiber.example.com-cert.pem
