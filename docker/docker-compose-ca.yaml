@@ -10,7 +10,7 @@ networks:
 
 services:
 
-  ca_orgNetzbetreiber:
+  ca-orgNetzbetreiber:
     image: hyperledger/fabric-ca:$IMAGE_TAG
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
@@ -22,11 +22,11 @@ services:
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/orgNetzbetreiber:/etc/hyperledger/fabric-ca-server
-    container_name: ca_orgNetzbetreiber
+    container_name: ca-orgNetzbetreiber
     networks:
       - test
 
-  ca_orgHaushaltA:
+  ca-orgHaushaltA:
     image: hyperledger/fabric-ca:$IMAGE_TAG
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
@@ -38,11 +38,11 @@ services:
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/orgHaushaltA:/etc/hyperledger/fabric-ca-server
-    container_name: ca_orgHaushaltA
+    container_name: ca-orgHaushaltA
     networks:
       - test
   
-  ca_orgHaushaltB:
+  ca-orgHaushaltB:
     image: hyperledger/fabric-ca:$IMAGE_TAG
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
@@ -54,11 +54,11 @@ services:
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/orgHaushaltB:/etc/hyperledger/fabric-ca-server
-    container_name: ca_orgHaushaltB
+    container_name: ca-orgHaushaltB
     networks:
       - test
   
-  ca_orgHaushaltC:
+  ca-orgHaushaltC:
     image: hyperledger/fabric-ca:$IMAGE_TAG
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
@@ -70,11 +70,11 @@ services:
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/orgHaushaltC:/etc/hyperledger/fabric-ca-server
-    container_name: ca_orgHaushaltC
+    container_name: ca-orgHaushaltC
     networks:
       - test
 
-  ca_orderer:
+  ca-orderer:
     image: hyperledger/fabric-ca:$IMAGE_TAG
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
@@ -86,6 +86,6 @@ services:
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/ordererOrg:/etc/hyperledger/fabric-ca-server
-    container_name: ca_orderer
+    container_name: ca-orderer
     networks:
       - test

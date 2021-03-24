@@ -28,8 +28,12 @@ async function connection() {
     const mspid = connectionProfile.organizations[organization].mspid;
     const certificateAuthority = Object.keys(connectionProfile.certificateAuthorities)[0]
 
-    // Create a new CA client for interacting with the CA.
+    // Change url to work inside docker network.
     const caInfo = connectionProfile.certificateAuthorities[certificateAuthority];
+    connectionProfile.peers[peer].url = connectionProfile.peers[peer].url.replace('localhost', peer);
+    caInfo.url = caInfo.url.replace('localhost', caInfo.caName);
+
+    // Create a new CA client for interacting with the CA.
     const caTLSCACerts = caInfo.tlsCACerts.pem;
     const ca = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
 
