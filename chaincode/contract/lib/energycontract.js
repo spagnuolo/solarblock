@@ -6,11 +6,11 @@ const EnergyList = require('./energylist.js');
 const QueryUtils = require('./queries.js');
 const Credit = require('./credit.js');
 const CreditList = require('./creditlist.js');
-const ParamUtil =require('./paramutil.js');
+const ParamUtil = require('./paramutil.js');
 
 let energyAssetID = 0;
 
-class EnergyContext extends Context { 
+class EnergyContext extends Context {
     constructor() {
         super();
         this.energyList = new EnergyList(this);
@@ -38,27 +38,27 @@ class EnergyContract extends Contract {
 
         let executed = await ctx.stub.getState('initExecuted');
 
-        if(executed.length !== 0){
+        if (executed.length !== 0) {
             throw new Error("instantiate may only be called once!");
         }
 
         await ctx.stub.putState('initExecuted', Buffer.from(String(Boolean(true))));
-        
+
         //init credit wallets
 
-        let credit = Credit.createInstance("OrgHaushaltA",  100);
+        let credit = Credit.createInstance("OrgHaushaltA", 100);
         await ctx.creditList.addCredit(credit);
         console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
-        credit = Credit.createInstance("OrgHaushaltB",  100);
+        credit = Credit.createInstance("OrgHaushaltB", 100);
         await ctx.creditList.addCredit(credit);
         console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
-        credit = Credit.createInstance("OrgHaushaltC",  100);
+        credit = Credit.createInstance("OrgHaushaltC", 100);
         await ctx.creditList.addCredit(credit);
         console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
-        credit = Credit.createInstance("OrgNetzbetreiber",  100);
+        credit = Credit.createInstance("OrgNetzbetreiber", 100);
         await ctx.creditList.addCredit(credit);
         console.log(`\nInstantiated the creditscore for ${credit.owner} with ${credit.amountOfCredits}`);
-       
+
 
         console.log('\nInstantiate the contract');
     }
@@ -66,8 +66,7 @@ class EnergyContract extends Contract {
     /**
      * Creat new energy. Only the "Netzbetreiber" is allowed to use this function.
      * @param {Context} ctx contracts of the transaction
-     * @param {String} owner organization for whom the i.r. Netzbetreiber
-     * @param {String} energyNumber unique identifyer of the asset
+     * @param {String} owner organisation for whom the i.r. Netzbetreiber
      * @param {String} capacity 
      * @returns 
      */
@@ -76,13 +75,13 @@ class EnergyContract extends Contract {
         ParamUtil.validateOrg(owner);
         ParamUtil.validatePositiveInteger(capacity);
 
-      
+
 
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create energy.');
         }
 
-        let energyNumber = (energyAssetID+=1);
+        let energyNumber = (energyAssetID += 1);
 
         //Checks if ID is taken.
         let creditKey = Energy.makeKey([owner, energyNumber]);
@@ -93,20 +92,65 @@ class EnergyContract extends Contract {
         }
 
         // Create an instance of the energy.
-        let energy = Energy.createInstance(owner, energyNumber, '-', '-', parseInt(capacity));
+        let energyNumber = await ctx.energyList.nextID();
+        let energy = Energy.createInstance(owner, energyNumber, '-', '-', Number(capacity));
 
         // Set new owner.
         energy.setOwnerMSP(owner + 'MSP');
         energy.setOwner(owner);
 
-        // Add the energy to the list of all similar solar energys in the ledger world state.
+        // Add the energy to the list in the ledger world state.
         await ctx.energyList.addEnergy(energy);
 
         // Must return a serialized energy to caller of smart contract.
         return energy;
     }
 
-    
+
+    /**
+     * Creat new energy. Only the "Netzbetreiber" is allowed to use this function.
+     * @param {Context} ctx contracts of the transaction
+     * @param {String} owner organization for whom the i.r. Netzbetreiber
+     * @param {String} energyNumber unique identifyer of the asset
+     * @param {String} splitAmount 
+     * @returns 
+     */
+    async split(ctx, owner, energyNumber, splitAmount) {
+        // Is the caller the owner of this asset?
+        let organization = ctx.clientIdentity.getMSPID().replace("MSP", "");
+        if (organization !== owner) {
+            throw new Error("\nYou don't own this asset.");
+        }
+
+        // Get energy and check if energy asset exists.
+        let energyKey = Energy.makeKey([owner, energyNumber]);
+        let energy = await ctx.energyList.getEnergy(energyKey);
+        if (!energy) {
+            throw new Error('\nThere is no ' + owner + energyNumber + ' energy asset.');
+        }
+
+        // Can I split by splitAmount?
+        let amount = Math.abs(Number(splitAmount));
+        let rest = energy.getCapacity() - amount;
+        if (rest <= 0) {
+            throw new Error(`\n Can't split ${energy.getCapacity()} by ${splitAmount}!`);
+        }
+
+        // Reduce asset by requested amount.
+        energy.setCapacity(rest);
+        await ctx.energyList.updateEnergy(energy);
+
+        // Create new asset with split amount
+        let nextEnergyNumber = await ctx.energyList.nextID();
+        let splitedEnergy = Energy.createInstance(owner, nextEnergyNumber, '-', '-', amount);
+        splitedEnergy.setOwnerMSP(owner + 'MSP');
+        splitedEnergy.setOwner(owner);
+        await ctx.energyList.addEnergy(splitedEnergy);
+
+        // Return a serialized energy to caller of smart contract.
+        return splitedEnergy;
+    }
+
     /**
      * Sell solar energy.
      *
@@ -117,7 +161,7 @@ class EnergyContract extends Contract {
     */
     async sell(ctx, seller, energyNumber, price) {
 
-        
+
         ParamUtil.validateOrg(seller);
         ParamUtil.validatePositiveInteger(energyNumber);
         ParamUtil.validatePositiveInteger(price);
@@ -144,9 +188,9 @@ class EnergyContract extends Contract {
 
         // Must return a serialized energy to caller of smart contract.
         return energy;
-        
-    
-        
+
+
+
     }
 
     /**
@@ -166,7 +210,7 @@ class EnergyContract extends Contract {
         ParamUtil.validateOrg(newOwner);
         ParamUtil.validatePositiveInteger(energyNumber);
 
-    
+
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
@@ -175,8 +219,8 @@ class EnergyContract extends Contract {
         let buyerCredit = await ctx.creditList.getCredit(newOwner);
 
         //check if byuer has enough credits to make the purchase
-    
-        if(buyerCredit.getAmount()<price){
+
+        if (buyerCredit.getAmount() < price) {
             throw new Error("\n you don't have enough balance to make this purchase")
         }
         // Validate current owner
@@ -197,9 +241,9 @@ class EnergyContract extends Contract {
 
             //set creditscores accordingly
             let sellerCredit = await ctx.creditList.getCredit(seller);
-            sellerCredit.setAmount(sellerCredit.getAmount()+price);
+            sellerCredit.setAmount(sellerCredit.getAmount() + price);
             ctx.creditList.updateCredit(sellerCredit);
-            buyerCredit.setAmount(buyerCredit.getAmount()-price);
+            buyerCredit.setAmount(buyerCredit.getAmount() - price);
             ctx.creditList.updateCredit(buyerCredit);
 
             energy.setOwner(newOwner);
@@ -231,7 +275,7 @@ class EnergyContract extends Contract {
      */
     async buyRequest(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
 
-    
+
 
         // Retrieve the current energy using key fields provided
         let creditKey = Energy.makeKey([seller, energyNumber]);
@@ -248,7 +292,7 @@ class EnergyContract extends Contract {
         await ctx.energyList.updateEnergy(energy);
         return energy;
 
-    
+
     }
 
 
@@ -352,11 +396,11 @@ class EnergyContract extends Contract {
      * @returns an Credit object or more exactly an Wallet for Credits
      */
 
-    async createCreditWallet(ctx , organization , initialCreditValue){
+    async createCreditWallet(ctx, organization, initialCreditValue) {
         ParamUtil.validateOrg(organization);
         ParamUtil.validatePositiveInteger(initialCreditValue);
 
-        
+
         //check if the function caller is OrgNetzbetreiber
 
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
@@ -368,21 +412,21 @@ class EnergyContract extends Contract {
         let isCredit = await ctx.creditList.getCredit(organization);
 
         if (isCredit) {
-            throw new Error('\nPlease use an unique ID: ' + organization +  ' has already been used. ');
+            throw new Error('\nPlease use an unique ID: ' + organization + ' has already been used. ');
         }
 
-         // Create an instance of the energy.
-         let credit = Credit.createInstance(organization,  parseInt(initialCreditValue));
+        // Create an instance of the energy.
+        let credit = Credit.createInstance(organization, parseInt(initialCreditValue));
 
-    
- 
-         // Add the energy to the list of all similar solar energys in the ledger world state.
-         console.log('\ncalling "addcredit" ');
-         await ctx.creditList.addCredit(credit);
- 
-         // Must return a serialized energy to caller of smart contract.
-         return credit;
-        
+
+
+        // Add the energy to the list of all similar solar energys in the ledger world state.
+        console.log('\ncalling "addcredit" ');
+        await ctx.creditList.addCredit(credit);
+
+        // Must return a serialized energy to caller of smart contract.
+        return credit;
+
     }
 
     /**
@@ -393,7 +437,7 @@ class EnergyContract extends Contract {
      * @returns 
      */
 
-    async addCredits(ctx,organization, amountOfCreditsToAdd){
+    async addCredits(ctx, organization, amountOfCreditsToAdd) {
 
         ParamUtil.validateOrg(organization);
         ParamUtil.validatePositiveInteger(amountOfCreditsToAdd);
@@ -405,14 +449,14 @@ class EnergyContract extends Contract {
 
         //Checks if ID is taken.
         let isCredit = await ctx.creditList.getCredit(organization);
- 
+
         if (!isCredit) {
-            throw new Error('\nno Wallet for ' + organization +' has  been found. ');
+            throw new Error('\nno Wallet for ' + organization + ' has  been found. ');
         }
         let creditKey = Credit.makeKey([organization]);
         let credit = await ctx.creditList.getCredit(creditKey);
 
-        credit.setAmount(parseInt(credit.getAmount())+parseInt(amountOfCreditsToAdd));
+        credit.setAmount(parseInt(credit.getAmount()) + parseInt(amountOfCreditsToAdd));
 
         ctx.creditList.updateCredit(credit)
 
@@ -428,14 +472,14 @@ class EnergyContract extends Contract {
     async queryCreditOwner(ctx, owner) {
 
         ParamUtil.validateOrg(owner);
-        
+
 
         //we only allow the OrgNetzbetreiber to view the Credits since rn they manage it
-        if(owner !== (ctx.clientIdentity.getMSPID().replace("MSP",""))){
+        if (owner !== (ctx.clientIdentity.getMSPID().replace("MSP", ""))) {
 
-            if("OrgNetzbetreiber" !== (ctx.clientIdentity.getMSPID().replace("MSP","")))
+            if ("OrgNetzbetreiber" !== (ctx.clientIdentity.getMSPID().replace("MSP", "")))
 
-            throw new Error("you have no permission to view this Wallet.");
+                throw new Error("you have no permission to view this Wallet.");
         }
 
         let query = new QueryUtils(ctx, 'org.solarnet.solarcredit');

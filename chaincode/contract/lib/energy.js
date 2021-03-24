@@ -21,6 +21,14 @@ class Energy extends State {
     }
 
 
+    getCapacity() {
+        return this.capacity;
+    }
+
+    setCapacity(newCapacity) {
+        this.capacity = newCapacity;
+    }
+
     getSellDateTime() {
         return this.sellDateTime;
     }
@@ -49,10 +57,10 @@ class Energy extends State {
         this.price = newPrice;
     }
 
-    getPrice(){
+    getPrice() {
         return this.price;
     }
-    
+
     /**
      * Useful methods to encapsulate solar energy states
      */
@@ -91,8 +99,8 @@ class Energy extends State {
     /**
      * Factory method to create a solar energy object
      */
-    static createInstance(owner , energyNumber, sellDateTime, expiredDateTime, faceValue) {
-        return new Energy({ owner , energyNumber, sellDateTime, expiredDateTime, faceValue });
+    static createInstance(seller, energyNumber, sellDateTime, expiredDateTime, capacity) {
+        return new Energy({ seller, energyNumber, sellDateTime, expiredDateTime, capacity });
     }
 
     static getClass() {

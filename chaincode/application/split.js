@@ -6,15 +6,15 @@ const { Wallets, Gateway } = require('fabric-network');
 const Energy = require('../contract/lib/energy.js');
 
 async function main() {
-    const energyAmount = process.argv[2];
-    if (!energyAmount) {
-        console.log('Please provide how much energy you want to sell');
+    const energyNumber = process.argv[2];
+    if (!energyNumber) {
+        console.log('Please provide the energyNumber.');
         return;
     }
 
-    const newOwner = process.argv[3];
-    if (!newOwner) {
-        console.log('Please specify the organization for whom you want to create the asset.');
+    const splitAmount = process.argv[3];
+    if (!splitAmount) {
+        console.log('Please provide for how much you want to split the energy.');
         return;
     }
 
@@ -41,14 +41,15 @@ async function main() {
         console.log('Use org.solarnet.solarenergy smart contract.');
         const contract = await network.getContract('energycontract');
 
-        console.log('Submit solar energy create transaction.');
-        const createResponse = await contract.submitTransaction('create', newOwner, energyAmount);
+        console.log('Submit solar energy split transaction.');
 
-        console.log('Process create transaction response.' + createResponse);
-        let energy = Energy.fromBuffer(createResponse);
+        const splitResponse = await contract.submitTransaction('split', organization, energyNumber, splitAmount);
 
-        console.log(` ${energy.energyNumber} successfully created for value ${energy.capacity}`);
-        console.log('Transaction completed')
+        console.log('Process split transaction response.' + splitResponse);
+        let energy = Energy.fromBuffer(splitResponse);
+
+        console.log(`${energy.owner} solar energy : ${energy.energyNumber} successfully split for value ${energy.capacity}`);
+        console.log('Transaction complete.');
 
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);

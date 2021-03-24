@@ -57,7 +57,7 @@ async function main() {
         console.log('Process sell transaction response.' + sellResponse);
         let energy = Energy.fromBuffer(sellResponse);
 
-        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully sell for value ${energy.faceValue}`);
+        console.log(`${energy.seller} solar energy : ${energy.energyNumber} successfully sell for value ${energy.capacity}`);
         console.log('Transaction complete.');
 
     } catch (error) {
