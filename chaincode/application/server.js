@@ -68,7 +68,7 @@ async function connection() {
 
     try {
         await gateway.connect(connectionProfile, connectionOptions);
-        const network = await gateway.getNetwork('mychannel');
+        const network = await gateway.getNetwork('public-channel');
         contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);

@@ -19,7 +19,7 @@
 		}
 	},
 	"channels": {
-		"mychannel": {
+		"public-channel": {
 			"peers": {
 				"peer0.orgNetzbetreiber.example.com": {}
 			},

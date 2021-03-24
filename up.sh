@@ -27,7 +27,7 @@ fi
 
 MAX_RETRY=5
 CLI_DELAY=3
-CHANNEL_NAME="mychannel"
+CHANNEL_NAME="public-channel"
 
 COMPOSE_FILE_BASE=docker/docker-compose-test-net.yaml
 COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml

@@ -9,7 +9,7 @@ function _exit(){
 }
 
 
-: ${CHANNEL_NAME:="mychannel"}
+: ${CHANNEL_NAME:="public-channel"}
 : ${DELAY:="3"}
 : ${MAX_RETRY:="5"}
 : ${VERBOSE:="false"}
