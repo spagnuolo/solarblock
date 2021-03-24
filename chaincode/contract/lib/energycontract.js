@@ -6,52 +6,9 @@ const EnergyList = require('./energylist.js');
 const QueryUtils = require('./queries.js');
 const Credit = require('./credit.js');
 const CreditList = require('./creditlist.js');
+const ParamUtil =require('./paramutil.js');
 
-//checks parameters of correctness
-class Utility{
-
-    async validateParamsCreate( owner, capacity){
-      if(owner.startsWith("Org") && capacity > 0) {
-          return true;
-      }
-      else {
-          return false;
-      }
-    }
-
-    async validateParamsSell(energyNumber, price){
-        if(energyNumber >0 && price >0){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    async validateParamsBuy(seller, energyNumber, newOwner){
-        if(seller.startsWith("OrgNetzbetreiberMSP" && energyNumber >0 && newOwner.startsWith("Org"))){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    async validateParamsBuyRequest(seller, energyNumber, currentOwner){
-        if(seller.startsWith("OrgNetzbetreiberMSP" && energyNumber >0 && currentOwner.startsWith("Org"))){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-}
-
-
-
- let energyAssetID = 0;
- let creditAssetID = 0;
+let energyAssetID = 0;
 
 class EnergyContext extends Context { 
     constructor() {
@@ -103,7 +60,11 @@ class EnergyContract extends Contract {
      * @returns 
      */
     async create(ctx, owner, capacity) {
-        if(new Utility().validateParamsCreate()) {
+
+        ParamUtil.validateOrg(owner);
+        ParamUtil.validatePositiveInteger(capacity);
+
+      
 
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create energy.');
@@ -131,9 +92,6 @@ class EnergyContract extends Contract {
 
         // Must return a serialized energy to caller of smart contract.
         return energy;
-     } else {
-            console.log("\nYou passed invalid parameters");
-        }
     }
 
     
@@ -146,7 +104,11 @@ class EnergyContract extends Contract {
      * @param {String} price face value of energy
     */
     async sell(ctx, seller, energyNumber, price) {
-        if(new Utility().validateParamsSell()) {
+
+        
+        ParamUtil.validateOrg(seller);
+        ParamUtil.validatePositiveInteger(energyNumber);
+        ParamUtil.validatePositiveInteger(price);
 
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
@@ -170,10 +132,8 @@ class EnergyContract extends Contract {
 
         // Must return a serialized energy to caller of smart contract.
         return energy;
-        }
-        else {
-            console.log("\nYou passed invalid parameters");
-        }
+        
+    
         
     }
 
@@ -189,8 +149,12 @@ class EnergyContract extends Contract {
       * @param {String} purchaseDateTime time energy was purchased (i.e. traded)  // transaction input - not written to asset
      */
     async buy(ctx, seller, energyNumber, newOwner, purchaseDateTime) {
-        if(new Utility().validateParamsBuy()) {
 
+        ParamUtil.validateOrg(seller);
+        ParamUtil.validateOrg(newOwner);
+        ParamUtil.validatePositiveInteger(energyNumber);
+
+    
         // Retrieve the current energy using key fields provided
         let energyKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
@@ -221,9 +185,6 @@ class EnergyContract extends Contract {
         // Update the energy
         await ctx.energyList.updateEnergy(energy);
         return energy;
-    }else{
-        console.log("\nYou passed invalid parameters");
-    }
     }
 
     /**
@@ -240,7 +201,9 @@ class EnergyContract extends Contract {
       * @param {String} purchaseDateTime time energy was requested                // transaction input - ditto.
      */
     async buyRequest(ctx, seller, energyNumber, currentOwner, newOwner, price, purchaseDateTime) {
-        if(new Utility().validateParamsBuyRequest()) {
+
+    
+
         // Retrieve the current energy using key fields provided
         let creditKey = Energy.makeKey([seller, energyNumber]);
         let energy = await ctx.energyList.getEnergy(creditKey);
@@ -256,10 +219,7 @@ class EnergyContract extends Contract {
         await ctx.energyList.updateEnergy(energy);
         return energy;
 
-    }
-    else{
-        console.log("\nYou passed invalid parameters");
-    }
+    
     }
 
 
@@ -364,6 +324,8 @@ class EnergyContract extends Contract {
      */
 
     async createCreditWallet(ctx , organization , initialCreditValue){
+        ParamUtil.validateOrg(organization);
+        ParamUtil.validatePositiveInteger(initialCreditValue);
 
         
         //check if the function caller is OrgNetzbetreiber
@@ -404,13 +366,17 @@ class EnergyContract extends Contract {
 
     async addCredits(ctx,organization, amountOfCreditsToAdd){
 
+        ParamUtil.validateOrg(organization);
+        ParamUtil.validatePositiveInteger(amountOfCreditsToAdd);
+
+
         if (ctx.clientIdentity.getMSPID() !== 'OrgNetzbetreiberMSP') {
             throw new Error('\nNo permission to create a Wallet.');
         }
 
         //Checks if ID is taken.
         let isCredit = await ctx.creditList.getCredit(organization);
-
+ 
         if (!isCredit) {
             throw new Error('\nno Wallet for ' + organization +' has  been found. ');
         }
@@ -431,6 +397,9 @@ class EnergyContract extends Contract {
     */
 
     async queryCreditOwner(ctx, owner) {
+
+        ParamUtil.validateOrg(owner);
+        
 
         //we only allow the OrgNetzbetreiber to view the Credits since rn they manage it
         if(owner !== (ctx.clientIdentity.getMSPID().replace("MSP",""))){
