@@ -39,6 +39,14 @@ class EnergyContract extends Contract {
     }
 
     /**
+     * @param {Context} ctx the transaction context
+     */
+    async getCredits(ctx) {
+        let organization = ctx.clientIdentity.getMSPID().replace("MSP", "");
+        return ctx.creditWallets.getCredits(organization);
+    }
+
+    /**
      * Creat new energy. Only the "Netzbetreiber" is allowed to use this function.
      * @param {Context} ctx contracts of the transaction
      * @param {String} owner organisation for whom the i.r. Netzbetreiber

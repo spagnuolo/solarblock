@@ -105,13 +105,24 @@ api.use(express.static('./public'));
 api.use(express.json());
 
 // GET methods.
+api.get('/init', (request, response) => {
+    contract.submitTransaction('instantiate').then(() => {
+        response.json({ message: "Solarblock initialized." });
+    }).catch((error) => {
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
+    });
+});
+
 api.get('/getInfo', (request, response) => {
     response.json({ organization, peer });
 });
 
-api.get('/init', (request, response) => {
-    contract.submitTransaction('instantiate').then(() => {
-        response.json({ message: "Solarblock initialized." });
+api.get('/getCredits', (request, response) => {
+    contract.evaluateTransaction('getCredits').then((queryResponse) => {
+        let data = JSON.parse(queryResponse.toString());
+        response.json(data);
     }).catch((error) => {
         let message = `Error processing transaction. ${error}`;
         console.log(error.stack);
