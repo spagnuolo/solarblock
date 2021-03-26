@@ -16,7 +16,7 @@ const energyState = {
 class Energy extends State {
 
     constructor(obj) {
-        super(Energy.getClass(), [obj.owner, obj.energyNumber]);
+        super(Energy.getClass(), [obj.seller, obj.energyNumber]);
         Object.assign(this, obj);
     }
 
