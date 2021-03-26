@@ -6,9 +6,8 @@
   import Tailwind from "./Tailwind.svelte";
 
   let credits = 0;
-  let promise = getRequest();
-  async function getRequest() {
-    const response = await fetch("getCredits");
+  async function getCredits() {
+    const response = await fetch("/getCredits");
     let data = await response.json();
 
     if (response.ok) {
@@ -18,6 +17,7 @@
       throw new Error("Couldn't fetch data.");
     }
   }
+  getCredits();
 
   let panels = [
     { emoji: "⚡", active: true, component: "Energy", name: "Meine Energie" },
@@ -41,6 +41,9 @@
 
   // Highlight only the selected panel.
   function handleSelection(index: number) {
+    // Update credits.
+    getCredits();
+
     // Deactivate all.
     for (let i = 0; i < panels.length; i++) {
       panels[i].active = false;

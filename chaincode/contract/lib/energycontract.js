@@ -142,7 +142,7 @@ class EnergyContract extends Contract {
         // Smart contract, rather than energy, moves energy into SELLING state.
         energy.setSelling();
         energy.setSellDateTime(new Date().toUTCString());
-        energy.setPrice(price);
+        energy.setPrice(Math.abs(Number(price)));
         await ctx.energyList.updateEnergy(energy);
 
         // Must return a serialized energy to caller of smart contract.

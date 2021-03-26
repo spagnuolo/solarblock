@@ -40,6 +40,3 @@ docker run -d --rm --network solarnet_test --name guiHaushaltC --mount type=bind
 
 # init
 curl "http://localhost:8000/init"
-
-# POST create 9k energy.
-curl -d '{"newOwner":"OrgNetzbetreiber", "capacity": "9000"}' -H 'content-type:application/json'  "http://localhost:8000/createEnergy"

@@ -7,6 +7,7 @@
 
     let txn;
     let splitAmount = "";
+    let sellAmount = "";
     let balance = 0;
 </script>
 
@@ -35,15 +36,16 @@
                 <input
                     class="block w-full my-2 -mb-2 p-2 bg-white hover:bg-gray-100 rounded text-center appearance-none"
                     placeholder="Verkaufswert in Credits, bspw. 3"
-                    bind:value={credits}
+                    bind:value={sellAmount}
                 />
                 <PostButton
                     label="Verkaufen"
                     url="/sellEnergy"
                     json={{
                         energyNumber: txn.Record.energyNumber,
-                        credits,
+                        sellAmount,
                     }}
+                    active={Number(sellAmount) ? true : false}
                 />
             </div>
         {:else}
