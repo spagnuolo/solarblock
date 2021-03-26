@@ -5,6 +5,20 @@
   import Market from "./Market.svelte";
   import Tailwind from "./Tailwind.svelte";
 
+  let credits = 0;
+  let promise = getRequest();
+  async function getRequest() {
+    const response = await fetch("getCredits");
+    let data = await response.json();
+
+    if (response.ok) {
+      credits = data;
+      return data;
+    } else {
+      throw new Error("Couldn't fetch data.");
+    }
+  }
+
   let panels = [
     { emoji: "⚡", active: true, component: "Energy", name: "Meine Energie" },
     { emoji: "🛒", active: false, component: "Market", name: "Marktplatz" },
@@ -60,9 +74,9 @@
 
     <!-- main -->
     {#if panels[0].active}
-      <Energy />
+      <Energy {credits} />
     {:else if panels[1].active}
-      <Market />
+      <Market {credits} />
     {:else if panels[2].active}
       <Create />
     {/if}

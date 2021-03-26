@@ -25,11 +25,11 @@
     </tr>
     <tr>
         <th class="text-right pr-2">Preis:</th>
-        <td>{txn.Record.price} Credits</td>
+        <td>{txn.Record.price ? txn.Record.price + " Credits" : ""}</td>
     </tr>
     <tr>
         <th class="text-right pr-2">Status:</th>
-        <td>{state[txn.Record.currentState]}</td>
+        <td>{txn.Record.currentState ? state[txn.Record.currentState] : ""}</td>
     </tr>
     <tr>
         <th class="text-right pr-2">Menge:</th>
