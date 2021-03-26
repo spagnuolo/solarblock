@@ -32,6 +32,7 @@
                 <th>Besitzer</th>
                 <th>Verkäufer</th>
                 <th>Datum</th>
+                <th>Preis</th>
             </tr>
         </thead>
 
@@ -46,7 +47,7 @@
                     <th>{i + 1}</th>
                     <td>{entry["Record"].energyNumber}</td>
                     <td>{entry["Record"].capacity} kWh</td>
-                    <td>{entry["Record"].owner}</td>
+                    <td>{entry["Record"].price}c</td>
                     <td>{entry["Record"].seller}</td>
                     <td>{entry["Record"].sellDateTime}</td>
                 </tr>

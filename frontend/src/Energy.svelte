@@ -5,6 +5,7 @@
 
     let txn;
     let splitAmount = "";
+    let credits = "";
 </script>
 
 <!-- left control -->
@@ -29,12 +30,17 @@
                     }}
                     active={Number(splitAmount) ? true : false}
                 />
+                <input
+                    class="block w-full my-2 -mb-2 p-2 bg-white hover:bg-gray-100 rounded text-right appearance-none"
+                    placeholder="Verkaufswert in Credits, bspw. 3"
+                    bind:value={credits}
+                />
                 <PostButton
                     label="Verkaufen"
                     url="/sellEnergy"
                     json={{
-                        capacity: txn.Record.capacity,
                         energyNumber: txn.Record.energyNumber,
+                        credits,
                     }}
                 />
             </div>

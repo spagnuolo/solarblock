@@ -11,7 +11,7 @@
     <div class="m-1 bg-blue-200 rounded-lg">
         <div class="title">Kaufen</div>
         {#if txn}
-            <Transaktion bind:txn />
+            <Transaktion {txn} />
             <div class="m-full p-2">
                 <PostButton
                     label="Kaufen?"
