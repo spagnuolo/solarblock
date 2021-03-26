@@ -3,12 +3,14 @@
 const { Contract, Context } = require('fabric-contract-api');
 const Energy = require('./energy.js');
 const EnergyList = require('./energylist.js');
+const CreditWallets = require('./creditwallets.js');
 const QueryUtils = require('./queries.js');
 
 class EnergyContext extends Context {
     constructor() {
         super();
         this.energyList = new EnergyList(this);
+        this.creditWallets = new CreditWallets(this);
     }
 }
 
@@ -27,9 +29,13 @@ class EnergyContract extends Contract {
      * @param {Context} ctx the transaction context
      */
     async instantiate(ctx) {
-        // No implementation required with this example
-        // It could be where data migration is performed, if necessary
-        console.log('Instantiate the contract');
+        // Gurantee that this method is only called once!
+        let initialized = await ctx.stub.getState('isInitialized');
+        if (String(initialized) === 'initialized') throw new Error('\ninstantiate may only be called once.');
+        await ctx.stub.putState('isInitialized', Buffer.from('initialized'));
+
+        // Init credit wallets
+        await ctx.creditWallets.init();
     }
 
     /**

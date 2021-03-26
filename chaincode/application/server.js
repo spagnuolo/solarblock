@@ -110,7 +110,7 @@ api.get('/getInfo', (request, response) => {
 });
 
 api.get('/init', (request, response) => {
-    contract.evaluateTransaction('instantiate').then(() => {
+    contract.submitTransaction('instantiate').then(() => {
         response.json({ message: "Solarblock initialized." });
     }).catch((error) => {
         let message = `Error processing transaction. ${error}`;
