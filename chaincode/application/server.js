@@ -228,11 +228,7 @@ api.post('/buyEnergy', (request, response) => {
     console.log('/buyEnergy JSON:', request.body);
     let transactionParameters = [
         'buy',
-        request.body.seller,
         request.body.energyNumber,
-        organization,
-        'price',
-        'purchaseDateTime'
     ];
 
     contract.submitTransaction(...transactionParameters).then((buyResponse) => {
