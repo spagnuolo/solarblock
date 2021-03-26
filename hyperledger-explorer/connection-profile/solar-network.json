@@ -19,7 +19,7 @@
 		}
 	},
 	"channels": {
-		"mychannel": {
+		"public-channel": {
 			"peers": {
 				"peer0.orgNetzbetreiber.example.com": {}
 			},
@@ -40,7 +40,9 @@
 			"adminPrivateKey": {
 				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/keystore/e99bebd62aca7b0c0a43bbbfe5d98832f4d03582895fdfda7a96c3ed8439040d_sk"
 			},
-			"peers": ["peer0.orgNetzbetreiber.example.com"],
+			"peers": [
+				"peer0.orgNetzbetreiber.example.com"
+			],
 			"signedCert": {
 				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/signcerts/cert.pem"
 			}

@@ -2,11 +2,12 @@
     export let org = "Organization";
 
     async function getRequest() {
-        let response = await fetch("http://localhost:8000/getInfo");
+        let response = await fetch("/getInfo");
         let data = await response.json();
 
         if (response.ok) {
             org = data.organization;
+            document.title = `${org} | Solarblock`;
             return data;
         } else {
             throw new Error("Couldn't fetch data.");
@@ -14,9 +15,11 @@
     }
 
     let promise = getRequest();
-    // setInterval(() => {
-    //     promise = getRequest();
-    // }, 10 * 1000);
+
+    // Ckeck every minute if connected.
+    setInterval(() => {
+        promise = getRequest();
+    }, 60 * 1000);
 </script>
 
 <div
@@ -29,6 +32,6 @@
             {data.organization} 🌐 {data.peer}
         </p>
     {:catch error}
-        <p class="bg-red-600">Keine Verbindung</p>
+        <p>Keine Verbindung</p>
     {/await}
 </div>

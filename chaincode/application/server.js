@@ -1,14 +1,20 @@
 'use strict';
 
+// REST API.
 const express = require('express');
 const cors = require('cors');
 
+// Handle files.
 const fs = require('fs');
+const path = require('path');
 const yaml = require('js-yaml');
+
+// Fabric Network.
+const FabricCAServices = require('fabric-ca-client');
 const { Wallets, Gateway } = require('fabric-network');
-const Energy = require('../contract/lib/energy.js');
+const Energy = require('./contract/lib/energy.js');
 
-
+// Globals.
 let gateway;
 let contract;
 let organization;
@@ -16,24 +22,53 @@ let peer;
 
 // Connect to fabric network.
 async function connection() {
-    const connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection.yaml', 'utf8'));
+    const connectionProfile = yaml.safeLoad(fs.readFileSync('./gateway/connection.yaml', 'utf8'));
     organization = connectionProfile.client.organization;
     peer = connectionProfile.organizations[organization].peers[0];
-    const userName = 'user' + organization;
+    const mspid = connectionProfile.organizations[organization].mspid;
+    const certificateAuthority = Object.keys(connectionProfile.certificateAuthorities)[0]
 
-    const wallet = await Wallets.newFileSystemWallet(`../identity/user/${userName}/wallet`);
+    // Change url to work inside docker network.
+    const caInfo = connectionProfile.certificateAuthorities[certificateAuthority];
+    connectionProfile.peers[peer].url = connectionProfile.peers[peer].url.replace('localhost', peer);
+    caInfo.url = caInfo.url.replace('localhost', caInfo.caName);
+
+    // Create a new CA client for interacting with the CA.
+    const caTLSCACerts = caInfo.tlsCACerts.pem;
+    const ca = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
+
+    const userName = 'user' + organization;
+    const walletPath = path.join(process.cwd(), `./identity/user/${userName}/wallet`);
+    const wallet = await Wallets.newFileSystemWallet(walletPath);
+
+    // Check to see if we've already enrolled the admin user.
+    const userExists = await wallet.get(userName);
+    if (!userExists) {
+        // Enroll the admin user, and import the new identity into the wallet.
+        const enrollment = await ca.enroll({ enrollmentID: 'user1', enrollmentSecret: 'user1pw' });
+        const x509Identity = {
+            credentials: {
+                certificate: enrollment.certificate,
+                privateKey: enrollment.key.toBytes(),
+            },
+            mspId: mspid,
+            type: 'X.509',
+        };
+        await wallet.put(userName, x509Identity);
+        console.log(`Successfully enrolled client user "${userName}" and imported it into the wallet`);
+    }
+
     gateway = new Gateway();
 
     const connectionOptions = {
         identity: userName,
         wallet: wallet,
-        discovery: { enabled: true, asLocalhost: true }
-
+        discovery: { enabled: true, asLocalhost: false }
     };
 
     try {
         await gateway.connect(connectionProfile, connectionOptions);
-        const network = await gateway.getNetwork('mychannel');
+        const network = await gateway.getNetwork('public-channel');
         contract = await network.getContract('energycontract', 'org.solarnet.solarenergy');
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
@@ -66,12 +101,22 @@ readline.question('Press ENTER to exit server.\n\n', () => {
 // API
 const api = express();
 api.use(cors({ origin: "http://localhost:5000" })); // Allow requests from frontend dev server.
-api.use(express.static('../public'));
+api.use(express.static('./public'));
 api.use(express.json());
 
 // GET methods.
 api.get('/getInfo', (request, response) => {
     response.json({ organization, peer });
+});
+
+api.get('/init', (request, response) => {
+    contract.evaluateTransaction('instantiate').then(() => {
+        response.json({ message: "Solarblock initialized." });
+    }).catch((error) => {
+        let message = `Error processing transaction. ${error}`;
+        console.log(error.stack);
+        response.json({ message });
+    });
 });
 
 api.get('/getSelling', (request, response) => {
@@ -168,9 +213,6 @@ api.post('/sellEnergy', (request, response) => {
     });
 });
 
-/* Test post request with terminal.
-curl -d '{"seller":"OrgNetzbetreiber", "energyNumber": "0001"}' -H 'content-type:application/json'  "http://localhost:8000/buyEnergy"
-*/
 api.post('/buyEnergy', (request, response) => {
     console.log('/buyEnergy JSON:', request.body);
     let transactionParameters = [

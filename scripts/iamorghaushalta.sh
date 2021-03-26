@@ -9,7 +9,7 @@ function _exit(){
 }
 
 
-: ${CHANNEL_NAME:="mychannel"}
+: ${CHANNEL_NAME:="public-channel"}
 : ${DELAY:="3"}
 : ${MAX_RETRY:="5"}
 : ${VERBOSE:="false"}
@@ -18,19 +18,19 @@ function _exit(){
 DIR=${PWD}
 
 # Locate the test-network 
-cd "${DIR}/../.."
+cd "${DIR}/.."
 env | sort > /tmp/env.orig
 
-OVERRIDE_ORG="3"
+OVERRIDE_ORG="2"
 . ./scripts/envVar.sh
 
 
-parsePeerConnectionParameters 1 3
+parsePeerConnectionParameters 1 2
 export PEER_PARMS="${PEER_CONN_PARMS##*( )}"
 
 # set the fabric config path
-export FABRIC_CFG_PATH="${DIR}/../../config"
-export PATH="${DIR}/../../bin:${PWD}:$PATH"
+export FABRIC_CFG_PATH="${DIR}/../config"
+export PATH="${DIR}/../bin:${PWD}:$PATH"
 
 env | sort | comm -1 -3 /tmp/env.orig - | sed -E 's/(.*)=(.*)/export \1="\2"/'
 rm /tmp/env.orig

@@ -1,10 +1,10 @@
 {
-  "name": "nodejs",
+  "name": "solarnet",
   "version": "1.0.0",
-  "description": "",
-  "main": "sell.js",
+  "description": "Solarnet Fabric Backend a frontend and REST api for a fabric blockchain",
+  "main": "server.js",
   "scripts": {
-    "test": "rm -rf _idwallet && node addToWallet.js && node sell.js"
+    "test": "echo \"No test specified.\""
   },
   "keywords": [],
   "author": "",
