@@ -3,6 +3,8 @@
     import Table from "./Table.svelte";
     import Transaktion from "./Transaktion.svelte";
 
+    export let credits = 0;
+
     let txn;
 </script>
 
@@ -11,7 +13,7 @@
     <div class="m-1 bg-blue-200 rounded-lg">
         <div class="title">Kaufen</div>
         {#if txn}
-            <Transaktion bind:txn />
+            <Transaktion {txn} />
             <div class="m-full p-2">
                 <PostButton
                     label="Kaufen?"
@@ -25,6 +27,9 @@
         {:else}
             <p class="p-2 text-center">Wähle ein Angebot aus.</p>
         {/if}
+    </div>
+    <div class="mx-1 mt-4 p-2 bg-blue-200 text-center rounded-lg">
+        <div><b>Credits:</b> {credits}c</div>
     </div>
 </div>
 

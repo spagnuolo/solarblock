@@ -5,6 +5,20 @@
   import Market from "./Market.svelte";
   import Tailwind from "./Tailwind.svelte";
 
+  let credits = 0;
+  async function getCredits() {
+    const response = await fetch("/getCredits");
+    let data = await response.json();
+
+    if (response.ok) {
+      credits = data;
+      return data;
+    } else {
+      throw new Error("Couldn't fetch data.");
+    }
+  }
+  getCredits();
+
   let panels = [
     { emoji: "⚡", active: true, component: "Energy", name: "Meine Energie" },
     { emoji: "🛒", active: false, component: "Market", name: "Marktplatz" },
@@ -27,6 +41,9 @@
 
   // Highlight only the selected panel.
   function handleSelection(index: number) {
+    // Update credits.
+    getCredits();
+
     // Deactivate all.
     for (let i = 0; i < panels.length; i++) {
       panels[i].active = false;
@@ -60,9 +77,9 @@
 
     <!-- main -->
     {#if panels[0].active}
-      <Energy />
+      <Energy {credits} />
     {:else if panels[1].active}
-      <Market />
+      <Market {credits} />
     {:else if panels[2].active}
       <Create />
     {/if}

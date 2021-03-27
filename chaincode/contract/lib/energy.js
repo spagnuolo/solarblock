@@ -36,6 +36,14 @@ class Energy extends State {
         this.capacity = newCapacity;
     }
 
+    getPrice() {
+        return this.price;
+    }
+
+    setPrice(newPrice) {
+        this.price = newPrice;
+    }
+
     getSellDateTime() {
         return this.sellDateTime;
     }

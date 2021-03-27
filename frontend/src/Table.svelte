@@ -1,4 +1,5 @@
 <script lang="ts">
+    export let sum = 0;
     export let txn;
     export let fetchURL = "/getOwn";
 
@@ -9,6 +10,9 @@
         transactions = await response.json();
 
         if (response.ok) {
+            for (let entry of transactions) {
+                sum += entry["Record"].capacity;
+            }
             return transactions;
         } else {
             throw new Error("Couldn't fetch data.");
@@ -28,10 +32,10 @@
             <tr>
                 <th><abbr title="Position">Pos</abbr></th>
                 <th>ID</th>
-                <th>Menge</th>
+                <th>Energie</th>
+                <th>Preis</th>
                 <th>Besitzer</th>
-                <th>Verkäufer</th>
-                <th>Datum</th>
+                <th>Verkaufsdatum</th>
             </tr>
         </thead>
 
@@ -46,8 +50,12 @@
                     <th>{i + 1}</th>
                     <td>{entry["Record"].energyNumber}</td>
                     <td>{entry["Record"].capacity} kWh</td>
+                    <td
+                        >{entry["Record"].price
+                            ? entry["Record"].price + "c"
+                            : "-"}</td
+                    >
                     <td>{entry["Record"].owner}</td>
-                    <td>{entry["Record"].seller}</td>
                     <td>{entry["Record"].sellDateTime}</td>
                 </tr>
             {/each}

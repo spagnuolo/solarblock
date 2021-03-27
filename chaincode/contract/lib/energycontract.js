@@ -3,12 +3,14 @@
 const { Contract, Context } = require('fabric-contract-api');
 const Energy = require('./energy.js');
 const EnergyList = require('./energylist.js');
+const CreditWallets = require('./creditwallets.js');
 const QueryUtils = require('./queries.js');
 
 class EnergyContext extends Context {
     constructor() {
         super();
         this.energyList = new EnergyList(this);
+        this.creditWallets = new CreditWallets(this);
     }
 }
 
@@ -27,9 +29,21 @@ class EnergyContract extends Contract {
      * @param {Context} ctx the transaction context
      */
     async instantiate(ctx) {
-        // No implementation required with this example
-        // It could be where data migration is performed, if necessary
-        console.log('Instantiate the contract');
+        // Gurantee that this method is only called once!
+        let initialized = await ctx.stub.getState('isInitialized');
+        if (String(initialized) === 'initialized') throw new Error('\ninstantiate may only be called once.');
+        await ctx.stub.putState('isInitialized', Buffer.from('initialized'));
+
+        // Init credit wallets
+        await ctx.creditWallets.init();
+    }
+
+    /**
+     * @param {Context} ctx the transaction context
+     */
+    async getCredits(ctx) {
+        let organization = ctx.clientIdentity.getMSPID().replace("MSP", "");
+        return ctx.creditWallets.getCredits(organization);
     }
 
     /**
@@ -110,7 +124,7 @@ class EnergyContract extends Contract {
      * @param {String} seller solar energy seller
      * @param {String} energyNumber energy number for this seller
      * @param {String} price face value of energy
-    */
+     */
     async sell(ctx, seller, energyNumber, price) {
         let energyKey = Energy.makeKey([energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
@@ -128,7 +142,7 @@ class EnergyContract extends Contract {
         // Smart contract, rather than energy, moves energy into SELLING state.
         energy.setSelling();
         energy.setSellDateTime(new Date().toUTCString());
-        // TODO: set price.
+        energy.setPrice(Math.abs(Number(price)));
         await ctx.energyList.updateEnergy(energy);
 
         // Must return a serialized energy to caller of smart contract.
@@ -138,41 +152,44 @@ class EnergyContract extends Contract {
     /**
      * Buy solar energy
      *
-      * @param {Context} ctx the transaction context
-      * @param {String} seller solar energy seller
-      * @param {Integer} energyNumber energy number for this seller
-      * @param {String} currentOwner current owner of energy
-      * @param {String} newOwner new owner of energy
-      * @param {Integer} price price paid for this energy // transaction input - not written to asset
-      * @param {String} purchaseDateTime time energy was purchased (i.e. traded)  // transaction input - not written to asset
+     * @param {Context} ctx the transaction context
+     * @param {Integer} energyNumber energy number for this seller
+     * @param {String} newOwner new owner of energy
      */
-    async buy(ctx, seller, energyNumber, newOwner, price, purchaseDateTime) {
+    async buy(ctx, energyNumber) {
+        // Get new owner from context.
+        let newOwner = ctx.clientIdentity.getMSPID().replace("MSP", "");
 
-        // Retrieve the current energy using key fields provided
+        // Retrieve the current energy using key fields provided.
         let energyKey = Energy.makeKey([energyNumber]);
         let energy = await ctx.energyList.getEnergy(energyKey);
 
-        // Validate current owner
-        if (energy.getOwner() !== seller) {
-            throw new Error('\nEnergy ' + seller + energyNumber + ' is not owned by ' + seller);
+        // Credit check.
+        let price = Number(energy.getPrice());
+        let newOwnerCredits = await ctx.creditWallets.getCredits(newOwner);
+
+        console.log(`${newOwnerCredits} - ${price}`);
+        if (newOwnerCredits < price) {
+            throw new Error("\nYou don't have enough balance to make this purchase");
         }
 
-        // First buy moves state from SELLING to TRANSFER (when running )
+        // First buy moves state from SELLING to BOUGHT.
         if (energy.isSelling()) {
             energy.setBought();
         } else {
-            throw new Error('\nTransaktion ' + seller + energyNumber + ' is not available for sale.');
+            throw new Error('\nTransaktion ' + energyNumber + ' is not available for sale.');
         }
 
-        // Check energy is not already REDEEMED
-        if (energy.isBought()) {
-            energy.setOwner(newOwner);
-            // save the owner's MSP 
-            let mspid = ctx.clientIdentity.getMSPID();
-            energy.setOwnerMSP(mspid);
-        } else {
-            throw new Error('\nEnergy ' + seller + energyNumber + ' is not trading. Current state = ' + energy.getCurrentState());
-        }
+        // Add price to seller.
+        let seller = energy.getOwner();
+        await ctx.creditWallets.addCredits(seller, price);
+
+        // Subract price from newOwner.
+        await ctx.creditWallets.addCredits(newOwner, -price);
+
+        // Transfer energy asset.
+        energy.setOwner(newOwner);
+        energy.setOwnerMSP(ctx.clientIdentity.getMSPID());
 
         // Update the energy
         await ctx.energyList.updateEnergy(energy);

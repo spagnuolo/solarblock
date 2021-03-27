@@ -11,6 +11,7 @@
             owner: "",
             sellDateTime: "",
             seller: "",
+            price: "",
         },
     };
 
@@ -19,29 +20,23 @@
 
 <table class="w-full">
     <tr>
-        <th>ID:</th>
+        <th class="text-right pr-2">ID:</th>
         <td>{txn.Record.energyNumber}</td>
     </tr>
     <tr>
-        <th>Preis:</th>
-        <td>0 Credits</td>
+        <th class="text-right pr-2">Preis:</th>
+        <td>{txn.Record.price ? txn.Record.price + " Credits" : ""}</td>
     </tr>
     <tr>
-        <th>Status:</th>
-        <td>{state[txn.Record.currentState]}</td>
+        <th class="text-right pr-2">Status:</th>
+        <td>{txn.Record.currentState ? state[txn.Record.currentState] : ""}</td>
     </tr>
     <tr>
-        <th>Menge:</th>
+        <th class="text-right pr-2">Menge:</th>
         <td>{txn.Record.capacity} kWh</td>
     </tr>
     <tr>
-        <th>Besiztzer:</th>
+        <th class="text-right pr-2">Besiztzer:</th>
         <td>{txn.Record.owner}</td>
     </tr>
 </table>
-
-<style>
-    th {
-        @apply text-right pr-2;
-    }
-</style>
