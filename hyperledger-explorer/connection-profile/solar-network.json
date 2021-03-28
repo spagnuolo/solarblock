@@ -1,0 +1,59 @@
+{
+	"name": "solar-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "ganymedeAdmin",
+			"password": "ganymedeAdminPw"
+		},
+		"enableAuthentication": true,
+		"organization": "OrgNetzbetreiberMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"public-channel": {
+			"peers": {
+				"peer0.orgNetzbetreiber.example.com": {}
+			},
+			"connection": {
+				"timeout": {
+					"peer": {
+						"endorser": "6000",
+						"eventHub": "6000",
+						"eventReg": "6000"
+					}
+				}
+			}
+		}
+	},
+	"organizations": {
+		"OrgNetzbetreiberMSP": {
+			"mspid": "OrgNetzbetreiberMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/keystore/e99bebd62aca7b0c0a43bbbfe5d98832f4d03582895fdfda7a96c3ed8439040d_sk"
+			},
+			"peers": [
+				"peer0.orgNetzbetreiber.example.com"
+			],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/users/Admin@orgNetzbetreiber.example.com/msp/signcerts/cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer0.orgNetzbetreiber.example.com": {
+			"tlsCACerts": {
+				"path": "/tmp/crypto/peerOrganizations/orgNetzbetreiber.example.com/peers/peer0.orgNetzbetreiber.example.com/tls/ca.crt"
+			},
+			"url": "grpcs://peer0.orgNetzbetreiber.example.com:7051"
+		}
+	}
+}

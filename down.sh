@@ -3,6 +3,7 @@ COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml
 COMPOSE_FILE_CA=docker/docker-compose-ca.yaml
 
 cd .
+docker container stop guiNetzbetreiber guiHaushaltA guiHaushaltB guiHaushaltC
 docker-compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
 
 CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /dev-peer.*/) {print $1}')
@@ -27,7 +28,5 @@ docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db'
 docker run --rm -v $(pwd):/data busybox sh -c 'cd /data && rm -rf channel-artifacts log.txt *.tar.gz'
 
-rm -rf organization/haushalt_a/identity/user/*
-rm -rf organization/haushalt_b/identity/user/*
-rm -rf organization/haushalt_c/identity/user/*
-rm -rf organization/netzbetreiber/identity/user/*
+rm -rf chaincode/application/identity/user/*
+
